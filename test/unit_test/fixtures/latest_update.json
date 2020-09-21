@@ -1,0 +1,31 @@
+{
+    "previousPage": 0,
+    "currentPage": 1,
+    "nextPage": 2,
+    "latestUpdateList": [
+      {
+        "title": "unOrdinary",
+        "manga_endpoint": "unordinary/",
+        "image": "https://i3.wp.com/komikindo.co/wp-content/uploads/2018/09/UnOrdinary_Seraphina.jpg",
+        "hotTag": "",
+        "newTag": "",
+        "listNewChapter": [
+          {
+            "chapterName": "Ch.119",
+            "chapter_endpoint": "unordinary-chapter-119/",
+            "updatedOn": "3 jam lalu"
+          },
+          {
+            "chapterName": "Ch.118",
+            "chapter_endpoint": "unordinary-chapter-118/",
+            "updatedOn": "3 minggu lalu"
+          },
+          {
+            "chapterName": "Ch.117",
+            "chapter_endpoint": "unordinary-chapter-117/",
+            "updatedOn": "4 minggu lalu"
+          }
+        ]
+      }
+    ]
+  }

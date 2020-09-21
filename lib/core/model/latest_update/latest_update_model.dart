@@ -4,14 +4,43 @@
 
 import 'dart:convert';
 
-List<LatestUpdate> latestUpdateFromJson(String str) => List<LatestUpdate>.from(
-    json.decode(str).map((x) => LatestUpdate.fromJson(x)));
+LatestUpdate latestUpdateFromJson(String str) =>
+    LatestUpdate.fromJson(json.decode(str));
 
-String latestUpdateToJson(List<LatestUpdate> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String latestUpdateToJson(LatestUpdate data) => json.encode(data.toJson());
 
 class LatestUpdate {
   LatestUpdate({
+    this.previousPage,
+    this.currentPage,
+    this.nextPage,
+    this.latestUpdateList,
+  });
+
+  final int previousPage;
+  final int currentPage;
+  final int nextPage;
+  final List<LatestUpdateList> latestUpdateList;
+
+  factory LatestUpdate.fromJson(Map<String, dynamic> json) => LatestUpdate(
+        previousPage: json["previousPage"],
+        currentPage: json["currentPage"],
+        nextPage: json["nextPage"],
+        latestUpdateList: List<LatestUpdateList>.from(
+            json["latestUpdateList"].map((x) => LatestUpdateList.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "previousPage": previousPage,
+        "currentPage": currentPage,
+        "nextPage": nextPage,
+        "latestUpdateList":
+            List<dynamic>.from(latestUpdateList.map((x) => x.toJson())),
+      };
+}
+
+class LatestUpdateList {
+  LatestUpdateList({
     this.title,
     this.mangaEndpoint,
     this.image,
@@ -27,7 +56,8 @@ class LatestUpdate {
   final String newTag;
   final List<ListNewChapter> listNewChapter;
 
-  factory LatestUpdate.fromJson(Map<String, dynamic> json) => LatestUpdate(
+  factory LatestUpdateList.fromJson(Map<String, dynamic> json) =>
+      LatestUpdateList(
         title: json["title"],
         mangaEndpoint: json["manga_endpoint"],
         image: json["image"],

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'moor_db_repository.dart';
+part of 'moor_db_provider.dart';
 
 // **************************************************************************
 // MoorGenerator
@@ -8,7 +8,6 @@ part of 'moor_db_repository.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
 class Bookmark extends DataClass implements Insertable<Bookmark> {
-  final int id;
   final String title;
   final String mangaEndpoint;
   final String image;
@@ -17,8 +16,7 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   final String rating;
   final String description;
   Bookmark(
-      {@required this.id,
-      @required this.title,
+      {@required this.title,
       @required this.mangaEndpoint,
       @required this.image,
       this.author,
@@ -28,10 +26,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   factory Bookmark.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     return Bookmark(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       title:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
       mangaEndpoint: stringType
@@ -50,9 +46,6 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
     if (!nullToAbsent || title != null) {
       map['title'] = Variable<String>(title);
     }
@@ -79,7 +72,6 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
 
   BookmarksCompanion toCompanion(bool nullToAbsent) {
     return BookmarksCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       title:
           title == null && nullToAbsent ? const Value.absent() : Value(title),
       mangaEndpoint: mangaEndpoint == null && nullToAbsent
@@ -102,7 +94,6 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Bookmark(
-      id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       mangaEndpoint: serializer.fromJson<String>(json['mangaEndpoint']),
       image: serializer.fromJson<String>(json['image']),
@@ -116,7 +107,6 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   Map<String, dynamic> toJson({ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'mangaEndpoint': serializer.toJson<String>(mangaEndpoint),
       'image': serializer.toJson<String>(image),
@@ -128,8 +118,7 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   }
 
   Bookmark copyWith(
-          {int id,
-          String title,
+          {String title,
           String mangaEndpoint,
           String image,
           String author,
@@ -137,7 +126,6 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
           String rating,
           String description}) =>
       Bookmark(
-        id: id ?? this.id,
         title: title ?? this.title,
         mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
         image: image ?? this.image,
@@ -149,7 +137,6 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   @override
   String toString() {
     return (StringBuffer('Bookmark(')
-          ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('mangaEndpoint: $mangaEndpoint, ')
           ..write('image: $image, ')
@@ -163,22 +150,19 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
 
   @override
   int get hashCode => $mrjf($mrjc(
-      id.hashCode,
+      title.hashCode,
       $mrjc(
-          title.hashCode,
+          mangaEndpoint.hashCode,
           $mrjc(
-              mangaEndpoint.hashCode,
+              image.hashCode,
               $mrjc(
-                  image.hashCode,
-                  $mrjc(
-                      author.hashCode,
-                      $mrjc(type.hashCode,
-                          $mrjc(rating.hashCode, description.hashCode))))))));
+                  author.hashCode,
+                  $mrjc(type.hashCode,
+                      $mrjc(rating.hashCode, description.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is Bookmark &&
-          other.id == this.id &&
           other.title == this.title &&
           other.mangaEndpoint == this.mangaEndpoint &&
           other.image == this.image &&
@@ -189,7 +173,6 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
 }
 
 class BookmarksCompanion extends UpdateCompanion<Bookmark> {
-  final Value<int> id;
   final Value<String> title;
   final Value<String> mangaEndpoint;
   final Value<String> image;
@@ -198,7 +181,6 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   final Value<String> rating;
   final Value<String> description;
   const BookmarksCompanion({
-    this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.mangaEndpoint = const Value.absent(),
     this.image = const Value.absent(),
@@ -208,7 +190,6 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     this.description = const Value.absent(),
   });
   BookmarksCompanion.insert({
-    this.id = const Value.absent(),
     @required String title,
     @required String mangaEndpoint,
     @required String image,
@@ -220,7 +201,6 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
         mangaEndpoint = Value(mangaEndpoint),
         image = Value(image);
   static Insertable<Bookmark> custom({
-    Expression<int> id,
     Expression<String> title,
     Expression<String> mangaEndpoint,
     Expression<String> image,
@@ -230,7 +210,6 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     Expression<String> description,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (mangaEndpoint != null) 'manga_endpoint': mangaEndpoint,
       if (image != null) 'image': image,
@@ -242,8 +221,7 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   }
 
   BookmarksCompanion copyWith(
-      {Value<int> id,
-      Value<String> title,
+      {Value<String> title,
       Value<String> mangaEndpoint,
       Value<String> image,
       Value<String> author,
@@ -251,7 +229,6 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
       Value<String> rating,
       Value<String> description}) {
     return BookmarksCompanion(
-      id: id ?? this.id,
       title: title ?? this.title,
       mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
       image: image ?? this.image,
@@ -265,9 +242,6 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
@@ -295,7 +269,6 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   @override
   String toString() {
     return (StringBuffer('BookmarksCompanion(')
-          ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('mangaEndpoint: $mangaEndpoint, ')
           ..write('image: $image, ')
@@ -313,15 +286,6 @@ class $BookmarksTable extends Bookmarks
   final GeneratedDatabase _db;
   final String _alias;
   $BookmarksTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   GeneratedTextColumn _title;
   @override
@@ -412,7 +376,7 @@ class $BookmarksTable extends Bookmarks
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, title, mangaEndpoint, image, author, type, rating, description];
+      [title, mangaEndpoint, image, author, type, rating, description];
   @override
   $BookmarksTable get asDslTable => this;
   @override
@@ -424,9 +388,6 @@ class $BookmarksTable extends Bookmarks
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
-    }
     if (data.containsKey('title')) {
       context.handle(
           _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
@@ -469,7 +430,7 @@ class $BookmarksTable extends Bookmarks
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {title};
   @override
   Bookmark map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
@@ -483,7 +444,6 @@ class $BookmarksTable extends Bookmarks
 }
 
 class History extends DataClass implements Insertable<History> {
-  final int id;
   final String title;
   final String mangaEndpoint;
   final String image;
@@ -493,8 +453,7 @@ class History extends DataClass implements Insertable<History> {
   final int chapterReached;
   final int totalChapter;
   History(
-      {@required this.id,
-      @required this.title,
+      {@required this.title,
       @required this.mangaEndpoint,
       @required this.image,
       this.author,
@@ -505,10 +464,9 @@ class History extends DataClass implements Insertable<History> {
   factory History.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final intType = db.typeSystem.forDartType<int>();
     return History(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       title:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
       mangaEndpoint: stringType
@@ -529,9 +487,6 @@ class History extends DataClass implements Insertable<History> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
     if (!nullToAbsent || title != null) {
       map['title'] = Variable<String>(title);
     }
@@ -561,7 +516,6 @@ class History extends DataClass implements Insertable<History> {
 
   HistorysCompanion toCompanion(bool nullToAbsent) {
     return HistorysCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       title:
           title == null && nullToAbsent ? const Value.absent() : Value(title),
       mangaEndpoint: mangaEndpoint == null && nullToAbsent
@@ -587,7 +541,6 @@ class History extends DataClass implements Insertable<History> {
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return History(
-      id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       mangaEndpoint: serializer.fromJson<String>(json['mangaEndpoint']),
       image: serializer.fromJson<String>(json['image']),
@@ -602,7 +555,6 @@ class History extends DataClass implements Insertable<History> {
   Map<String, dynamic> toJson({ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'mangaEndpoint': serializer.toJson<String>(mangaEndpoint),
       'image': serializer.toJson<String>(image),
@@ -615,8 +567,7 @@ class History extends DataClass implements Insertable<History> {
   }
 
   History copyWith(
-          {int id,
-          String title,
+          {String title,
           String mangaEndpoint,
           String image,
           String author,
@@ -625,7 +576,6 @@ class History extends DataClass implements Insertable<History> {
           int chapterReached,
           int totalChapter}) =>
       History(
-        id: id ?? this.id,
         title: title ?? this.title,
         mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
         image: image ?? this.image,
@@ -638,7 +588,6 @@ class History extends DataClass implements Insertable<History> {
   @override
   String toString() {
     return (StringBuffer('History(')
-          ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('mangaEndpoint: $mangaEndpoint, ')
           ..write('image: $image, ')
@@ -653,26 +602,23 @@ class History extends DataClass implements Insertable<History> {
 
   @override
   int get hashCode => $mrjf($mrjc(
-      id.hashCode,
+      title.hashCode,
       $mrjc(
-          title.hashCode,
+          mangaEndpoint.hashCode,
           $mrjc(
-              mangaEndpoint.hashCode,
+              image.hashCode,
               $mrjc(
-                  image.hashCode,
+                  author.hashCode,
                   $mrjc(
-                      author.hashCode,
+                      type.hashCode,
                       $mrjc(
-                          type.hashCode,
-                          $mrjc(
-                              rating.hashCode,
-                              $mrjc(chapterReached.hashCode,
-                                  totalChapter.hashCode)))))))));
+                          rating.hashCode,
+                          $mrjc(chapterReached.hashCode,
+                              totalChapter.hashCode))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is History &&
-          other.id == this.id &&
           other.title == this.title &&
           other.mangaEndpoint == this.mangaEndpoint &&
           other.image == this.image &&
@@ -684,7 +630,6 @@ class History extends DataClass implements Insertable<History> {
 }
 
 class HistorysCompanion extends UpdateCompanion<History> {
-  final Value<int> id;
   final Value<String> title;
   final Value<String> mangaEndpoint;
   final Value<String> image;
@@ -694,7 +639,6 @@ class HistorysCompanion extends UpdateCompanion<History> {
   final Value<int> chapterReached;
   final Value<int> totalChapter;
   const HistorysCompanion({
-    this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.mangaEndpoint = const Value.absent(),
     this.image = const Value.absent(),
@@ -705,7 +649,6 @@ class HistorysCompanion extends UpdateCompanion<History> {
     this.totalChapter = const Value.absent(),
   });
   HistorysCompanion.insert({
-    this.id = const Value.absent(),
     @required String title,
     @required String mangaEndpoint,
     @required String image,
@@ -718,7 +661,6 @@ class HistorysCompanion extends UpdateCompanion<History> {
         mangaEndpoint = Value(mangaEndpoint),
         image = Value(image);
   static Insertable<History> custom({
-    Expression<int> id,
     Expression<String> title,
     Expression<String> mangaEndpoint,
     Expression<String> image,
@@ -729,7 +671,6 @@ class HistorysCompanion extends UpdateCompanion<History> {
     Expression<int> totalChapter,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (mangaEndpoint != null) 'manga_endpoint': mangaEndpoint,
       if (image != null) 'image': image,
@@ -742,8 +683,7 @@ class HistorysCompanion extends UpdateCompanion<History> {
   }
 
   HistorysCompanion copyWith(
-      {Value<int> id,
-      Value<String> title,
+      {Value<String> title,
       Value<String> mangaEndpoint,
       Value<String> image,
       Value<String> author,
@@ -752,7 +692,6 @@ class HistorysCompanion extends UpdateCompanion<History> {
       Value<int> chapterReached,
       Value<int> totalChapter}) {
     return HistorysCompanion(
-      id: id ?? this.id,
       title: title ?? this.title,
       mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
       image: image ?? this.image,
@@ -767,9 +706,6 @@ class HistorysCompanion extends UpdateCompanion<History> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
@@ -800,7 +736,6 @@ class HistorysCompanion extends UpdateCompanion<History> {
   @override
   String toString() {
     return (StringBuffer('HistorysCompanion(')
-          ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('mangaEndpoint: $mangaEndpoint, ')
           ..write('image: $image, ')
@@ -818,15 +753,6 @@ class $HistorysTable extends Historys with TableInfo<$HistorysTable, History> {
   final GeneratedDatabase _db;
   final String _alias;
   $HistorysTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   GeneratedTextColumn _title;
   @override
@@ -931,7 +857,6 @@ class $HistorysTable extends Historys with TableInfo<$HistorysTable, History> {
 
   @override
   List<GeneratedColumn> get $columns => [
-        id,
         title,
         mangaEndpoint,
         image,
@@ -952,9 +877,6 @@ class $HistorysTable extends Historys with TableInfo<$HistorysTable, History> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
-    }
     if (data.containsKey('title')) {
       context.handle(
           _titleMeta, title.isAcceptableOrUnknown(data['title'], _titleMeta));
@@ -1003,7 +925,7 @@ class $HistorysTable extends Historys with TableInfo<$HistorysTable, History> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {title};
   @override
   History map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
