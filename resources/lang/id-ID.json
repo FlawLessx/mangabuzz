@@ -1,0 +1,46 @@
+{
+    "appName": "Mangabuzz",
+    "version": "v {}",
+    "searchHome": "Cari Sesuatu...",
+    "searchBookmark": "Cari Bookmark...",
+    "searchHistory": "Cari Riwayat...",
+    "menu": {
+      "newest": "Terbaru",
+      "bookmark": "Ditandai",
+      "history": "History",
+      "settings": "Pengaturan"
+    },
+    "homePage": {
+      "hotSeries": "Pembaruan Seri Populer",
+      "latestUpdate": "Update Terakhir"
+    },
+    "bookmarkPage": {
+      "detail": "Selengkapnya"
+    },
+    "percent": "{}%",
+    "detail": {
+      "chapterList": "List Chapter",
+      "download": "Unduh",
+      "chapterReached": "{} Chapter Dicapai",
+      "chapterRemains": "{} Chapter Tersista",
+      "continueRead": "Lanjutkan Membaca"
+    },
+    "settings": {
+      "settingsName": "Pengaturan",
+      "generalSettings": "Pengaturan Umum",
+      "langguange": "Bahasa",
+      "otherSettings": "Pengaturan Lainnya",
+      "clearCache": "Bersihkan Cache",
+      "sizeCache": "{} MB",
+      "infoCache": "Cache berguna untuk menyimpan lalu menampilkan gambar yang sudah terunduh sehingga tidak perlu mengunduh lagi"
+    },
+    "chapter": {
+      "chapterNow": "Chapter {}",
+      "chapterRemains": "Dari {} chapter"
+    },
+    "listManga": "List Manga",
+    "listManhua": "List Manhua",
+    "listManhwa": "List Manhwa",
+    "searchQuery": "Hasil untuk {}"
+  }
+  

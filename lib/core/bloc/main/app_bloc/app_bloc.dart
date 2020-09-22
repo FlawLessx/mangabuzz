@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
-import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:moor/moor.dart';
 
-import '../../model/best_series/best_series_model.dart';
-import '../../model/latest_update/latest_update_model.dart';
-import '../../model/manga/manga_model.dart';
-import '../../repository/local/moor_repository.dart';
-import '../../repository/remote/api_repository.dart';
-import '../../util/connectivity_check.dart';
+import '../../../model/best_series/best_series_model.dart';
+import '../../../model/bookmark/bookmark_model.dart';
+import '../../../model/history/history_model.dart';
+import '../../../model/latest_update/latest_update_model.dart';
+import '../../../model/manga/manga_model.dart';
+import '../../../repository/local/moor_repository.dart';
+import '../../../repository/remote/api_repository.dart';
+import '../../../util/connectivity_check.dart';
 
 part 'app_event.dart';
 part 'app_state.dart';
