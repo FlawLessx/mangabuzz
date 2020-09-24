@@ -27,6 +27,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Stream<AppState> mapEventToState(
     AppEvent event,
   ) async* {
+    yield AppDataLoading();
+
     if (event is GetAppData) yield* _getAppDataToState(event);
   }
 

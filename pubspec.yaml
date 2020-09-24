@@ -46,6 +46,15 @@ dependencies:
   easy_localization_loader: ^0.0.2
   easy_localization: ^2.3.3
   moor_ffi: ^0.8.0
+  flutter_screenutil: ^3.0.2
+  carousel_slider: ^2.2.1
+  smooth_page_indicator: ^0.2.0
+  google_nav_bar: ^3.0.1
+  line_icons: ^0.2.0
+  content_placeholder: ^0.1.0
+  flutter_rating_bar: ^3.0.1+1
+  flutter_localizations: 
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -70,9 +79,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - resources/img/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -85,10 +93,22 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Poppins-Regular
+      fonts:
+        - asset: resources/fonts/Poppins-Regular.ttf
+    - family: Poppins-Medium
+      fonts:
+        - asset: resources/fonts/Poppins-Medium.ttf
+    - family: Poppins-SemiBold
+      fonts:
+        - asset: resources/fonts/Poppins-SemiBold.ttf
+    - family: Poppins-Bold
+      fonts:
+        - asset: resources/fonts/Poppins-Bold.ttf
+    - family: Poppins-ExtraBold
+      fonts:
+        - asset: resources/fonts/Poppins-ExtraBold.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

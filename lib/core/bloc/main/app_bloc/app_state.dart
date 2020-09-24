@@ -9,6 +9,8 @@ abstract class AppState extends Equatable {
 
 class AppInitial extends AppState {}
 
+class AppDataLoading extends AppState {}
+
 class AppDataLoaded extends AppState {
   final List<BestSeries> listBestSeries;
   final List<Manga> listHotMangaUpdate;

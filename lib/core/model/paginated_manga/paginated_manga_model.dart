@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:mangabuzz/core/model/manga/manga_model.dart';
+
 PaginatedManga paginatedMangaFromJson(String str) =>
     PaginatedManga.fromJson(json.decode(str));
 
@@ -20,14 +22,13 @@ class PaginatedManga {
   final int previousPage;
   final int currentPage;
   final int nextPage;
-  final List<Result> result;
+  final List<Manga> result;
 
   factory PaginatedManga.fromJson(Map<String, dynamic> json) => PaginatedManga(
         previousPage: json["previousPage"],
         currentPage: json["currentPage"],
         nextPage: json["nextPage"],
-        result:
-            List<Result>.from(json["result"].map((x) => Result.fromJson(x))),
+        result: List<Manga>.from(json["result"].map((x) => Manga.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,41 +36,5 @@ class PaginatedManga {
         "currentPage": currentPage,
         "nextPage": nextPage,
         "result": List<dynamic>.from(result.map((x) => x.toJson())),
-      };
-}
-
-class Result {
-  Result({
-    this.title,
-    this.mangaEndpoint,
-    this.type,
-    this.image,
-    this.chapter,
-    this.rating,
-  });
-
-  final String title;
-  final String mangaEndpoint;
-  final String type;
-  final String image;
-  final String chapter;
-  final String rating;
-
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
-        title: json["title"],
-        mangaEndpoint: json["manga_endpoint"],
-        type: json["type"],
-        image: json["image"],
-        chapter: json["chapter"],
-        rating: json["rating"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "title": title,
-        "manga_endpoint": mangaEndpoint,
-        "type": type,
-        "image": image,
-        "chapter": chapter,
-        "rating": rating,
       };
 }
