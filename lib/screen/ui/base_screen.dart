@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mangabuzz/generated/locale_keys.g.dart';
+import 'package:mangabuzz/screen/ui/bookmark/bookmark_screen.dart';
 import 'package:mangabuzz/screen/ui/home/home_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -13,7 +14,12 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
-  static List<Widget> widgetList = <Widget>[HomePage(), Text("WOOOOW")];
+  static List<Widget> widgetList = <Widget>[
+    HomePage(),
+    Text("WOOOOW"),
+    BookmarkPage(),
+    TestPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +43,12 @@ class _BaseScreenState extends State<BaseScreen> {
                   color: Colors.grey,
                   textStyle: TextStyle(
                       fontFamily: 'Poppins-Medium',
-                      fontSize: 14,
+                      fontSize: 16,
                       color: Theme.of(context).primaryColor),
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   duration: Duration(milliseconds: 800),
                   tabBackgroundColor:
-                      Theme.of(context).primaryColor.withOpacity(0.3),
+                      Theme.of(context).primaryColor.withOpacity(0.2),
                   tabs: [
                     GButton(
                       icon: LineIcons.home,
@@ -67,6 +73,7 @@ class _BaseScreenState extends State<BaseScreen> {
                   ],
                   selectedIndex: _selectedIndex,
                   onTabChange: (index) {
+                    print(index);
                     setState(() {
                       _selectedIndex = index;
                     });

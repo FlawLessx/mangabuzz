@@ -20,8 +20,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(AppInitial());
 
   APIRepository _apiRepository = APIRepository();
+  var _moorDBRepository = MoorDBRepository();
   ConnectivityCheck _connectivityCheck = ConnectivityCheck();
-  MoorDBRepository _moorDBRepository = MoorDBRepository();
 
   @override
   Stream<AppState> mapEventToState(

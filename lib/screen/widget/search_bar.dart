@@ -1,12 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../generated/locale_keys.g.dart';
-
 class SearchBar extends PreferredSize {
-  final Widget searchWidget;
-  SearchBar({this.searchWidget});
+  final String text;
+  final Function function;
+  SearchBar({@required this.text, @required this.function});
 
   @override
   Size get preferredSize => Size.fromHeight(ScreenUtil().setHeight(200));

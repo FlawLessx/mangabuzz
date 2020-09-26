@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
+import 'package:mangabuzz/screen/widget/tag.dart';
 
 class MangaItem extends StatefulWidget {
   final Manga manga;
@@ -51,24 +52,7 @@ class _MangaItemState extends State<MangaItem> {
                     width: ScreenUtil().setWidth(220),
                     height: ScreenUtil().setWidth(320),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-                    child: Container(
-                      height: ScreenUtil().setWidth(70),
-                      width: ScreenUtil().setWidth(70),
-                      decoration: BoxDecoration(
-                          color: Color(0xFFDD392E),
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(ScreenUtil().setWidth(20)))),
-                      child: Center(
-                        child: Text(
-                          "H",
-                          style: TextStyle(
-                              color: Colors.white, fontFamily: "Poppins-Bold"),
-                        ),
-                      ),
-                    ),
-                  )
+                  Tag(isHot: true)
                 ],
               ),
             ),
