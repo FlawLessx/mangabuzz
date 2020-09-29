@@ -9,6 +9,9 @@ import 'package:mangabuzz/core/bloc/main/app_bloc/app_bloc.dart';
 import 'package:mangabuzz/core/bloc/sub/bookmark_bloc/bookmark_bloc.dart';
 import 'package:mangabuzz/core/bloc/sub/history_bloc/history_bloc.dart';
 import 'package:mangabuzz/core/bloc/sub/search_bloc/search_bloc.dart';
+import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/home/bloc/home_screen_bloc.dart';
 
 import 'screen/ui/base_screen.dart';
 
@@ -31,6 +34,7 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
+        // Core BLoC
         BlocProvider<AppBloc>(
           create: (context) => AppBloc(),
         ),
@@ -42,6 +46,17 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HistoryBloc>(
           create: (context) => HistoryBloc(),
+        ),
+
+        // Sub BLoC
+        BlocProvider<BookmarkScreenBloc>(
+          create: (context) => BookmarkScreenBloc(),
+        ),
+        BlocProvider<HistoryScreenBloc>(
+          create: (context) => HistoryScreenBloc(),
+        ),
+        BlocProvider<HomeScreenBloc>(
+          create: (context) => HomeScreenBloc(),
         )
       ],
       child: MaterialApp(

@@ -45,9 +45,10 @@ class TypeTag extends StatelessWidget {
               BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20)))),
       child: Center(
         child: Padding(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
           child: Text(
             type,
+            textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white,
                 fontSize: fontSize,

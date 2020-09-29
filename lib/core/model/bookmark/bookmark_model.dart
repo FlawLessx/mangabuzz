@@ -11,15 +11,16 @@ String bookmarkToJson(List<BookmarkModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class BookmarkModel {
-  BookmarkModel({
-    this.title,
-    this.mangaEndpoint,
-    this.image,
-    this.author,
-    this.type,
-    this.rating,
-    this.description,
-  });
+  BookmarkModel(
+      {this.title,
+      this.mangaEndpoint,
+      this.image,
+      this.author,
+      this.type,
+      this.rating,
+      this.description,
+      this.totalChapter,
+      this.isNew});
 
   final String title;
   final String mangaEndpoint;
@@ -28,16 +29,19 @@ class BookmarkModel {
   final String type;
   final String rating;
   final String description;
+  int totalChapter;
+  bool isNew;
 
   factory BookmarkModel.fromJson(Map<String, dynamic> json) => BookmarkModel(
-        title: json["title"],
-        mangaEndpoint: json["mangaEndpoint"],
-        image: json["image"],
-        author: json["author"],
-        type: json["type"],
-        rating: json["rating"],
-        description: json["description"],
-      );
+      title: json["title"],
+      mangaEndpoint: json["mangaEndpoint"],
+      image: json["image"],
+      author: json["author"],
+      type: json["type"],
+      rating: json["rating"],
+      description: json["description"],
+      totalChapter: json["totalChapter"],
+      isNew: json["isNew"]);
 
   Map<String, dynamic> toJson() => {
         "title": title,
@@ -47,5 +51,7 @@ class BookmarkModel {
         "type": type,
         "rating": rating,
         "description": description,
+        "totalChapter": totalChapter,
+        "isNew": isNew
       };
 }

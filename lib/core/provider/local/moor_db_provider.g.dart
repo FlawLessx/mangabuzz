@@ -15,6 +15,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
   final String type;
   final String rating;
   final String description;
+  final int totalChapter;
+  final bool isNew;
   Bookmark(
       {@required this.title,
       @required this.mangaEndpoint,
@@ -22,11 +24,15 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
       this.author,
       this.type,
       this.rating,
-      this.description});
+      this.description,
+      @required this.totalChapter,
+      this.isNew});
   factory Bookmark.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final stringType = db.typeSystem.forDartType<String>();
+    final intType = db.typeSystem.forDartType<int>();
+    final boolType = db.typeSystem.forDartType<bool>();
     return Bookmark(
       title:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}title']),
@@ -41,6 +47,9 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}rating']),
       description: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}description']),
+      totalChapter: intType
+          .mapFromDatabaseResponse(data['${effectivePrefix}total_chapter']),
+      isNew: boolType.mapFromDatabaseResponse(data['${effectivePrefix}is_new']),
     );
   }
   @override
@@ -67,6 +76,12 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
+    if (!nullToAbsent || totalChapter != null) {
+      map['total_chapter'] = Variable<int>(totalChapter);
+    }
+    if (!nullToAbsent || isNew != null) {
+      map['is_new'] = Variable<bool>(isNew);
+    }
     return map;
   }
 
@@ -87,6 +102,11 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
+      totalChapter: totalChapter == null && nullToAbsent
+          ? const Value.absent()
+          : Value(totalChapter),
+      isNew:
+          isNew == null && nullToAbsent ? const Value.absent() : Value(isNew),
     );
   }
 
@@ -101,6 +121,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
       type: serializer.fromJson<String>(json['type']),
       rating: serializer.fromJson<String>(json['rating']),
       description: serializer.fromJson<String>(json['description']),
+      totalChapter: serializer.fromJson<int>(json['totalChapter']),
+      isNew: serializer.fromJson<bool>(json['isNew']),
     );
   }
   @override
@@ -114,6 +136,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
       'type': serializer.toJson<String>(type),
       'rating': serializer.toJson<String>(rating),
       'description': serializer.toJson<String>(description),
+      'totalChapter': serializer.toJson<int>(totalChapter),
+      'isNew': serializer.toJson<bool>(isNew),
     };
   }
 
@@ -124,7 +148,9 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
           String author,
           String type,
           String rating,
-          String description}) =>
+          String description,
+          int totalChapter,
+          bool isNew}) =>
       Bookmark(
         title: title ?? this.title,
         mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
@@ -133,6 +159,8 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
         type: type ?? this.type,
         rating: rating ?? this.rating,
         description: description ?? this.description,
+        totalChapter: totalChapter ?? this.totalChapter,
+        isNew: isNew ?? this.isNew,
       );
   @override
   String toString() {
@@ -143,7 +171,9 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
           ..write('author: $author, ')
           ..write('type: $type, ')
           ..write('rating: $rating, ')
-          ..write('description: $description')
+          ..write('description: $description, ')
+          ..write('totalChapter: $totalChapter, ')
+          ..write('isNew: $isNew')
           ..write(')'))
         .toString();
   }
@@ -157,8 +187,14 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
               image.hashCode,
               $mrjc(
                   author.hashCode,
-                  $mrjc(type.hashCode,
-                      $mrjc(rating.hashCode, description.hashCode)))))));
+                  $mrjc(
+                      type.hashCode,
+                      $mrjc(
+                          rating.hashCode,
+                          $mrjc(
+                              description.hashCode,
+                              $mrjc(totalChapter.hashCode,
+                                  isNew.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -169,7 +205,9 @@ class Bookmark extends DataClass implements Insertable<Bookmark> {
           other.author == this.author &&
           other.type == this.type &&
           other.rating == this.rating &&
-          other.description == this.description);
+          other.description == this.description &&
+          other.totalChapter == this.totalChapter &&
+          other.isNew == this.isNew);
 }
 
 class BookmarksCompanion extends UpdateCompanion<Bookmark> {
@@ -180,6 +218,8 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
   final Value<String> type;
   final Value<String> rating;
   final Value<String> description;
+  final Value<int> totalChapter;
+  final Value<bool> isNew;
   const BookmarksCompanion({
     this.title = const Value.absent(),
     this.mangaEndpoint = const Value.absent(),
@@ -188,6 +228,8 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     this.type = const Value.absent(),
     this.rating = const Value.absent(),
     this.description = const Value.absent(),
+    this.totalChapter = const Value.absent(),
+    this.isNew = const Value.absent(),
   });
   BookmarksCompanion.insert({
     @required String title,
@@ -197,9 +239,12 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     this.type = const Value.absent(),
     this.rating = const Value.absent(),
     this.description = const Value.absent(),
+    @required int totalChapter,
+    this.isNew = const Value.absent(),
   })  : title = Value(title),
         mangaEndpoint = Value(mangaEndpoint),
-        image = Value(image);
+        image = Value(image),
+        totalChapter = Value(totalChapter);
   static Insertable<Bookmark> custom({
     Expression<String> title,
     Expression<String> mangaEndpoint,
@@ -208,6 +253,8 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     Expression<String> type,
     Expression<String> rating,
     Expression<String> description,
+    Expression<int> totalChapter,
+    Expression<bool> isNew,
   }) {
     return RawValuesInsertable({
       if (title != null) 'title': title,
@@ -217,6 +264,8 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
       if (type != null) 'type': type,
       if (rating != null) 'rating': rating,
       if (description != null) 'description': description,
+      if (totalChapter != null) 'total_chapter': totalChapter,
+      if (isNew != null) 'is_new': isNew,
     });
   }
 
@@ -227,7 +276,9 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
       Value<String> author,
       Value<String> type,
       Value<String> rating,
-      Value<String> description}) {
+      Value<String> description,
+      Value<int> totalChapter,
+      Value<bool> isNew}) {
     return BookmarksCompanion(
       title: title ?? this.title,
       mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
@@ -236,6 +287,8 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
       type: type ?? this.type,
       rating: rating ?? this.rating,
       description: description ?? this.description,
+      totalChapter: totalChapter ?? this.totalChapter,
+      isNew: isNew ?? this.isNew,
     );
   }
 
@@ -263,6 +316,12 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
+    if (totalChapter.present) {
+      map['total_chapter'] = Variable<int>(totalChapter.value);
+    }
+    if (isNew.present) {
+      map['is_new'] = Variable<bool>(isNew.value);
+    }
     return map;
   }
 
@@ -275,7 +334,9 @@ class BookmarksCompanion extends UpdateCompanion<Bookmark> {
           ..write('author: $author, ')
           ..write('type: $type, ')
           ..write('rating: $rating, ')
-          ..write('description: $description')
+          ..write('description: $description, ')
+          ..write('totalChapter: $totalChapter, ')
+          ..write('isNew: $isNew')
           ..write(')'))
         .toString();
   }
@@ -374,9 +435,44 @@ class $BookmarksTable extends Bookmarks
     );
   }
 
+  final VerificationMeta _totalChapterMeta =
+      const VerificationMeta('totalChapter');
+  GeneratedIntColumn _totalChapter;
   @override
-  List<GeneratedColumn> get $columns =>
-      [title, mangaEndpoint, image, author, type, rating, description];
+  GeneratedIntColumn get totalChapter =>
+      _totalChapter ??= _constructTotalChapter();
+  GeneratedIntColumn _constructTotalChapter() {
+    return GeneratedIntColumn(
+      'total_chapter',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _isNewMeta = const VerificationMeta('isNew');
+  GeneratedBoolColumn _isNew;
+  @override
+  GeneratedBoolColumn get isNew => _isNew ??= _constructIsNew();
+  GeneratedBoolColumn _constructIsNew() {
+    return GeneratedBoolColumn(
+      'is_new',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        title,
+        mangaEndpoint,
+        image,
+        author,
+        type,
+        rating,
+        description,
+        totalChapter,
+        isNew
+      ];
   @override
   $BookmarksTable get asDslTable => this;
   @override
@@ -425,6 +521,18 @@ class $BookmarksTable extends Bookmarks
           _descriptionMeta,
           description.isAcceptableOrUnknown(
               data['description'], _descriptionMeta));
+    }
+    if (data.containsKey('total_chapter')) {
+      context.handle(
+          _totalChapterMeta,
+          totalChapter.isAcceptableOrUnknown(
+              data['total_chapter'], _totalChapterMeta));
+    } else if (isInserting) {
+      context.missing(_totalChapterMeta);
+    }
+    if (data.containsKey('is_new')) {
+      context.handle(
+          _isNewMeta, isNew.isAcceptableOrUnknown(data['is_new'], _isNewMeta));
     }
     return context;
   }

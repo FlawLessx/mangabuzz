@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:mangabuzz/generated/locale_keys.g.dart';
+import 'package:mangabuzz/core/util/connectivity_check.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bookmark_screen.dart';
+import 'package:mangabuzz/screen/ui/history/history_screen.dart';
 import 'package:mangabuzz/screen/ui/home/home_screen.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class BaseScreen extends StatefulWidget {
   @override
@@ -14,12 +14,28 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
+  ConnectivityCheck connectivityCheck = ConnectivityCheck();
   static List<Widget> widgetList = <Widget>[
     HomePage(),
     Text("WOOOOW"),
     BookmarkPage(),
-    TestPage(),
+    HistoryPage()
   ];
+
+  @override
+  void initState() {
+    connectivityCheck.checkConnectivity().then((value) => {
+          if (value == true)
+            {
+              // TODO some bloc
+            }
+          else
+            {
+              // TODO get error page
+            }
+        });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +59,7 @@ class _BaseScreenState extends State<BaseScreen> {
                   color: Colors.grey,
                   textStyle: TextStyle(
                       fontFamily: 'Poppins-Medium',
-                      fontSize: 16,
+                      fontSize: 14,
                       color: Theme.of(context).primaryColor),
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   duration: Duration(milliseconds: 800),
@@ -52,17 +68,17 @@ class _BaseScreenState extends State<BaseScreen> {
                   tabs: [
                     GButton(
                       icon: LineIcons.home,
-                      iconSize: ScreenUtil().setHeight(60),
+                      iconSize: ScreenUtil().setHeight(70),
                       text: 'Home',
                     ),
                     GButton(
                       icon: LineIcons.search,
-                      iconSize: ScreenUtil().setHeight(60),
+                      iconSize: ScreenUtil().setHeight(70),
                       text: 'Explore',
                     ),
                     GButton(
                       icon: Icons.favorite_border,
-                      iconSize: ScreenUtil().setHeight(60),
+                      iconSize: ScreenUtil().setHeight(70),
                       text: 'Bookmark',
                     ),
                     GButton(

@@ -18,6 +18,8 @@ class Bookmarks extends Table {
   TextColumn get type => text().nullable()();
   TextColumn get rating => text().nullable()();
   TextColumn get description => text().nullable()();
+  IntColumn get totalChapter => integer()();
+  BoolColumn get isNew => boolean().nullable()();
 
   @override
   Set<Column> get primaryKey => {title};
@@ -66,31 +68,6 @@ class MyDatabase extends _$MyDatabase {
 }
 
 //
-//  Extension
-//
-extension DomainToMoorExtension on BookmarkModel {
-  Bookmark get asMoor => Bookmark(
-      title: title,
-      mangaEndpoint: mangaEndpoint,
-      image: image,
-      author: author,
-      type: type,
-      rating: rating,
-      description: description);
-}
-
-extension MoorToDomainExtension on Bookmark {
-  BookmarkModel get asDomain => BookmarkModel(
-      title: title,
-      mangaEndpoint: mangaEndpoint,
-      image: image,
-      author: author,
-      type: type,
-      rating: rating,
-      description: description);
-}
-
-//
 // DAOs, This is the repo for the database
 //
 
@@ -105,9 +82,9 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
   //
 
   // Get all data from bookmarks table
-  Future<List<BookmarkModel>> listAllBookmark() {
+  Future<List<BookmarkModel>> listAllBookmark(int limit, {int offset}) {
     try {
-      return select(bookmarks).map((rows) {
+      return (select(bookmarks)..limit(limit, offset: offset)).map((rows) {
         return BookmarkModel(
             title: rows.title,
             mangaEndpoint: rows.mangaEndpoint,
@@ -115,7 +92,9 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
             author: rows.author,
             type: rows.type,
             rating: rows.rating,
-            description: rows.description);
+            description: rows.description,
+            totalChapter: rows.totalChapter,
+            isNew: rows.isNew);
       }).get();
     } on Exception {
       throw Exception();
@@ -134,7 +113,9 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
               author: e.author,
               type: e.type,
               rating: e.rating,
-              description: e.description);
+              description: e.description,
+              totalChapter: e.totalChapter,
+              isNew: e.isNew);
         }).toList();
       });
     } on Exception {
@@ -181,7 +162,9 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
             author: rows.author,
             type: rows.type,
             rating: rows.rating,
-            description: rows.description);
+            description: rows.description,
+            totalChapter: rows.totalChapter,
+            isNew: rows.isNew);
       }).get();
     } on Exception {
       throw Exception();
@@ -200,9 +183,9 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
   //
 
   // Get all data from bookmarks table
-  Future<List<HistoryModel>> listAllHistory() {
+  Future<List<HistoryModel>> listAllHistory(int limit, {int offset}) {
     try {
-      return select(historys).map((rows) {
+      return (select(historys)..limit(limit, offset: offset)).map((rows) {
         return HistoryModel(
             title: rows.title,
             mangaEndpoint: rows.mangaEndpoint,
@@ -286,3 +269,6 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
     }
   }
 }
+
+// Call Database
+final moorDBProvider = MyDatabase();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
+import 'package:mangabuzz/screen/widget/rating.dart';
 import 'package:mangabuzz/screen/widget/tag.dart';
 
 class BookmarkItem extends StatefulWidget {
@@ -19,7 +20,6 @@ class _BookmarkItemState extends State<BookmarkItem> {
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -61,7 +61,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                         padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
                         child: TypeTag(
                           type: widget.bookmarkModel.type,
-                          fontSize: 13,
+                          fontSize: 11,
                         ),
                       ),
                     )
@@ -76,6 +76,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +85,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                       widget.bookmarkModel.title,
                       style: TextStyle(
                           fontFamily: "Poppins-SemiBold",
-                          fontSize: 16,
+                          fontSize: 15,
                           color: Colors.black),
                     ),
                     Container(
@@ -104,7 +105,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                   widget.bookmarkModel.author,
                   style: TextStyle(
                       fontFamily: "Poppins-Medium",
-                      fontSize: 14,
+                      fontSize: 13,
                       color: Colors.grey),
                 ),
                 SizedBox(
@@ -114,35 +115,13 @@ class _BookmarkItemState extends State<BookmarkItem> {
                   widget.bookmarkModel.description,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14, color: Colors.black),
+                  style: TextStyle(fontSize: 13, color: Colors.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    Container(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          RatingBarIndicator(
-                            rating:
-                                double.parse(widget.bookmarkModel.rating) / 2,
-                            itemCount: 5,
-                            itemSize: ScreenUtil().setHeight(40),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                          ),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(10),
-                          ),
-                          Text(
-                            widget.bookmarkModel.rating,
-                            style: TextStyle(fontSize: 14),
-                          )
-                        ],
-                      ),
+                    Rating(
+                      rating: widget.bookmarkModel.rating,
                     ),
                     GestureDetector(
                         onTap: () {},
@@ -158,7 +137,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: "Poppins-Medium",
-                                  fontSize: 14),
+                                  fontSize: 13),
                             ),
                           ),
                         ))

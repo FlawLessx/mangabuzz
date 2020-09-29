@@ -29,7 +29,7 @@ void main() {
           title: Value('One Piece'),
           mangaEndpoint: Value('one-piece/'),
           image: Value('imge')));
-      final result = await _db.bookmarkDao.listAllBookmark();
+      final result = await _db.bookmarkDao.listAllBookmark(5, offset: 0);
 
       expect(result.length, 0);
     });
@@ -51,7 +51,7 @@ void main() {
           title: Value('One Piece'),
           mangaEndpoint: Value('one-piece/'),
           image: Value('imge')));
-      final result = await _db.bookmarkDao.listAllBookmark();
+      final result = await _db.bookmarkDao.listAllBookmark(5, offset: 0);
 
       expect(result.length, 0);
     });

@@ -46,8 +46,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
       // Get Data From Local
       List<BookmarkModel> listBookmark =
-          await _moorDBRepository.listAllBookmark();
-      List<HistoryModel> listHistory = await _moorDBRepository.listAllHistory();
+          await _moorDBRepository.listAllBookmark(5, offset: 5);
+      List<HistoryModel> listHistory =
+          await _moorDBRepository.listAllHistory(5, offset: 5);
 
       yield AppDataLoaded(
           listBestSeries: listBestSeries,

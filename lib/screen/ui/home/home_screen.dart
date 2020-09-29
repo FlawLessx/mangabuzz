@@ -1,7 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:content_placeholder/content_placeholder.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -9,13 +6,11 @@ import 'package:mangabuzz/core/bloc/main/app_bloc/app_bloc.dart';
 import 'package:mangabuzz/core/model/best_series/best_series_model.dart';
 import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
-import 'package:mangabuzz/generated/locale_keys.g.dart';
-import 'package:mangabuzz/screen/ui/error/error_screen.dart';
 import 'package:mangabuzz/screen/ui/home/carousell.dart';
+import 'package:mangabuzz/screen/ui/home/home_placeholder.dart';
 import 'package:mangabuzz/screen/widget/latest_update_item.dart';
 import 'package:mangabuzz/screen/widget/manga_item.dart';
 import 'package:mangabuzz/screen/widget/paginated_button.dart';
-import 'package:mangabuzz/screen/widget/placeholder.dart';
 import 'package:mangabuzz/screen/widget/search_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -115,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Hot Series Update",
                           style: TextStyle(
-                              fontFamily: "Poppins-Bold", fontSize: 18),
+                              fontFamily: "Poppins-Bold", fontSize: 16),
                         ),
                       ],
                     ),
@@ -130,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                     child: Text(
                       "Latest Update",
                       style:
-                          TextStyle(fontFamily: "Poppins-Bold", fontSize: 18),
+                          TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                     ),
                   ),
                   SizedBox(
@@ -153,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             } else {
-              return buildPlaceholder();
+              return buildHomePlaceholder();
             }
           },
         ));
@@ -174,41 +169,6 @@ class _HomePageState extends State<HomePage> {
                 ))
             .toList(),
       ),
-    );
-  }
-
-  Widget buildPlaceholder() {
-    return ListView(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              bestSeriesPlaceholder(),
-              SizedBox(
-                height: ScreenUtil().setHeight(30),
-              ),
-              Text(
-                "Hot Series Update",
-                style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 18),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
-              ),
-              buildHotSeriesUpdatePlaceholder(),
-              Text(
-                "Latest Update",
-                style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 18),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(20),
-              ),
-              buildLatestUpdatePlaceholder(),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

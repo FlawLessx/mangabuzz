@@ -31,14 +31,15 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
     try {
       final data = event.bookmarkModel;
       await _moorDBRepository.insertBookmark(BookmarksCompanion.insert(
-        title: data.title,
-        mangaEndpoint: data.mangaEndpoint,
-        image: data.image,
-        author: Value(data.author),
-        type: Value(data.type),
-        description: Value(data.description),
-        rating: Value(data.author),
-      ));
+          title: data.title,
+          mangaEndpoint: data.mangaEndpoint,
+          image: data.image,
+          author: Value(data.author),
+          type: Value(data.type),
+          description: Value(data.description),
+          rating: Value(data.author),
+          totalChapter: data.totalChapter,
+          isNew: Value(false)));
 
       yield BookmarkSuccess();
     } catch (e) {
@@ -50,14 +51,15 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
     try {
       final data = event.bookmarkModel;
       await _moorDBRepository.updateBookmark(BookmarksCompanion.insert(
-        title: data.title,
-        mangaEndpoint: data.mangaEndpoint,
-        image: data.image,
-        author: Value(data.author),
-        type: Value(data.type),
-        description: Value(data.description),
-        rating: Value(data.author),
-      ));
+          title: data.title,
+          mangaEndpoint: data.mangaEndpoint,
+          image: data.image,
+          author: Value(data.author),
+          type: Value(data.type),
+          description: Value(data.description),
+          rating: Value(data.author),
+          totalChapter: data.totalChapter,
+          isNew: Value(false)));
 
       yield BookmarkSuccess();
     } catch (e) {
@@ -69,14 +71,15 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
     try {
       final data = event.bookmarkModel;
       await _moorDBRepository.deleteBookmark(BookmarksCompanion.insert(
-        title: data.title,
-        mangaEndpoint: data.mangaEndpoint,
-        image: data.image,
-        author: Value(data.author),
-        type: Value(data.type),
-        description: Value(data.description),
-        rating: Value(data.author),
-      ));
+          title: data.title,
+          mangaEndpoint: data.mangaEndpoint,
+          image: data.image,
+          author: Value(data.author),
+          type: Value(data.type),
+          description: Value(data.description),
+          rating: Value(data.author),
+          totalChapter: data.totalChapter,
+          isNew: Value(false)));
 
       yield BookmarkSuccess();
     } catch (e) {
