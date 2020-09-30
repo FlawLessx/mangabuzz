@@ -51,7 +51,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 ],
               );
             } else {
-              return buildHistoryPlaceholder();
+              return buildHistoryScreenPlaceholder();
             }
           },
         ));

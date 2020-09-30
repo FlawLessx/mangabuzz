@@ -5,15 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/bloc/main/app_bloc/app_bloc.dart';
-import 'package:mangabuzz/core/bloc/sub/bookmark_bloc/bookmark_bloc.dart';
-import 'package:mangabuzz/core/bloc/sub/history_bloc/history_bloc.dart';
-import 'package:mangabuzz/core/bloc/sub/search_bloc/search_bloc.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/home/bloc/home_screen_bloc.dart';
 
-import 'screen/ui/base_screen.dart';
+import 'core/bloc/main/app_bloc/app_bloc.dart';
+import 'core/bloc/sub/bookmark_bloc/bookmark_bloc.dart';
+import 'core/bloc/sub/history_bloc/history_bloc.dart';
+import 'core/bloc/sub/search_bloc/search_bloc.dart';
+import 'core/util/route_generator.dart';
+import 'screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
+import 'screen/ui/history/bloc/history_screen_bloc.dart';
+import 'screen/ui/home/bloc/home_screen_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    RouteGenerator routeGenerator = RouteGenerator();
 
     return MultiBlocProvider(
       providers: [
@@ -60,6 +61,8 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        onGenerateRoute: routeGenerator.onGenerateRoute,
+        initialRoute: baseRoute,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -72,7 +75,6 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: Colors.white,
             fontFamily: 'Poppins-Regular',
             primaryColor: Color(0xFF906ef8)),
-        home: BaseScreen(),
       ),
     );
   }

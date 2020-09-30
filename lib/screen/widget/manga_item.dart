@@ -52,7 +52,18 @@ class _MangaItemState extends State<MangaItem> {
                     width: ScreenUtil().setWidth(220),
                     height: ScreenUtil().setWidth(320),
                   ),
-                  Tag(isHot: true)
+                  Tag(isHot: true),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Padding(
+                      padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+                      child: TypeTag(
+                        type: widget.manga.type,
+                        fontSize: 11,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

@@ -2,7 +2,7 @@ import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget buildHistoryPlaceholder() {
+Widget buildHistoryScreenPlaceholder() {
   List count = [1, 2, 3, 4];
 
   return ListView(

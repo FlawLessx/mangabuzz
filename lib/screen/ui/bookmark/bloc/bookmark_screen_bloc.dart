@@ -31,35 +31,39 @@ class BookmarkScreenBloc
 
   Stream<BookmarkScreenState> getBookmarkDataToState(
       GetBookmarkScreenData event) async* {
-    final data =
-        await dbRepo.listAllBookmark(event.limit, offset: event.offset);
-    List<BookmarkModel> result = [];
+    try {
+      final data =
+          await dbRepo.listAllBookmark(event.limit, offset: event.offset);
+      List<BookmarkModel> result = [];
 
-    // Get new release from api
-    for (var item in data) {
-      var dataFromAPI = await apiRepo.getMangaDetail(item.mangaEndpoint);
+      // Get new release from api
+      for (var item in data) {
+        var dataFromAPI = await apiRepo.getMangaDetail(item.mangaEndpoint);
 
-      if (dataFromAPI.chapterList.length != item.totalChapter) {
-        item.isNew = true;
-        item.totalChapter = dataFromAPI.chapterList.length;
+        if (dataFromAPI.chapterList.length != item.totalChapter) {
+          item.isNew = true;
+          item.totalChapter = dataFromAPI.chapterList.length;
 
-        await dbRepo.updateBookmark(BookmarksCompanion(
-            title: Value(item.title),
-            author: Value(item.author),
-            description: Value(item.description),
-            image: Value(item.image),
-            mangaEndpoint: Value(item.mangaEndpoint),
-            rating: Value(item.rating),
-            type: Value(item.type),
-            totalChapter: Value(item.totalChapter),
-            isNew: Value(false)));
-      } else {
-        item.isNew = false;
+          await dbRepo.updateBookmark(BookmarksCompanion(
+              title: Value(item.title),
+              author: Value(item.author),
+              description: Value(item.description),
+              image: Value(item.image),
+              mangaEndpoint: Value(item.mangaEndpoint),
+              rating: Value(item.rating),
+              type: Value(item.type),
+              totalChapter: Value(item.totalChapter),
+              isNew: Value(false)));
+        } else {
+          item.isNew = false;
+        }
+
+        result.add(item);
       }
 
-      result.add(item);
+      yield BookmarkScreenLoaded(listBookmarkData: result);
+    } on Exception {
+      yield BookmarkScreenError();
     }
-
-    yield BookmarkScreenLoaded(listBookmarkData: result);
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/screen/widget/placeholder.dart';
 
-Widget buildHomePlaceholder() {
+Widget buildHomeScreenPlaceholder() {
   List count = [1, 2, 3, 4];
 
   return ListView(

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:mangabuzz/core/model/best_series/best_series_model.dart';
 import 'package:mangabuzz/core/model/chapter/chapter_model.dart';
-import 'package:mangabuzz/core/model/genre/all_genre_model.dart';
+import 'package:mangabuzz/core/model/genre/genre_model.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/model/paginated_manga/paginated_manga_model.dart';
@@ -113,7 +113,7 @@ void main() {
           ));
 
       var result = await apiProvider.getAllGenre();
-      expect(result.first, isA<AllGenre>());
+      expect(result.first, isA<Genre>());
     });
 
     test('Fail test all genre', () async {

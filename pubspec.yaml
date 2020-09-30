@@ -55,7 +55,6 @@ dependencies:
   flutter_rating_bar: ^3.0.1+1
   flutter_animation_progress_bar: ^1.0.5
   random_color: ^1.0.5
-  flutter_tags: ^0.4.9
   lazy_load_scrollview: ^1.1.0
   flutter_localizations: 
     sdk: flutter

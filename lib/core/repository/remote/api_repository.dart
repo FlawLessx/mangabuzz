@@ -3,7 +3,7 @@ import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 
 import '../../model/best_series/best_series_model.dart';
 import '../../model/chapter/chapter_model.dart';
-import '../../model/genre/all_genre_model.dart';
+import '../../model/genre/genre_model.dart';
 import '../../model/latest_update/latest_update_model.dart';
 import '../../model/manga/manga_model.dart';
 import '../../model/paginated_manga/paginated_manga_model.dart';
@@ -18,7 +18,7 @@ class APIRepository {
       _apiProvider.getMangaDetail(mangaEndpoint);
   Future<LatestUpdate> getLatestUpdate(int pageNumber) =>
       _apiProvider.getLatestUpdate(pageNumber);
-  Future<List<AllGenre>> getAllGenre() => _apiProvider.getAllGenre();
+  Future<List<Genre>> getAllGenre() => _apiProvider.getAllGenre();
   Future<PaginatedManga> getGenre(String genreEndpoint, int pageNumber) =>
       _apiProvider.getGenre(genreEndpoint, pageNumber);
   Future<List<Chapter>> getChapter(String chapterEndpoint) =>

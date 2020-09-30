@@ -70,7 +70,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
               ),
             );
           } else {
-            return buildBookmarkPlaceholder();
+            return buildBookmarkScreenPlaceholder();
           }
         },
       ),

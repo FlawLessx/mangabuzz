@@ -4,7 +4,7 @@ import 'package:moor/moor.dart';
 
 import '../../model/best_series/best_series_model.dart';
 import '../../model/chapter/chapter_model.dart';
-import '../../model/genre/all_genre_model.dart';
+import '../../model/genre/genre_model.dart';
 import '../../model/latest_update/latest_update_model.dart';
 import '../../model/manga/manga_model.dart';
 import '../../model/paginated_manga/paginated_manga_model.dart';
@@ -58,11 +58,11 @@ class APIProvider {
     }
   }
 
-  Future<List<AllGenre>> getAllGenre() async {
+  Future<List<Genre>> getAllGenre() async {
     final response = await client.get(_constant.allGenre);
 
     if (response.statusCode == 200) {
-      return allGenreFromJson(response.body);
+      return genreFromJson(response.body);
     } else {
       throw Exception();
     }

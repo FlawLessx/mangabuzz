@@ -6,6 +6,7 @@ import 'package:mangabuzz/core/bloc/main/app_bloc/app_bloc.dart';
 import 'package:mangabuzz/core/model/best_series/best_series_model.dart';
 import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
+import 'package:mangabuzz/screen/ui/home/bloc/home_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/home/carousell.dart';
 import 'package:mangabuzz/screen/ui/home/home_placeholder.dart';
 import 'package:mangabuzz/screen/widget/latest_update_item.dart';
@@ -91,9 +92,9 @@ class _HomePageState extends State<HomePage> {
           text: "Search something...",
           function: () {},
         ),
-        body: BlocBuilder<AppBloc, AppState>(
+        body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
           builder: (context, state) {
-            if (state is AppDataLoaded) {
+            if (state is HomeScreenLoaded) {
               return ListView(
                 children: [
                   Padding(
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Carousell(itemList: imgList),
+                        Carousell(itemList: state.listBestSeries),
                         //bestSeriesPlaceholder(),
                         SizedBox(
                           height: ScreenUtil().setHeight(30),
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: ScreenUtil().setHeight(10),
                   ),
-                  buildHotMangaUpdate(manga),
+                  buildHotMangaUpdate(state.listHotMangaUpdate),
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: ScreenUtil().setWidth(30)),
@@ -134,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: ScreenUtil().setWidth(30)),
-                    child: buildLatestUpdateGridview(latestUpdate),
+                    child: buildLatestUpdateGridview(state.listLatestUpdate),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               );
             } else {
-              return buildHomePlaceholder();
+              return buildHomeScreenPlaceholder();
             }
           },
         ));

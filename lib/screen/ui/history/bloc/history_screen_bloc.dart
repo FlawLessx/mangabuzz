@@ -28,8 +28,13 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
 
   Stream<HistoryScreenState> getHistoryDataToState(
       GetHistoryScreenData event) async* {
-    final data = await dbRepo.listAllHistory(event.limit, offset: event.offset);
+    try {
+      final data =
+          await dbRepo.listAllHistory(event.limit, offset: event.offset);
 
-    yield HistoryScreenLoaded(listHistoryData: data);
+      yield HistoryScreenLoaded(listHistoryData: data);
+    } on Exception {
+      yield HistoryScreenError();
+    }
   }
 }
