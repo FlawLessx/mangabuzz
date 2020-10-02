@@ -29,7 +29,7 @@ class HistoryModel {
   final String type;
   final String rating;
   final int chapterReached;
-  final int totalChapter;
+  int totalChapter;
 
   factory HistoryModel.fromJson(Map<String, dynamic> json) => HistoryModel(
         title: json["title"],

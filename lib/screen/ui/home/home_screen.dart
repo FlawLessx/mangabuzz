@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/bloc/main/app_bloc/app_bloc.dart';
 import 'package:mangabuzz/core/model/best_series/best_series_model.dart';
 import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';

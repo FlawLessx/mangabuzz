@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -43,20 +44,14 @@ class _HistoryItemState extends State<HistoryItem> {
                     Radius.circular(ScreenUtil().setWidth(20))),
                 child: Stack(
                   children: [
-                    /*  CachedNetworkImage(
-                      imageUrl: "http://via.placeholder.com/350x150",
+                    CachedNetworkImage(
+                      imageUrl: widget.historyModel.image,
                       width: ScreenUtil().setWidth(220),
                       height: ScreenUtil().setWidth(320),
-                      placeholder: (context, url) => ContentPlaceholder(),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),*/
-
-                    Image.asset(
-                      widget.historyModel.image,
-                      fit: BoxFit.cover,
-                      width: ScreenUtil().setWidth(250),
-                      height: ScreenUtil().setWidth(350),
                     ),
                     Positioned(
                       bottom: 0,

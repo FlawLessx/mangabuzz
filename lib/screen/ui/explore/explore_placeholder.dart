@@ -16,11 +16,11 @@ Widget buildExploreScreenPlaceholder() {
               style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
             ),
             ContentPlaceholder(
-              height: ScreenUtil().setHeight(100),
+              height: ScreenUtil().setHeight(120),
               width: double.infinity,
             ),
             SizedBox(
-              height: ScreenUtil().setHeight(30),
+              height: ScreenUtil().setHeight(20),
             ),
             Text(
               "List Manga",
@@ -28,7 +28,7 @@ Widget buildExploreScreenPlaceholder() {
             ),
             listItemPlaceholder(),
             SizedBox(
-              height: ScreenUtil().setHeight(30),
+              height: ScreenUtil().setHeight(20),
             ),
             Text(
               "List Manhwa",
@@ -36,7 +36,7 @@ Widget buildExploreScreenPlaceholder() {
             ),
             listItemPlaceholder(),
             SizedBox(
-              height: ScreenUtil().setHeight(30),
+              height: ScreenUtil().setHeight(20),
             ),
             Text(
               "List Manhua",

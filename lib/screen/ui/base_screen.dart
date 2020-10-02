@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mangabuzz/core/util/connectivity_check.dart';
+import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bookmark_screen.dart';
 import 'package:mangabuzz/screen/ui/explore/explore_screen.dart';
 import 'package:mangabuzz/screen/ui/history/history_screen.dart';
@@ -69,17 +70,17 @@ class _BaseScreenState extends State<BaseScreen> {
                   tabs: [
                     GButton(
                       icon: LineIcons.home,
-                      iconSize: ScreenUtil().setHeight(70),
+                      iconSize: ScreenUtil().setHeight(60),
                       text: 'Home',
                     ),
                     GButton(
                       icon: LineIcons.compass,
-                      iconSize: ScreenUtil().setHeight(70),
+                      iconSize: ScreenUtil().setHeight(60),
                       text: 'Explore',
                     ),
                     GButton(
                       icon: Icons.favorite_border,
-                      iconSize: ScreenUtil().setHeight(70),
+                      iconSize: ScreenUtil().setHeight(60),
                       text: 'Bookmark',
                     ),
                     GButton(

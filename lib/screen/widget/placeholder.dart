@@ -39,10 +39,6 @@ Widget buildLatestUpdatePlaceholder() {
                     width: ScreenUtil().setWidth(200),
                     height: ScreenUtil().setHeight(40),
                   ),
-                  ContentPlaceholder.block(
-                    width: ScreenUtil().setWidth(200),
-                    height: ScreenUtil().setHeight(40),
-                  ),
                 ],
               )
             ],

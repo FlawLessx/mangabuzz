@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/ui/explore/bloc/explore_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 
 import 'core/bloc/main/app_bloc/app_bloc.dart';
 import 'core/bloc/sub/bookmark_bloc/bookmark_bloc.dart';
@@ -32,6 +34,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     RouteGenerator routeGenerator = RouteGenerator();
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Color(0xFFa78df7)));
 
     return MultiBlocProvider(
       providers: [
@@ -58,6 +62,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HomeScreenBloc>(
           create: (context) => HomeScreenBloc(),
+        ),
+        BlocProvider<ExploreScreenBloc>(
+          create: (context) => ExploreScreenBloc(),
+        ),
+        BlocProvider<MangaDetailScreenBloc>(
+          create: (context) => MangaDetailScreenBloc(),
         )
       ],
       child: MaterialApp(
@@ -74,7 +84,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
             fontFamily: 'Poppins-Regular',
-            primaryColor: Color(0xFF906ef8)),
+            primaryColor: Color(0xFFa78df7)),
       ),
     );
   }

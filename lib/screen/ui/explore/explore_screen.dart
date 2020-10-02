@@ -101,38 +101,11 @@ class _ExplorePageState extends State<ExplorePage> {
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(30)),
       child: Row(
         children: listGenre.map((e) {
-          var _color = _randomColor.randomColor(
-              colorBrightness: ColorBrightness.primary,
-              colorSaturation: ColorSaturation.mediumSaturation);
-
-          return Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(10),
-                vertical: ScreenUtil().setWidth(20)),
-            child: Container(
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).primaryColor.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(0, 2), // changes position of shadow
-                      ),
-                    ],
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(ScreenUtil().setWidth(50))),
-                    color: Theme.of(context).primaryColor),
-                child: Center(
-                    child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30),
-                      vertical: ScreenUtil().setWidth(10)),
-                  child: Text(
-                    e.genreSubtitle,
-                    style: TextStyle(
-                        color: Colors.white, fontFamily: "Poppins-Medium"),
-                  ),
-                ))),
+          return Chip(
+            label: Text(e.genreSubtitle),
+            labelStyle: TextStyle(color: Colors.white),
+            backgroundColor: Theme.of(context).primaryColor,
+            shadowColor: Theme.of(context).primaryColor.withOpacity(0.5),
           );
         }).toList(),
       ),

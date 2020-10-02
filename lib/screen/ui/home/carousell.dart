@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -44,18 +45,14 @@ class _CarousellState extends State<Carousell> {
                             Radius.circular(ScreenUtil().setWidth(20))),
                         child: Stack(
                           children: [
-                            /* 
                             CachedNetworkImage(
-                              imageUrl: "http://via.placeholder.com/350x150",
-                              placeholder: (context, url) => ContentPlaceholder(),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
-                            ) ,*/
-                            Image.asset(
-                              item.image,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
+                              imageUrl: item.image,
                               width: ScreenUtil().setWidth(1100),
                               height: ScreenUtil().setHeight(370),
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
                             ),
                             Align(
                               alignment: Alignment.topRight,

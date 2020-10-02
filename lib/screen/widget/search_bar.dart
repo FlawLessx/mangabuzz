@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/widget/round_button.dart';
 
 class SearchBar extends PreferredSize {
   final String text;
@@ -26,7 +27,6 @@ class SearchBar extends PreferredSize {
                     color: Color(0xFFf3f4f6),
                     borderRadius: BorderRadius.all(
                         Radius.circular(ScreenUtil().setWidth(60)))),
-                height: ScreenUtil().setHeight(300),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(30)),
@@ -54,33 +54,7 @@ class SearchBar extends PreferredSize {
                 ),
               )),
               SizedBox(width: ScreenUtil().setWidth(60)),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  height: ScreenUtil().setHeight(140),
-                  width: ScreenUtil().setHeight(140),
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.6),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: Offset(0, 2), // changes position of shadow
-                        ),
-                      ],
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(140)))),
-                  child: Center(
-                    child: Icon(
-                      Icons.menu,
-                      color: Colors.white,
-                      size: ScreenUtil().setHeight(80),
-                    ),
-                  ),
-                ),
-              )
+              RoundButton(icons: Icons.menu, onTap: () {})
             ],
           ),
         ),

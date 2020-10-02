@@ -4,12 +4,15 @@ import 'package:mangabuzz/screen/ui/bookmark/bookmark_screen.dart';
 import 'package:mangabuzz/screen/ui/explore/explore_screen.dart';
 import 'package:mangabuzz/screen/ui/history/history_screen.dart';
 import 'package:mangabuzz/screen/ui/home/home_screen.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
 
 const String baseRoute = '/';
 const String homeRoute = '/home';
 const String exploreRoute = '/explore';
 const String bookmarkRoute = '/bookmark';
 const String historyRoute = '/history';
+const String mangaDetailRoute = '/mangaDetail';
+const String chapterRoute = '/chapter';
 const String settingsRoute = '/settings';
 const String listMangaRoute = '/manga';
 const String listManhwaRoute = '/manhwa';
@@ -39,6 +42,12 @@ class RouteGenerator {
           builder: (_) => HistoryPage(),
           settings: settings,
         );
+        break;
+      case mangaDetailRoute:
+        var args = settings.arguments as MangaDetailPageArguments;
+        return MaterialPageRoute(
+            builder: (_) => MangaDetailPage(mangaEndpoint: args.mangaEndpoint),
+            settings: settings);
         break;
       default:
         return MaterialPageRoute(

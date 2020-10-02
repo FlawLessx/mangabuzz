@@ -1,9 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
-import 'package:mangabuzz/screen/widget/rating.dart';
-import 'package:mangabuzz/screen/widget/tag.dart';
+
+import '../../../core/model/bookmark/bookmark_model.dart';
+import '../../widget/rating.dart';
+import '../../widget/tag.dart';
 
 class BookmarkItem extends StatefulWidget {
   final BookmarkModel bookmarkModel;
@@ -39,20 +40,14 @@ class _BookmarkItemState extends State<BookmarkItem> {
                     Radius.circular(ScreenUtil().setWidth(20))),
                 child: Stack(
                   children: [
-                    /*  CachedNetworkImage(
-                      imageUrl: "http://via.placeholder.com/350x150",
-                      width: ScreenUtil().setWidth(220),
-                      height: ScreenUtil().setWidth(320),
-                      placeholder: (context, url) => ContentPlaceholder(),
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),*/
-
-                    Image.asset(
-                      widget.bookmarkModel.image,
-                      fit: BoxFit.cover,
+                    CachedNetworkImage(
+                      imageUrl: widget.bookmarkModel.image,
                       width: ScreenUtil().setWidth(250),
                       height: ScreenUtil().setWidth(350),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      fit: BoxFit.cover,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                     Positioned(
                       bottom: 0,

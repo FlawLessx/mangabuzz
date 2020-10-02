@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
@@ -51,11 +52,13 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
               child: ClipRRect(
                 borderRadius: BorderRadius.all(
                     Radius.circular(ScreenUtil().setWidth(20))),
-                child: Image.asset(
-                  widget.item.image,
-                  fit: BoxFit.cover,
+                child: CachedNetworkImage(
+                  imageUrl: widget.item.image,
                   width: ScreenUtil().setWidth(180),
                   height: ScreenUtil().setWidth(280),
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
             ),

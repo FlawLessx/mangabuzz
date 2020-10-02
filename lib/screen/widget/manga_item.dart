@@ -37,20 +37,13 @@ class _MangaItemState extends State<MangaItem> {
                   BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20))),
               child: Stack(
                 children: [
-                  /*  CachedNetworkImage(
-                    imageUrl: "http://via.placeholder.com/350x150",
+                  CachedNetworkImage(
+                    imageUrl: widget.manga.image,
                     width: ScreenUtil().setWidth(220),
                     height: ScreenUtil().setWidth(320),
-                    placeholder: (context, url) => ContentPlaceholder(),
+                    placeholder: (context, url) => CircularProgressIndicator(),
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),*/
-
-                  Image.asset(
-                    widget.manga.image,
-                    fit: BoxFit.cover,
-                    width: ScreenUtil().setWidth(220),
-                    height: ScreenUtil().setWidth(320),
                   ),
                   Tag(isHot: true),
                   Positioned(
