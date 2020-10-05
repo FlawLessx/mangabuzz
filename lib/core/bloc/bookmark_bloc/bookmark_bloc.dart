@@ -5,9 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
-import '../../../model/bookmark/bookmark_model.dart';
-import '../../../provider/local/moor_db_provider.dart';
-import '../../../repository/local/moor_repository.dart';
+import '../../model/bookmark/bookmark_model.dart';
+import '../../provider/local/moor_db_provider.dart';
+import '../../repository/local/moor_repository.dart';
 
 part 'bookmark_event.dart';
 part 'bookmark_state.dart';

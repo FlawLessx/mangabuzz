@@ -57,6 +57,7 @@ dependencies:
   random_color: ^1.0.5
   lazy_load_scrollview: ^1.1.0
   expand_widget: ^1.1.0
+  flutter_dropdown: ^0.0.8
   flutter_localizations: 
     sdk: flutter
 

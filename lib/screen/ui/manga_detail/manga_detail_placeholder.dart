@@ -16,7 +16,11 @@ Widget buildMangaDetailPagePlaceholder(BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           RoundButton(
-              icons: Icons.arrow_back, onTap: () => Navigator.pop(context)),
+              iconColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              enableShadow: true,
+              icons: Icons.arrow_back,
+              onTap: () => Navigator.pop(context)),
           GestureDetector(
             child: Icon(
               Icons.favorite,

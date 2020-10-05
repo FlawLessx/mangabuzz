@@ -4,12 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
-import '../../../model/bookmark/bookmark_model.dart';
-import '../../../model/history/history_model.dart';
-import '../../../model/manga/manga_model.dart';
-import '../../../repository/local/moor_repository.dart';
-import '../../../repository/remote/api_repository.dart';
-import '../../../util/connectivity_check.dart';
+import '../../model/bookmark/bookmark_model.dart';
+import '../../model/history/history_model.dart';
+import '../../model/manga/manga_model.dart';
+import '../../repository/local/moor_repository.dart';
+import '../../repository/remote/api_repository.dart';
+import '../../util/connectivity_check.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';

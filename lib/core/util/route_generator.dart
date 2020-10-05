@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mangabuzz/screen/ui/base_screen.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bookmark_screen.dart';
+import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 import 'package:mangabuzz/screen/ui/explore/explore_screen.dart';
 import 'package:mangabuzz/screen/ui/history/history_screen.dart';
 import 'package:mangabuzz/screen/ui/home/home_screen.dart';
@@ -44,10 +45,12 @@ class RouteGenerator {
         );
         break;
       case mangaDetailRoute:
-        var args = settings.arguments as MangaDetailPageArguments;
         return MaterialPageRoute(
-            builder: (_) => MangaDetailPage(mangaEndpoint: args.mangaEndpoint),
-            settings: settings);
+            builder: (_) => MangaDetailPage(), settings: settings);
+        break;
+      case chapterRoute:
+        return MaterialPageRoute(
+            builder: (_) => ChapterPage(), settings: settings);
         break;
       default:
         return MaterialPageRoute(

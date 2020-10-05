@@ -16,7 +16,7 @@ class BookmarkScreenLoaded extends BookmarkScreenState {
   BookmarkScreenLoaded({@required this.listBookmarkData});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [listBookmarkData];
 }
 
 class BookmarkScreenError extends BookmarkScreenState {}

@@ -5,17 +5,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/screen/ui/explore/bloc/explore_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 
-import 'core/bloc/main/app_bloc/app_bloc.dart';
-import 'core/bloc/sub/bookmark_bloc/bookmark_bloc.dart';
-import 'core/bloc/sub/history_bloc/history_bloc.dart';
-import 'core/bloc/sub/search_bloc/search_bloc.dart';
+import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
+import 'core/bloc/history_bloc/history_bloc.dart';
+import 'core/bloc/search_bloc/search_bloc.dart';
 import 'core/util/route_generator.dart';
 import 'screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
+import 'screen/ui/chapter/bloc/chapter_screen_bloc.dart';
+import 'screen/ui/explore/bloc/explore_screen_bloc.dart';
 import 'screen/ui/history/bloc/history_screen_bloc.dart';
 import 'screen/ui/home/bloc/home_screen_bloc.dart';
+import 'screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,9 +40,6 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         // Core BLoC
-        BlocProvider<AppBloc>(
-          create: (context) => AppBloc(),
-        ),
         BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(),
         ),
@@ -68,7 +65,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<MangaDetailScreenBloc>(
           create: (context) => MangaDetailScreenBloc(),
-        )
+        ),
+        BlocProvider<ChapterScreenBloc>(
+          create: (context) => ChapterScreenBloc(),
+        ),
       ],
       child: MaterialApp(
         onGenerateRoute: routeGenerator.onGenerateRoute,

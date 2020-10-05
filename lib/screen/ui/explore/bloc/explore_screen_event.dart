@@ -7,4 +7,4 @@ abstract class ExploreScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetExploreScreenEvent extends ExploreScreenEvent {}
+class GetExploreScreenData extends ExploreScreenEvent {}

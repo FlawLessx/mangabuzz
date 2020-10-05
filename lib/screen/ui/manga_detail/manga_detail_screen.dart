@@ -1,25 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:content_placeholder/content_placeholder.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/chapter_item.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_placeholder.dart';
-import 'package:mangabuzz/screen/widget/rating.dart';
-import 'package:mangabuzz/screen/widget/round_button.dart';
-
-class MangaDetailPageArguments {
-  final String mangaEndpoint;
-  MangaDetailPageArguments({@required this.mangaEndpoint});
-}
+import '../../../core/model/manga_detail/manga_detail_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../chapter/bloc/chapter_screen_bloc.dart';
+import 'bloc/manga_detail_screen_bloc.dart';
+import 'chapter_item.dart';
+import 'manga_detail_placeholder.dart';
+import '../../widget/rating.dart';
+import '../../widget/round_button.dart';
 
 class MangaDetailPage extends StatefulWidget {
-  final String mangaEndpoint;
-  MangaDetailPage({@required this.mangaEndpoint});
-
   @override
   _MangaDetailPageState createState() => _MangaDetailPageState();
 }
@@ -89,6 +82,9 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     RoundButton(
+                        iconColor: Colors.white,
+                        backgroundColor: Theme.of(context).primaryColor,
+                        enableShadow: true,
                         icons: Icons.arrow_back,
                         onTap: () => Navigator.pop(context)),
                     GestureDetector(
@@ -207,7 +203,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         ],
                       ),
                     ),
-                    buildChapter(state.mangaDetail.chapterList)
+                    buildChapter(state.mangaDetail)
                   ],
                 )
               ],
@@ -220,19 +216,31 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
     );
   }
 
-  Widget buildChapter(List<ChapterList> chapterList) {
+  Widget buildChapter(MangaDetail mangaDetail) {
     return ListView.builder(
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(100),
             vertical: ScreenUtil().setHeight(20)),
         physics: NeverScrollableScrollPhysics(),
-        itemCount: chapterList.length,
+        itemCount: mangaDetail.chapterList.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
-            child: ChapterItem(
-              chapterListData: chapterList[index],
+            child: GestureDetector(
+              onTap: () {
+                BlocProvider.of<ChapterScreenBloc>(context)
+                    .add(GetChapterScreenData(
+                  chapterEndpoint:
+                      mangaDetail.chapterList[index].chapterEndpoint,
+                  selectedIndex: index,
+                  mangaDetail: mangaDetail,
+                ));
+                Navigator.pushNamed(context, chapterRoute);
+              },
+              child: ChapterItem(
+                chapterListData: mangaDetail.chapterList[index],
+              ),
             ),
           );
         });

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/util/connectivity_check.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bookmark_screen.dart';
+import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
+import 'package:mangabuzz/screen/ui/explore/bloc/explore_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/explore/explore_screen.dart';
+import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/history/history_screen.dart';
+import 'package:mangabuzz/screen/ui/home/bloc/home_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/home/home_screen.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -29,7 +36,13 @@ class _BaseScreenState extends State<BaseScreen> {
     connectivityCheck.checkConnectivity().then((value) => {
           if (value == true)
             {
-              // TODO some bloc
+              BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData()),
+              BlocProvider.of<ExploreScreenBloc>(context)
+                  .add(GetExploreScreenData()),
+              BlocProvider.of<BookmarkScreenBloc>(context)
+                  .add(GetBookmarkScreenData(limit: 20, offset: 0)),
+              BlocProvider.of<HistoryScreenBloc>(context)
+                  .add(GetHistoryScreenData(limit: 20, offset: 0))
             }
           else
             {
@@ -99,5 +112,21 @@ class _BaseScreenState extends State<BaseScreen> {
             ),
           )),
     );
+  }
+}
+
+class Test extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+      child: Center(
+          child: FlatButton(
+              onPressed: () => Navigator.pushNamed(
+                    context,
+                    chapterRoute,
+                  ),
+              child: Text("Tap"))),
+    ));
   }
 }

@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:mangabuzz/core/model/history/history_model.dart';
+import 'package:mangabuzz/core/provider/local/moor_db_provider.dart';
+import 'package:mangabuzz/core/repository/local/moor_repository.dart';
 import 'package:moor_flutter/moor_flutter.dart';
-
-import '../../../model/history/history_model.dart';
-import '../../../provider/local/moor_db_provider.dart';
-import '../../../repository/local/moor_repository.dart';
 
 part 'history_event.dart';
 part 'history_state.dart';

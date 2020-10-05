@@ -4,7 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class RoundButton extends StatelessWidget {
   final IconData icons;
   final Function onTap;
-  RoundButton({@required this.icons, @required this.onTap});
+  final Color backgroundColor;
+  final Color iconColor;
+  final bool enableShadow;
+  RoundButton(
+      {@required this.icons,
+      @required this.onTap,
+      @required this.backgroundColor,
+      @required this.iconColor,
+      @required this.enableShadow});
 
   @override
   Widget build(BuildContext context) {
@@ -15,20 +23,21 @@ class RoundButton extends StatelessWidget {
         width: ScreenUtil().setHeight(110),
         decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).primaryColor.withOpacity(0.6),
-              spreadRadius: 2,
-              blurRadius: 4,
-              offset: Offset(0, 2), // changes position of shadow
-            ),
+            if (enableShadow == true)
+              BoxShadow(
+                color: backgroundColor.withOpacity(0.6),
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: Offset(0, 2), // changes position of shadow
+              ),
           ],
           shape: BoxShape.circle,
-          color: Theme.of(context).primaryColor,
+          color: backgroundColor,
         ),
         child: Center(
           child: Icon(
             icons,
-            color: Colors.white,
+            color: iconColor,
             size: ScreenUtil().setHeight(80),
           ),
         ),

@@ -54,7 +54,12 @@ class SearchBar extends PreferredSize {
                 ),
               )),
               SizedBox(width: ScreenUtil().setWidth(60)),
-              RoundButton(icons: Icons.menu, onTap: () {})
+              RoundButton(
+                  iconColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  enableShadow: true,
+                  icons: Icons.menu,
+                  onTap: () {})
             ],
           ),
         ),

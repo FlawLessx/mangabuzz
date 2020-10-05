@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/model/best_series/best_series_model.dart';
-import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
 import 'package:mangabuzz/screen/ui/home/bloc/home_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/home/carousell.dart';
@@ -20,68 +18,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<BestSeries> imgList = [
-    BestSeries(
-        title: "Black Clover",
-        image: "resources/img/black clover.jpg",
-        type: "Manhwa"),
-    BestSeries(
-        title: "One Piece",
-        image: "resources/img/One-Piece.jpg",
-        type: "Manga"),
-  ];
-
-  final List<Manga> manga = [
-    Manga(
-        title: "Dr. Stone",
-        image: "resources/img/Dr-Stone.jpg",
-        type: "Manga",
-        rating: "7.3",
-        chapter: "Ch.145"),
-    Manga(
-        title: "Jagaaaaaan",
-        image: "resources/img/Jagaaaaaan.jpeg",
-        type: "Manga",
-        rating: "7.1",
-        chapter: "Ch.74"),
-    Manga(
-        title: "Jagaaaaaan",
-        image: "resources/img/Jagaaaaaan.jpeg",
-        type: "Manga",
-        rating: "7.1",
-        chapter: "Ch.74"),
-    Manga(
-        title: "God Of War aok aw raajr awjiak mwmm",
-        image: "resources/img/god of war.jpg",
-        type: "Manhua",
-        rating: "7.0",
-        chapter: "Ch.100"),
-  ];
-
-  LatestUpdate latestUpdate = LatestUpdate(latestUpdateList: [
-    LatestUpdateList(
-        image: "resources/img/Dr-Stone.jpg",
-        hotTag: "H",
-        listNewChapter: [
-          ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-          ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-          ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-        ]),
-    LatestUpdateList(
-        image: "resources/img/Dr-Stone.jpg",
-        newTag: "N",
-        listNewChapter: [
-          ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-          ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-          ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-        ]),
-    LatestUpdateList(image: "resources/img/Dr-Stone.jpg", listNewChapter: [
-      ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-      ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-      ListNewChapter(chapterName: "Ch.271", updatedOn: "7 menit"),
-    ])
-  ]);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -22,12 +22,12 @@ class ExploreScreenBloc extends Bloc<ExploreScreenEvent, ExploreScreenState> {
   ) async* {
     yield ExploreScreenLoading();
 
-    if (event is GetExploreScreenEvent)
+    if (event is GetExploreScreenData)
       yield* getExploreScreenDataToState(event);
   }
 
   Stream<ExploreScreenState> getExploreScreenDataToState(
-      GetExploreScreenEvent event) async* {
+      GetExploreScreenData event) async* {
     try {
       final genres = await apiRepo.getAllGenre();
       final listManga = await apiRepo.getListManga(1);
