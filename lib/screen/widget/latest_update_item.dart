@@ -1,7 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
+import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import 'package:mangabuzz/screen/util/color_series.dart';
+import 'package:mangabuzz/screen/widget/tag.dart';
+
+import 'circular_progress.dart';
 
 Widget buildLatestUpdateGridview(LatestUpdate listUpdate) {
   return GridView.builder(
@@ -28,105 +37,157 @@ class LatestUpdateItem extends StatefulWidget {
 }
 
 class _LatestUpdateItemState extends State<LatestUpdateItem> {
+  ColorSeries colorSeries = ColorSeries();
+
+  String _convertUpdate(String data) {
+    var result = data.split(" ");
+
+    return "${result[0]} ${result[1]}";
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: ScreenUtil().setHeight(10)),
-      child: Container(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  BlocProvider.of<MangaDetailScreenBloc>(context).add(
+                      GetMangaDetailScreenData(
+                          mangaEndpoint: widget.item.mangaEndpoint,
+                          title: widget.item.title));
+                  Navigator.pushNamed(context, mangaDetailRoute);
+                },
+                child: ClipRRect(
                   borderRadius: BorderRadius.all(
                       Radius.circular(ScreenUtil().setWidth(20))),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 3,
-                        offset: Offset(0, 0))
-                  ]),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(
-                    Radius.circular(ScreenUtil().setWidth(20))),
-                child: CachedNetworkImage(
-                  imageUrl: widget.item.image,
-                  width: ScreenUtil().setWidth(180),
-                  height: ScreenUtil().setWidth(280),
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  fit: BoxFit.cover,
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.item.image,
+                    width: ScreenUtil().setWidth(180),
+                    height: ScreenUtil().setWidth(300),
+                    placeholder: (context, url) => Container(
+                      width: ScreenUtil().setWidth(180),
+                      height: ScreenUtil().setWidth(300),
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                          child: CustomCircularProgressIndicator(),
+                        ),
+                      ),
+                    ),
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: ScreenUtil().setWidth(20),
-            ),
-            Column(
+              widget.item.hotTag != ""
+                  ? Positioned(right: 0, top: 0, child: Tag(isHot: true))
+                  : SizedBox()
+            ],
+          ),
+          SizedBox(
+            width: ScreenUtil().setWidth(20),
+          ),
+          Flexible(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Dr. Stone",
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
-                  textAlign: TextAlign.center,
-                  style:
-                      TextStyle(fontFamily: 'Poppins-SemiBold', fontSize: 16),
+                GestureDetector(
+                  onTap: () {
+                    BlocProvider.of<MangaDetailScreenBloc>(context).add(
+                        GetMangaDetailScreenData(
+                            mangaEndpoint: widget.item.mangaEndpoint,
+                            title: widget.item.title));
+                    Navigator.pushNamed(context, mangaDetailRoute);
+                  },
+                  child: Flexible(
+                    child: Text(
+                      widget.item.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontFamily: 'Poppins-SemiBold', fontSize: 13),
+                    ),
+                  ),
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: widget.item.listNewChapter
-                      .map((e) => Padding(
+                  children: [
+                    ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: widget.item.listNewChapter.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
                             padding: EdgeInsets.symmetric(
                                 vertical: ScreenUtil().setHeight(10)),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: ScreenUtil().setHeight(30),
-                                  width: ScreenUtil().setHeight(30),
+                                  height: ScreenUtil().setHeight(25),
+                                  width: ScreenUtil().setHeight(25),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Colors.amberAccent),
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 SizedBox(width: ScreenUtil().setWidth(5)),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          e.chapterName,
+                                Flexible(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          BlocProvider.of<ChapterScreenBloc>(
+                                                  context)
+                                              .add(GetChapterScreenData(
+                                                  chapterEndpoint: widget
+                                                      .item
+                                                      .listNewChapter[index]
+                                                      .chapterEndpoint,
+                                                  selectedIndex: index,
+                                                  mangaDetail: null,
+                                                  mangaEndpoint: widget
+                                                      .item.mangaEndpoint));
+                                          Navigator.pushNamed(
+                                              context, mangaDetailRoute);
+                                        },
+                                        child: Text(
+                                          widget.item.listNewChapter[index]
+                                              .chapterName,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
                                           style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 14),
+                                              fontSize: 12),
                                         ),
-                                        SizedBox(
-                                            width: ScreenUtil().setWidth(20)),
-                                        Text(
-                                          e.updatedOn,
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      ],
-                                    )
-                                  ],
+                                      ),
+                                      Text(
+                                        _convertUpdate(widget.item
+                                            .listNewChapter[index].updatedOn),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.fade,
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 10),
+                                      )
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
-                          ))
-                      .toList(),
-                )
+                          );
+                        })
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

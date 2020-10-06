@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/tag.dart';
 
 class MangaItem extends StatefulWidget {
@@ -39,8 +41,8 @@ class _MangaItemState extends State<MangaItem> {
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 4,
+                        spreadRadius: 2,
+                        blurRadius: 2,
                         offset: Offset(0, 0))
                   ]),
               child: ClipRRect(
@@ -50,10 +52,18 @@ class _MangaItemState extends State<MangaItem> {
                   children: [
                     CachedNetworkImage(
                       imageUrl: widget.manga.image,
-                      width: ScreenUtil().setWidth(220),
-                      height: ScreenUtil().setWidth(320),
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
+                      width: ScreenUtil().setWidth(240),
+                      height: ScreenUtil().setWidth(340),
+                      placeholder: (context, url) => Container(
+                        width: ScreenUtil().setWidth(240),
+                        height: ScreenUtil().setWidth(340),
+                        child: Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                            child: CustomCircularProgressIndicator(),
+                          ),
+                        ),
+                      ),
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
@@ -65,7 +75,7 @@ class _MangaItemState extends State<MangaItem> {
                         padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
                         child: TypeTag(
                           type: widget.manga.type,
-                          fontSize: 11,
+                          fontSize: 10,
                         ),
                       ),
                     )
@@ -81,7 +91,7 @@ class _MangaItemState extends State<MangaItem> {
               maxLines: 2,
               overflow: TextOverflow.clip,
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'Poppins-SemiBold', fontSize: 16),
+              style: TextStyle(fontFamily: 'Poppins-SemiBold', fontSize: 13),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -100,13 +110,13 @@ class _MangaItemState extends State<MangaItem> {
                 ),
                 Text(
                   widget.manga.rating,
-                  style: TextStyle(fontFamily: 'Poppins-Medium', fontSize: 14),
+                  style: TextStyle(fontSize: 11, color: Colors.grey),
                 )
               ],
             ),
             Text(
               widget.manga.chapter,
-              style: TextStyle(fontFamily: 'Poppins-Medium', fontSize: 15),
+              style: TextStyle(fontFamily: 'Poppins-Medium', fontSize: 12),
             )
           ],
         ),

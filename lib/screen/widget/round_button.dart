@@ -19,8 +19,8 @@ class RoundButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: ScreenUtil().setHeight(110),
-        width: ScreenUtil().setHeight(110),
+        height: ScreenUtil().setHeight(120),
+        width: ScreenUtil().setHeight(120),
         decoration: BoxDecoration(
           boxShadow: [
             if (enableShadow == true)

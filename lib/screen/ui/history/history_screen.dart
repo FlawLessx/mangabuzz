@@ -13,17 +13,6 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  List<HistoryModel> list = [
-    HistoryModel(
-        title: "Jagaaaaaan",
-        author: "Yanuar Bimantoro",
-        image: "resources/img/Jagaaaaaan.jpeg",
-        type: "Manhua",
-        rating: "7.0",
-        chapterReached: 70,
-        totalChapter: 104)
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,5 @@
 class ConstantUrl {
-  final baseUrl = 'mangabuzz.glitch.me';
+  final baseUrl = 'http://mangabuzz.glitch.me';
 
   String get hotMangaUpdate => "$baseUrl/api/hot_manga_update/";
   String get bestSeries => "$baseUrl/api/best_series/";

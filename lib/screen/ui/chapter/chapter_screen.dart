@@ -6,7 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/chapter/chapter_appbar.dart';
+import 'package:mangabuzz/screen/ui/chapter/chapter_placholder.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/round_button.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ChapterPage extends StatefulWidget {
   @override
@@ -31,8 +34,6 @@ class _ChapterPageState extends State<ChapterPage> {
       });
     super.initState();
   }
-
-  List<String> img = ["resources/img/1.jpg", "resources/img/2.jpg"];
 
   int _getCurrentValue(List<ChapterList> oldList, int selectedIndex) {
     List<ChapterList> newList = oldList.reversed.toList();
@@ -61,7 +62,7 @@ class _ChapterPageState extends State<ChapterPage> {
                     selectedIndex: state.selectedIndex,
                   );
                 } else {
-                  return Container();
+                  return chapterAppbarPlaceholder(context);
                 }
               },
             ),
@@ -77,13 +78,22 @@ class _ChapterPageState extends State<ChapterPage> {
                     ListView.builder(
                         shrinkWrap: true,
                         physics: ScrollPhysics(),
-                        itemCount: img.length,
+                        itemCount: state.chapterImg.length,
                         itemBuilder: (context, index) {
                           return CachedNetworkImage(
-                            imageUrl: state.mangaDetail.image,
+                            imageUrl: state.chapterImg[index].imageLink,
                             width: MediaQuery.of(context).size.width,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
+                            imageBuilder: (context, imageProvider) {
+                              return PhotoView(imageProvider: imageProvider);
+                            },
+                            placeholder: (context, url) => Container(
+                              child: Center(
+                                  child: Padding(
+                                padding:
+                                    EdgeInsets.all(ScreenUtil().setWidth(200)),
+                                child: CustomCircularProgressIndicator(),
+                              )),
+                            ),
                             fit: BoxFit.cover,
                             filterQuality: FilterQuality.high,
                             errorWidget: (context, url, error) =>
@@ -157,7 +167,7 @@ class _ChapterPageState extends State<ChapterPage> {
                 ),
               );
             } else {
-              return Container();
+              return chapterBodyPlaceholder();
             }
           },
         ));

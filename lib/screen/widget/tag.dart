@@ -11,8 +11,8 @@ class Tag extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
       child: Container(
-        height: ScreenUtil().setWidth(70),
-        width: ScreenUtil().setWidth(70),
+        height: ScreenUtil().setWidth(60),
+        width: ScreenUtil().setWidth(60),
         decoration: BoxDecoration(
             color: isHot == true ? Color(0xFFDD392E) : Color(0xFFF39800),
             borderRadius:
@@ -20,7 +20,10 @@ class Tag extends StatelessWidget {
         child: Center(
           child: Text(
             isHot == true ? "H" : "N",
-            style: TextStyle(color: Colors.white, fontFamily: "Poppins-Bold"),
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: "Poppins-SemiBold",
+                fontSize: 13),
           ),
         ),
       ),
@@ -42,7 +45,7 @@ class TypeTag extends StatelessWidget {
       decoration: BoxDecoration(
           color: colorSeries.generateColor(type),
           borderRadius:
-              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20)))),
+              BorderRadius.all(Radius.circular(ScreenUtil().setWidth(15)))),
       child: Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
@@ -52,7 +55,7 @@ class TypeTag extends StatelessWidget {
             style: TextStyle(
                 color: Colors.white,
                 fontSize: fontSize,
-                fontFamily: 'Poppins-Semibold'),
+                fontFamily: 'Poppins-SemiBold'),
           ),
         ),
       ),

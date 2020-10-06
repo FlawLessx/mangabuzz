@@ -101,11 +101,15 @@ class _ExplorePageState extends State<ExplorePage> {
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(30)),
       child: Row(
         children: listGenre.map((e) {
-          return Chip(
-            label: Text(e.genreSubtitle),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Theme.of(context).primaryColor,
-            shadowColor: Theme.of(context).primaryColor.withOpacity(0.5),
+          return Padding(
+            padding: EdgeInsets.only(right: ScreenUtil().setWidth(15)),
+            child: Chip(
+              label: Text(e.genreSubtitle),
+              labelStyle: TextStyle(color: Colors.white),
+              backgroundColor: Theme.of(context).primaryColor,
+              shadowColor: Theme.of(context).primaryColor.withOpacity(0.6),
+              elevation: 4.0,
+            ),
           );
         }).toList(),
       ),

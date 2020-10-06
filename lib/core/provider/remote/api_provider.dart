@@ -34,6 +34,7 @@ class APIProvider {
     if (response.statusCode == 200) {
       return bestSeriesFromJson(response.body);
     } else {
+      print(response.body);
       throw Exception();
     }
   }

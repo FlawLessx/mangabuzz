@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Carousell(itemList: state.listBestSeries),
-                        //bestSeriesPlaceholder(),
                         SizedBox(
                           height: ScreenUtil().setHeight(30),
                         ),
@@ -91,7 +90,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildHotMangaUpdate(List<Manga> listManga) {
     return SingleChildScrollView(
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

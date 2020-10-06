@@ -3,18 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
-import 'package:mangabuzz/core/util/connectivity_check.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bookmark_screen.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
-import 'package:mangabuzz/screen/ui/explore/bloc/explore_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/explore/explore_screen.dart';
-import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/history/history_screen.dart';
-import 'package:mangabuzz/screen/ui/home/bloc/home_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/home/home_screen.dart';
+import '../../core/util/connectivity_check.dart';
+import '../../core/util/route_generator.dart';
+import 'bookmark/bloc/bookmark_screen_bloc.dart';
+import 'bookmark/bookmark_screen.dart';
+import 'explore/bloc/explore_screen_bloc.dart';
+import 'explore/explore_screen.dart';
+import 'history/bloc/history_screen_bloc.dart';
+import 'history/history_screen.dart';
+import 'home/bloc/home_screen_bloc.dart';
+import 'home/home_screen.dart';
 
 class BaseScreen extends StatefulWidget {
   @override
@@ -104,7 +102,6 @@ class _BaseScreenState extends State<BaseScreen> {
                   ],
                   selectedIndex: _selectedIndex,
                   onTabChange: (index) {
-                    print(index);
                     setState(() {
                       _selectedIndex = index;
                     });

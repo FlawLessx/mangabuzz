@@ -35,7 +35,8 @@ class MangaDetailScreenBloc
       var historyResult;
       final dataManga = await apiRepo.getMangaDetail(event.mangaEndpoint);
       final listHistory = await dbRepo.searchHistoryByQuery(event.title);
-      bool isBookmarked = listHistory.length != 0 ? true : false;
+      final listBookmark = await dbRepo.searchBookmarkByQuery(event.title);
+      bool isBookmarked = listBookmark.length != 0 ? true : false;
 
       for (var item in listHistory) {
         if (item.title == event.title) {
@@ -51,7 +52,7 @@ class MangaDetailScreenBloc
       yield MangaDetailScreenLoaded(
           mangaDetail: dataManga,
           isBookmarked: isBookmarked,
-          historyModel: historyResult);
+          historyModel: historyResult != null ? historyResult : HistoryModel());
     } on Exception {
       yield MangaDetailScreenError();
     }

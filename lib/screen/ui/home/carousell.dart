@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/model/best_series/best_series_model.dart';
 import 'package:mangabuzz/screen/util/color_series.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Carousell extends StatefulWidget {
@@ -49,8 +51,19 @@ class _CarousellState extends State<Carousell> {
                               imageUrl: item.image,
                               width: ScreenUtil().setWidth(1100),
                               height: ScreenUtil().setHeight(370),
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
+                              placeholder: (context, url) => Container(
+                                width: ScreenUtil().setWidth(1100),
+                                height: ScreenUtil().setWidth(370),
+                                child: Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                        ScreenUtil().setWidth(30)),
+                                    child: CustomCircularProgressIndicator(),
+                                  ),
+                                ),
+                              ),
+                              filterQuality: FilterQuality.high,
+                              fit: BoxFit.fitWidth,
                               errorWidget: (context, url, error) =>
                                   Icon(Icons.error),
                             ),

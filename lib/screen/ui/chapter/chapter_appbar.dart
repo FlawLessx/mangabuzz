@@ -51,6 +51,8 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                   children: [
                     Text(
                       widget.chapterList[widget.selectedIndex].chapterName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style:
                           TextStyle(fontSize: 18, fontFamily: "Poppins-Bold"),
                     ),

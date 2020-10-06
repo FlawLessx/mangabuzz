@@ -8,7 +8,7 @@ class SearchBar extends PreferredSize {
   SearchBar({@required this.text, @required this.function});
 
   @override
-  Size get preferredSize => Size.fromHeight(ScreenUtil().setHeight(200));
+  Size get preferredSize => Size.fromHeight(ScreenUtil().setHeight(180));
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +31,11 @@ class SearchBar extends PreferredSize {
                   padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(30)),
                   child: TextField(
-                      style: TextStyle(color: Colors.black, fontSize: 18),
+                      style: TextStyle(color: Colors.black, fontSize: 16),
                       decoration: InputDecoration(
                         hintText: "Search something...",
                         hintStyle:
-                            TextStyle(color: Color(0xFFb8bbc4), fontSize: 18),
+                            TextStyle(color: Color(0xFFb8bbc4), fontSize: 16),
                         prefixIcon: Icon(
                           Icons.search,
                           color: Color(0xFFb8bbc4),

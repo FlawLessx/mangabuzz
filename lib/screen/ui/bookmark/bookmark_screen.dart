@@ -16,17 +16,6 @@ class BookmarkPage extends StatefulWidget {
 class _BookmarkPageState extends State<BookmarkPage> {
   int offset = 0;
 
-  List<BookmarkModel> list = [
-    BookmarkModel(
-        title: "One Piece",
-        author: "Eichiro Oda",
-        image: "resources/img/Dr-Stone.jpg",
-        type: "Manga",
-        rating: "9.1",
-        description:
-            "awokaokaowoa aowjaoja naiwdnaiunwa arihawiuhqui awrhaihwiahr awirhaiwraiw awoiraowroawh aworaowrhaowhr aowrhoawir oawoaewh")
-  ];
-
   _loadMore(int count) {
     setState(() {
       offset += count;
@@ -62,7 +51,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                   SingleChildScrollView(
                     physics: NeverScrollableScrollPhysics(),
                     child: Column(
-                        children: list
+                        children: state.listBookmarkData
                             .map((e) => BookmarkItem(bookmarkModel: e))
                             .toList()),
                   )

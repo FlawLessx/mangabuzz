@@ -11,11 +11,12 @@ class GetChapterScreenData extends ChapterScreenEvent {
   final String chapterEndpoint;
   final int selectedIndex;
   final MangaDetail mangaDetail;
-  GetChapterScreenData({
-    @required this.chapterEndpoint,
-    @required this.selectedIndex,
-    @required this.mangaDetail,
-  });
+  final String mangaEndpoint;
+  GetChapterScreenData(
+      {@required this.chapterEndpoint,
+      @required this.selectedIndex,
+      @required this.mangaDetail,
+      this.mangaEndpoint});
 
   @override
   List<Object> get props => [chapterEndpoint, selectedIndex, mangaDetail];

@@ -36,9 +36,15 @@ class ChapterScreenBloc extends Bloc<ChapterScreenEvent, ChapterScreenState> {
 
       final data = await apiRepo.getChapter(event.chapterEndpoint);
 
+      var mangaDetail;
+      if (event.mangaDetail != null)
+        mangaDetail = event.mangaDetail;
+      else
+        mangaDetail = await apiRepo.getMangaDetail(event.mangaEndpoint);
+
       yield ChapterScreenLoaded(
           selectedIndex: event.selectedIndex,
-          mangaDetail: event.mangaDetail,
+          mangaDetail: mangaDetail,
           chapterList: event.mangaDetail.chapterList,
           chapterImg: data);
     } on Exception {
