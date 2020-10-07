@@ -58,16 +58,6 @@ class _MangaItemState extends State<MangaItem> {
                       imageUrl: widget.manga.image,
                       width: ScreenUtil().setWidth(240),
                       height: ScreenUtil().setWidth(340),
-                      placeholder: (context, url) => Container(
-                        width: ScreenUtil().setWidth(240),
-                        height: ScreenUtil().setWidth(340),
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-                            child: CustomCircularProgressIndicator(),
-                          ),
-                        ),
-                      ),
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),

@@ -14,7 +14,9 @@ class SearchBar extends PreferredSize {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.symmetric(
+            vertical: ScreenUtil().setWidth(30),
+            horizontal: ScreenUtil().setWidth(20)),
         child: Container(
           color: Colors.transparent,
           height: ScreenUtil().setHeight(150),

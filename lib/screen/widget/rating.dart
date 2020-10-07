@@ -8,23 +8,26 @@ class Rating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      RatingBarIndicator(
-        rating: double.parse(rating) / 2,
-        itemCount: 5,
-        itemSize: ScreenUtil().setHeight(40),
-        itemBuilder: (context, _) => Icon(
-          Icons.star,
-          color: Colors.amber,
-        ),
-      ),
-      SizedBox(
-        width: ScreenUtil().setWidth(10),
-      ),
-      Text(
-        rating,
-        style: TextStyle(fontSize: 11, color: Colors.grey),
-      )
-    ]);
+    return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          RatingBarIndicator(
+            rating: double.parse(rating) / 2,
+            itemCount: 5,
+            itemSize: ScreenUtil().setHeight(40),
+            itemBuilder: (context, _) => Icon(
+              Icons.star,
+              color: Colors.amber,
+            ),
+          ),
+          SizedBox(
+            width: ScreenUtil().setWidth(10),
+          ),
+          Text(
+            rating,
+            style: TextStyle(fontSize: 11, color: Colors.grey),
+          )
+        ]);
   }
 }

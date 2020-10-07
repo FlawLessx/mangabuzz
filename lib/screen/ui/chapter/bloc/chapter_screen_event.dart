@@ -7,6 +7,8 @@ abstract class ChapterScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class InitialStateChapterScreen extends ChapterScreenEvent {}
+
 class GetChapterScreenData extends ChapterScreenEvent {
   final String chapterEndpoint;
   final int selectedIndex;

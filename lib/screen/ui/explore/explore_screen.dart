@@ -33,7 +33,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 children: [
                   Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
+                          horizontal: ScreenUtil().setWidth(20)),
                       child: textMenu("Genres", () {})),
                   buildGenres(state.listGenre),
                   SizedBox(
@@ -41,25 +41,37 @@ class _ExplorePageState extends State<ExplorePage> {
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
+                          horizontal: ScreenUtil().setWidth(20)),
                       child: textMenu("List Manga", () {})),
-                  buildListManga(state.listManga),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(20)),
+                    child: buildListManga(state.listManga),
+                  ),
                   SizedBox(
                     height: ScreenUtil().setHeight(30),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
+                          horizontal: ScreenUtil().setWidth(20)),
                       child: textMenu("List Manhwa", () {})),
-                  buildListManga(state.listManhwa),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(20)),
+                    child: buildListManga(state.listManhwa),
+                  ),
                   SizedBox(
                     height: ScreenUtil().setHeight(30),
                   ),
                   Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
+                          horizontal: ScreenUtil().setWidth(20)),
                       child: textMenu("List Manhua", () {})),
-                  buildListManga(state.listManhua)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(20)),
+                    child: buildListManga(state.listManhua),
+                  )
                 ],
               );
             } else {

@@ -43,8 +43,6 @@ dependencies:
   filesize: ^1.0.4
   flutter_cache_manager: ^1.4.2
   cached_network_image: ^2.3.2+1
-  easy_localization_loader: ^0.0.2
-  easy_localization: ^2.3.3
   moor_ffi: ^0.8.0
   flutter_screenutil: ^3.0.2
   carousel_slider: ^2.2.1
@@ -54,13 +52,18 @@ dependencies:
   content_placeholder: ^0.1.0
   flutter_rating_bar: ^3.0.1+1
   flutter_animation_progress_bar: ^1.0.5
-  random_color: ^1.0.5
   lazy_load_scrollview: ^1.1.0
   flutter_dropdown: ^0.0.8
   readmore: ^1.0.0
-  photo_view: ^0.10.2
+  flutter_advanced_networkimage: ^0.7.0
+  draggable_scrollbar: ^0.0.4
   flutter_localizations:
     sdk: flutter
+
+dependency_overrides:
+  image: ^2.1.18
+  xml: ^4.5.1
+  flutter_svg: ^0.18.0
 
 dev_dependencies:
   flutter_test:

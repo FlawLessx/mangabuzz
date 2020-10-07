@@ -46,7 +46,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
               onEndOfPage: () => _loadMore(state.listBookmarkData.length),
               child: ListView(
                 padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
                 children: [
                   Text(
                     "Bookmarked Series",

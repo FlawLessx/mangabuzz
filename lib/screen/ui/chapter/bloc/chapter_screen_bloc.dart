@@ -23,8 +23,9 @@ class ChapterScreenBloc extends Bloc<ChapterScreenEvent, ChapterScreenState> {
     ChapterScreenEvent event,
   ) async* {
     yield ChapterScreenLoading();
-
-    if (event is GetChapterScreenData)
+    if (state is InitialStateChapterScreen)
+      yield ChapterScreenInitial();
+    else if (event is GetChapterScreenData)
       yield* getChapterScreenDataToState(event);
   }
 

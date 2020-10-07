@@ -1,12 +1,14 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:photo_view/photo_view.dart';
 
 import '../../../core/model/manga_detail/manga_detail_model.dart';
-import '../../widget/circular_progress.dart';
 import '../../widget/round_button.dart';
 import 'bloc/chapter_screen_bloc.dart';
 import 'chapter_appbar.dart';
@@ -55,6 +57,11 @@ class _ChapterPageState extends State<ChapterPage> {
           }
         });
       });
+    BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
+        chapterEndpoint: widget.chapterEndpoint,
+        selectedIndex: widget.selectedIndex,
+        mangaDetail: widget.mangaDetail,
+        mangaEndpoint: widget.mangaEndpoint));
     super.initState();
   }
 
@@ -75,124 +82,125 @@ class _ChapterPageState extends State<ChapterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: PreferredSize(
-            child: BlocBuilder<ChapterScreenBloc, ChapterScreenState>(
-              builder: (context, state) {
-                if (state is ChapterScreenLoaded) {
-                  return ChapterAppbar(
-                    chapterList: state.chapterList,
-                    selectedIndex: state.selectedIndex,
-                  );
-                } else {
-                  return chapterAppbarPlaceholder(context);
-                }
-              },
-            ),
-            preferredSize: Size.fromHeight(ScreenUtil().setHeight(220))),
-        body: BlocBuilder<ChapterScreenBloc, ChapterScreenState>(
-          builder: (context, state) {
-            if (state is ChapterScreenLoaded) {
-              return Scrollbar(
-                child: ListView(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context);
+        BlocProvider.of<ChapterScreenBloc>(context)
+            .add(InitialStateChapterScreen());
+        return false;
+      },
+      child: Scaffold(
+          appBar: PreferredSize(
+              child: BlocBuilder<ChapterScreenBloc, ChapterScreenState>(
+                builder: (context, state) {
+                  if (state is ChapterScreenLoaded) {
+                    return ChapterAppbar(
+                      chapterList: state.chapterList,
+                      selectedIndex: state.selectedIndex,
+                    );
+                  } else {
+                    return chapterAppbarPlaceholder(context);
+                  }
+                },
+              ),
+              preferredSize: Size.fromHeight(ScreenUtil().setHeight(220))),
+          body: BlocBuilder<ChapterScreenBloc, ChapterScreenState>(
+            builder: (context, state) {
+              if (state is ChapterScreenLoaded) {
+                return DraggableScrollbar.semicircle(
                   controller: _scrollController,
-                  physics: ScrollPhysics(),
-                  children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        itemCount: state.chapterImg.length,
-                        itemBuilder: (context, index) {
-                          return CachedNetworkImage(
-                            imageUrl: state.chapterImg[index].imageLink,
-                            width: MediaQuery.of(context).size.width,
-                            imageBuilder: (context, imageProvider) {
-                              return PhotoView(imageProvider: imageProvider);
-                            },
-                            placeholder: (context, url) => Container(
-                              child: Center(
-                                  child: Padding(
-                                padding:
-                                    EdgeInsets.all(ScreenUtil().setWidth(200)),
-                                child: CustomCircularProgressIndicator(),
-                              )),
-                            ),
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.high,
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          );
-                        }),
-                    Container(
-                      height: ScreenUtil().setHeight(200),
-                      child: Column(
-                        children: [
-                          Transform.scale(
-                            scale: 1.1,
-                            child: FAProgressBar(
-                              currentValue: _getCurrentValue(
-                                  state.chapterList, state.selectedIndex),
-                              maxValue: state.chapterList.length,
-                              size: ScreenUtil().setHeight(20),
-                              backgroundColor: Color(0xFFE5E5E5),
-                              progressColor: Color(0xFF4be2c0),
-                              borderRadius: 10,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  RoundButton(
-                                      icons: Icons.arrow_back,
-                                      iconColor: Theme.of(context).primaryColor,
-                                      backgroundColor: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.2),
-                                      enableShadow: false,
-                                      onTap: () {}),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "${state.chapterList[state.selectedIndex].chapterName}",
-                                        style: TextStyle(
-                                            fontFamily: "Poppins-Medium",
-                                            fontSize: 14),
-                                      ),
-                                      Text(
-                                        "From ${state.chapterList.length} chapter",
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 12),
-                                      )
-                                    ],
-                                  ),
-                                  RoundButton(
-                                      iconColor: Theme.of(context).primaryColor,
-                                      backgroundColor: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.2),
-                                      enableShadow: false,
-                                      icons: Icons.arrow_forward,
-                                      onTap: () {}),
-                                ],
+                  child: ListView(
+                    controller: _scrollController,
+                    physics: ScrollPhysics(),
+                    children: [
+                      InteractiveViewer(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: state.chapterImg.length,
+                            itemBuilder: (context, index) {
+                              return Image(
+                                  image: AdvancedNetworkImage(
+                                      state.chapterImg[index].imageLink,
+                                      retryLimit: 5,
+                                      timeoutDuration: Duration(seconds: 60),
+                                      fallbackAssetImage:
+                                          "resources/img/error.png"));
+                            }),
+                      ),
+                      Container(
+                        height: ScreenUtil().setHeight(200),
+                        child: Column(
+                          children: [
+                            Transform.scale(
+                              scale: 1.1,
+                              child: FAProgressBar(
+                                currentValue: _getCurrentValue(
+                                    state.chapterList, state.selectedIndex),
+                                maxValue: state.chapterList.length,
+                                size: ScreenUtil().setHeight(20),
+                                backgroundColor: Color(0xFFE5E5E5),
+                                progressColor: Color(0xFF4be2c0),
+                                borderRadius: 10,
                               ),
                             ),
-                          )
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RoundButton(
+                                        icons: Icons.arrow_back,
+                                        iconColor:
+                                            Theme.of(context).primaryColor,
+                                        backgroundColor: Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.2),
+                                        enableShadow: false,
+                                        onTap: () {}),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "${state.chapterList[state.selectedIndex].chapterName}",
+                                          style: TextStyle(
+                                              fontFamily: "Poppins-Medium",
+                                              fontSize: 14),
+                                        ),
+                                        Text(
+                                          "From ${state.chapterList.length} chapter",
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                    RoundButton(
+                                        iconColor:
+                                            Theme.of(context).primaryColor,
+                                        backgroundColor: Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.2),
+                                        enableShadow: false,
+                                        icons: Icons.arrow_forward,
+                                        onTap: () {}),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return chapterBodyPlaceholder();
-            }
-          },
-        ));
+                    ],
+                  ),
+                );
+              } else {
+                return chapterBodyPlaceholder();
+              }
+            },
+          )),
+    );
   }
 }

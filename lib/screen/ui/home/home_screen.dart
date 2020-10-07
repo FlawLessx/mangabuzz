@@ -31,9 +31,12 @@ class _HomePageState extends State<HomePage> {
         ),
         body: BlocConsumer<HomeScreenBloc, HomeScreenState>(
           listener: (context, state) {
-            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-              BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
-            }));
+            if (state is HomeScreenError) {
+              Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+                BlocProvider.of<HomeScreenBloc>(context)
+                    .add(GetHomeScreenData());
+              }));
+            }
           },
           builder: (context, state) {
             if (state is HomeScreenLoaded) {
@@ -41,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30)),
+                        horizontal: ScreenUtil().setWidth(20)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -61,21 +64,21 @@ class _HomePageState extends State<HomePage> {
                     height: ScreenUtil().setHeight(10),
                   ),
                   buildHotMangaUpdate(state.listHotMangaUpdate),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(20),
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30)),
+                        horizontal: ScreenUtil().setWidth(20)),
                     child: Text(
                       "Latest Update",
                       style:
                           TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                     ),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(20),
-                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30)),
+                        horizontal: ScreenUtil().setWidth(20)),
                     child: buildLatestUpdateGridview(state.listLatestUpdate),
                   ),
                   Row(
@@ -100,7 +103,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildHotMangaUpdate(List<Manga> listManga) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

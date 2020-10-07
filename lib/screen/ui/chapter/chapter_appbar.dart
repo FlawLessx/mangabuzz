@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/chapter/chapter_dropdown.dart';
 import 'package:mangabuzz/screen/widget/round_button.dart';
 
@@ -67,7 +69,11 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                     iconColor: Colors.white,
                     backgroundColor: Theme.of(context).primaryColor,
                     enableShadow: true,
-                    onTap: () => Navigator.pop(context))
+                    onTap: () {
+                      BlocProvider.of<ChapterScreenBloc>(context)
+                          .add(InitialStateChapterScreen());
+                      Navigator.pop(context);
+                    })
               ],
             ),
           )),

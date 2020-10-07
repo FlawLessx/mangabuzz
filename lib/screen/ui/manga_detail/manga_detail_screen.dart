@@ -82,6 +82,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                       labelStyle: TextStyle(
                           color: Colors.white, fontFamily: "Poppins-Bold"),
                       backgroundColor: Theme.of(context).primaryColor,
+                      elevation: 3.0,
                       shadowColor:
                           Theme.of(context).primaryColor.withOpacity(0.6),
                     )
@@ -185,7 +186,6 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                       height: ScreenUtil().setHeight(5),
                     ),
                     Container(
-                      width: ScreenUtil().setWidth(280),
                       child: Rating(
                         rating: state.mangaDetail.rating,
                       ),
@@ -200,6 +200,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         state.mangaDetail.description,
                         trimLines: 3,
                         style: TextStyle(fontSize: 12),
+                        textAlign: TextAlign.center,
                         colorClickableText: Theme.of(context).primaryColor,
                         trimMode: TrimMode.Line,
                         trimCollapsedText: '...Show more',
@@ -266,13 +267,6 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
             padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
             child: GestureDetector(
               onTap: () {
-                BlocProvider.of<ChapterScreenBloc>(context)
-                    .add(GetChapterScreenData(
-                  chapterEndpoint:
-                      mangaDetail.chapterList[index].chapterEndpoint,
-                  selectedIndex: index,
-                  mangaDetail: mangaDetail,
-                ));
                 Navigator.pushNamed(context, chapterRoute,
                     arguments: ChapterPageArguments(
                       chapterEndpoint:

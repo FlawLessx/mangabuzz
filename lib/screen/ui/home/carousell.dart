@@ -66,17 +66,6 @@ class _CarousellState extends State<Carousell> {
                                 imageUrl: item.image,
                                 width: ScreenUtil().setWidth(1100),
                                 height: ScreenUtil().setHeight(370),
-                                placeholder: (context, url) => Container(
-                                  width: ScreenUtil().setWidth(1100),
-                                  height: ScreenUtil().setWidth(370),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                          ScreenUtil().setWidth(30)),
-                                      child: CustomCircularProgressIndicator(),
-                                    ),
-                                  ),
-                                ),
                                 filterQuality: FilterQuality.high,
                                 fit: BoxFit.fitWidth,
                                 errorWidget: (context, url, error) =>

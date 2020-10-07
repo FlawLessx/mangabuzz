@@ -31,22 +31,12 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   void initState() {
-    connectivityCheck.checkConnectivity().then((value) => {
-          if (value == true)
-            {
-              BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData()),
-              BlocProvider.of<ExploreScreenBloc>(context)
-                  .add(GetExploreScreenData()),
-              BlocProvider.of<BookmarkScreenBloc>(context)
-                  .add(GetBookmarkScreenData(limit: 20, offset: 0)),
-              BlocProvider.of<HistoryScreenBloc>(context)
-                  .add(GetHistoryScreenData(limit: 20, offset: 0))
-            }
-          else
-            {
-              // TODO get error page
-            }
-        });
+    BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
+    BlocProvider.of<ExploreScreenBloc>(context).add(GetExploreScreenData());
+    BlocProvider.of<BookmarkScreenBloc>(context)
+        .add(GetBookmarkScreenData(limit: 20, offset: 0));
+    BlocProvider.of<HistoryScreenBloc>(context)
+        .add(GetHistoryScreenData(limit: 20, offset: 0));
     super.initState();
   }
 

@@ -43,7 +43,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 onEndOfPage: () => _loadMore(state.listHistoryData.length),
                 child: ListView(
                   padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30)),
+                      horizontal: ScreenUtil().setWidth(20)),
                   children: [
                     Text(
                       "Read History",
