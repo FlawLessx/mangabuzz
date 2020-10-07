@@ -3,17 +3,34 @@ import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 import 'package:readmore/readmore.dart';
+
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../core/util/route_generator.dart';
+import '../../widget/rating.dart';
+import '../../widget/refresh_snackbar.dart';
+import '../../widget/round_button.dart';
 import '../chapter/bloc/chapter_screen_bloc.dart';
+import '../error/error_screen.dart';
 import 'bloc/manga_detail_screen_bloc.dart';
 import 'chapter_item.dart';
 import 'manga_detail_placeholder.dart';
-import '../../widget/rating.dart';
-import '../../widget/round_button.dart';
+
+class MangaDetailPageArguments {
+  final String mangaEndpoint;
+  final String title;
+
+  MangaDetailPageArguments(
+      {@required this.mangaEndpoint, @required this.title});
+}
 
 class MangaDetailPage extends StatefulWidget {
+  final String mangaEndpoint;
+  final String title;
+
+  MangaDetailPage({@required this.mangaEndpoint, @required this.title});
+
   @override
   _MangaDetailPageState createState() => _MangaDetailPageState();
 }
@@ -76,7 +93,17 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
         },
       ),
       body: SafeArea(
-          child: BlocBuilder<MangaDetailScreenBloc, MangaDetailScreenState>(
+          child: BlocConsumer<MangaDetailScreenBloc, MangaDetailScreenState>(
+        listener: (context, state) {
+          if (state is MangaDetailScreenError) {
+            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+              BlocProvider.of<MangaDetailScreenBloc>(context).add(
+                  GetMangaDetailScreenData(
+                      mangaEndpoint: widget.mangaEndpoint,
+                      title: widget.title));
+            }));
+          }
+        },
         builder: (context, state) {
           if (state is MangaDetailScreenLoaded) {
             return ListView(
@@ -216,6 +243,8 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                 )
               ],
             );
+          } else if (state is MangaDetailScreenError) {
+            return ErrorPage();
           } else {
             return buildMangaDetailPagePlaceholder(context);
           }
@@ -244,7 +273,13 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                   selectedIndex: index,
                   mangaDetail: mangaDetail,
                 ));
-                Navigator.pushNamed(context, chapterRoute);
+                Navigator.pushNamed(context, chapterRoute,
+                    arguments: ChapterPageArguments(
+                      chapterEndpoint:
+                          mangaDetail.chapterList[index].chapterEndpoint,
+                      selectedIndex: index,
+                      mangaDetail: mangaDetail,
+                    ));
               },
               child: ChapterItem(
                 chapterListData: mangaDetail.chapterList[index],

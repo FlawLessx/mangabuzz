@@ -7,6 +7,7 @@ import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
 import 'package:mangabuzz/core/provider/local/moor_db_provider.dart';
 import 'package:mangabuzz/core/repository/local/moor_repository.dart';
 import 'package:mangabuzz/core/repository/remote/api_repository.dart';
+import 'package:mangabuzz/core/util/connectivity_check.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 part 'bookmark_screen_event.dart';
@@ -19,6 +20,7 @@ class BookmarkScreenBloc
   // Variables
   final apiRepo = APIRepository();
   final dbRepo = MoorDBRepository();
+  final connectivity = ConnectivityCheck();
 
   @override
   Stream<BookmarkScreenState> mapEventToState(
@@ -32,6 +34,9 @@ class BookmarkScreenBloc
   Stream<BookmarkScreenState> getBookmarkDataToState(
       GetBookmarkScreenData event) async* {
     try {
+      bool isConnected = await connectivity.checkConnectivity();
+      if (isConnected == false) yield BookmarkScreenError();
+
       final data =
           await dbRepo.listAllBookmark(event.limit, offset: event.offset);
       List<BookmarkModel> result = [];

@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
-import 'package:mangabuzz/screen/util/color_series.dart';
-import 'package:mangabuzz/screen/widget/tag.dart';
 
+import '../../core/model/latest_update/latest_update_model.dart';
+import '../../core/util/route_generator.dart';
+import '../ui/chapter/bloc/chapter_screen_bloc.dart';
+import '../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import '../ui/manga_detail/manga_detail_screen.dart';
+import '../util/color_series.dart';
 import 'circular_progress.dart';
+import 'tag.dart';
 
 Widget buildLatestUpdateGridview(LatestUpdate listUpdate) {
   return GridView.builder(
@@ -59,7 +59,10 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                       GetMangaDetailScreenData(
                           mangaEndpoint: widget.item.mangaEndpoint,
                           title: widget.item.title));
-                  Navigator.pushNamed(context, mangaDetailRoute);
+                  Navigator.pushNamed(context, mangaDetailRoute,
+                      arguments: MangaDetailPageArguments(
+                          mangaEndpoint: widget.item.mangaEndpoint,
+                          title: widget.item.title));
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(

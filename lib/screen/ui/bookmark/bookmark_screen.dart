@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bookmark_item.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bookmark_placeholder.dart';
-import 'package:mangabuzz/screen/widget/search_bar.dart';
+
+import '../../widget/refresh_snackbar.dart';
+import '../../widget/search_bar.dart';
+import 'bloc/bookmark_screen_bloc.dart';
+import 'bookmark_item.dart';
+import 'bookmark_placeholder.dart';
 
 class BookmarkPage extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
       offset += count;
     });
     BlocProvider.of<BookmarkScreenBloc>(context)
-        .add(GetBookmarkScreenData(limit: 5, offset: offset));
+        .add(GetBookmarkScreenData(limit: 20, offset: offset));
   }
 
   @override
@@ -32,7 +33,13 @@ class _BookmarkPageState extends State<BookmarkPage> {
         text: "Search bookmark...",
         function: () {},
       ),
-      body: BlocBuilder<BookmarkScreenBloc, BookmarkScreenState>(
+      body: BlocConsumer<BookmarkScreenBloc, BookmarkScreenState>(
+        listener: (context, state) {
+          Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+            BlocProvider.of<BookmarkScreenBloc>(context)
+                .add(GetBookmarkScreenData(limit: 20, offset: 0));
+          }));
+        },
         builder: (context, state) {
           if (state is BookmarkScreenLoaded) {
             return LazyLoadScrollView(

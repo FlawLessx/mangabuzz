@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/model/genre/genre_model.dart';
-import 'package:mangabuzz/core/model/manga/manga_model.dart';
-import 'package:mangabuzz/screen/ui/explore/bloc/explore_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/explore/explore_placeholder.dart';
-import 'package:mangabuzz/screen/widget/manga_item.dart';
-import 'package:mangabuzz/screen/widget/search_bar.dart';
-import 'package:random_color/random_color.dart';
+
+import '../../../core/model/genre/genre_model.dart';
+import '../../../core/model/manga/manga_model.dart';
+import '../../widget/manga_item.dart';
+import '../../widget/refresh_snackbar.dart';
+import '../../widget/search_bar.dart';
+import 'bloc/explore_screen_bloc.dart';
+import 'explore_placeholder.dart';
 
 class ExplorePage extends StatefulWidget {
   @override
@@ -15,13 +16,17 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  RandomColor _randomColor = RandomColor();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: SearchBar(text: "Search something..", function: () {}),
-        body: BlocBuilder<ExploreScreenBloc, ExploreScreenState>(
+        body: BlocConsumer<ExploreScreenBloc, ExploreScreenState>(
+          listener: (context, state) {
+            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+              BlocProvider.of<ExploreScreenBloc>(context)
+                  .add(GetExploreScreenData());
+            }));
+          },
           builder: (context, state) {
             if (state is ExploreScreenLoaded) {
               return ListView(

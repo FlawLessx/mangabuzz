@@ -3,15 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
-import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_appbar.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_placholder.dart';
-import 'package:mangabuzz/screen/widget/circular_progress.dart';
-import 'package:mangabuzz/screen/widget/round_button.dart';
 import 'package:photo_view/photo_view.dart';
 
+import '../../../core/model/manga_detail/manga_detail_model.dart';
+import '../../widget/circular_progress.dart';
+import '../../widget/round_button.dart';
+import 'bloc/chapter_screen_bloc.dart';
+import 'chapter_appbar.dart';
+import 'chapter_placholder.dart';
+
+class ChapterPageArguments {
+  final String chapterEndpoint;
+  final int selectedIndex;
+  final MangaDetail mangaDetail;
+  final String mangaEndpoint;
+  ChapterPageArguments(
+      {@required this.chapterEndpoint,
+      @required this.selectedIndex,
+      @required this.mangaDetail,
+      this.mangaEndpoint});
+}
+
 class ChapterPage extends StatefulWidget {
+  final String chapterEndpoint;
+  final int selectedIndex;
+  final MangaDetail mangaDetail;
+  final String mangaEndpoint;
+  ChapterPage(
+      {@required this.chapterEndpoint,
+      @required this.selectedIndex,
+      @required this.mangaDetail,
+      this.mangaEndpoint});
+
   @override
   _ChapterPageState createState() => _ChapterPageState();
 }

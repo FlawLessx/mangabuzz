@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/model/history/history_model.dart';
-import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/history/history_item.dart';
-import 'package:mangabuzz/screen/ui/history/history_placeholder.dart';
-import 'package:mangabuzz/screen/widget/search_bar.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+
+import '../../widget/refresh_snackbar.dart';
+import '../../widget/search_bar.dart';
+import '../error/error_screen.dart';
+import 'bloc/history_screen_bloc.dart';
+import 'history_item.dart';
+import 'history_placeholder.dart';
 
 class HistoryPage extends StatefulWidget {
   @override
@@ -13,32 +16,54 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  int offset = 0;
+
+  _loadMore(int count) {
+    setState(() {
+      offset += count;
+    });
+    BlocProvider.of<HistoryScreenBloc>(context)
+        .add(GetHistoryScreenData(limit: 20, offset: offset));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: SearchBar(text: "Search bookmark...", function: () {}),
-        body: BlocBuilder<HistoryScreenBloc, HistoryScreenState>(
+        body: BlocConsumer<HistoryScreenBloc, HistoryScreenState>(
+          listener: (context, state) {
+            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+              BlocProvider.of<HistoryScreenBloc>(context)
+                  .add(GetHistoryScreenData(limit: 20, offset: 0));
+            }));
+          },
           builder: (context, state) {
             if (state is HistoryScreenLoaded) {
-              return ListView(
-                padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-                children: [
-                  Text(
-                    "Read History",
-                    style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                  ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: state.listHistoryData.length,
-                      itemBuilder: (context, index) {
-                        return HistoryItem(
-                            historyModel: state.listHistoryData[index]);
-                      })
-                ],
+              return LazyLoadScrollView(
+                onEndOfPage: () => _loadMore(state.listHistoryData.length),
+                child: ListView(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(30)),
+                  children: [
+                    Text(
+                      "Read History",
+                      style:
+                          TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
+                    ),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: state.listHistoryData.length,
+                        itemBuilder: (context, index) {
+                          return HistoryItem(
+                              historyModel: state.listHistoryData[index]);
+                        })
+                  ],
+                ),
               );
+            } else if (state is HistoryScreenError) {
+              return ErrorPage();
             } else {
               return buildHistoryScreenPlaceholder();
             }

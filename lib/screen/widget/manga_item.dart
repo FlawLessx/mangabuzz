@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
 import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/tag.dart';
 
@@ -27,7 +28,10 @@ class _MangaItemState extends State<MangaItem> {
             GetMangaDetailScreenData(
                 mangaEndpoint: widget.manga.mangaEndpoint,
                 title: widget.manga.title));
-        Navigator.pushNamed(context, mangaDetailRoute);
+        Navigator.pushNamed(context, mangaDetailRoute,
+            arguments: MangaDetailPageArguments(
+                mangaEndpoint: widget.manga.mangaEndpoint,
+                title: widget.manga.title));
       },
       child: Container(
         width: ScreenUtil().setWidth(300),

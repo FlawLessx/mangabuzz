@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mangabuzz/core/model/genre/genre_model.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
 import 'package:mangabuzz/core/repository/remote/api_repository.dart';
+import 'package:mangabuzz/core/util/connectivity_check.dart';
 
 part 'explore_screen_event.dart';
 part 'explore_screen_state.dart';
@@ -15,6 +16,7 @@ class ExploreScreenBloc extends Bloc<ExploreScreenEvent, ExploreScreenState> {
 
   // Variables
   final apiRepo = APIRepository();
+  final connectivity = ConnectivityCheck();
 
   @override
   Stream<ExploreScreenState> mapEventToState(
@@ -29,6 +31,9 @@ class ExploreScreenBloc extends Bloc<ExploreScreenEvent, ExploreScreenState> {
   Stream<ExploreScreenState> getExploreScreenDataToState(
       GetExploreScreenData event) async* {
     try {
+      bool isConnected = await connectivity.checkConnectivity();
+      if (isConnected == false) yield ExploreScreenError();
+
       final genres = await apiRepo.getAllGenre();
       final listManga = await apiRepo.getListManga(1);
       final listManhwa = await apiRepo.getListManhwa(1);

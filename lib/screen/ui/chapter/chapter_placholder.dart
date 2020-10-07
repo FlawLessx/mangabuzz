@@ -1,8 +1,9 @@
 import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/screen/widget/circular_progress.dart';
-import 'package:mangabuzz/screen/widget/round_button.dart';
+
+import '../../widget/circular_progress.dart';
+import '../../widget/round_button.dart';
 
 Widget chapterAppbarPlaceholder(BuildContext context) {
   return SafeArea(

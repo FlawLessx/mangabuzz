@@ -7,6 +7,7 @@ import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/repository/local/moor_repository.dart';
 import 'package:mangabuzz/core/repository/remote/api_repository.dart';
+import 'package:mangabuzz/core/util/connectivity_check.dart';
 
 part 'manga_detail_screen_event.dart';
 part 'manga_detail_screen_state.dart';
@@ -18,6 +19,7 @@ class MangaDetailScreenBloc
   // Variables
   final apiRepo = APIRepository();
   final dbRepo = MoorDBRepository();
+  final connectivity = ConnectivityCheck();
 
   @override
   Stream<MangaDetailScreenState> mapEventToState(
@@ -33,6 +35,9 @@ class MangaDetailScreenBloc
       GetMangaDetailScreenData event) async* {
     try {
       var historyResult;
+      bool isConnected = await connectivity.checkConnectivity();
+      if (isConnected == false) yield MangaDetailScreenError();
+
       final dataManga = await apiRepo.getMangaDetail(event.mangaEndpoint);
       final listHistory = await dbRepo.searchHistoryByQuery(event.title);
       final listBookmark = await dbRepo.searchBookmarkByQuery(event.title);

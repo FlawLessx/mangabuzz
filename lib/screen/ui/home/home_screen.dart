@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/model/manga/manga_model.dart';
-import 'package:mangabuzz/screen/ui/home/bloc/home_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/home/carousell.dart';
-import 'package:mangabuzz/screen/ui/home/home_placeholder.dart';
-import 'package:mangabuzz/screen/widget/latest_update_item.dart';
-import 'package:mangabuzz/screen/widget/manga_item.dart';
-import 'package:mangabuzz/screen/widget/paginated_button.dart';
-import 'package:mangabuzz/screen/widget/search_bar.dart';
+
+import '../../../core/model/manga/manga_model.dart';
+import '../../widget/latest_update_item.dart';
+import '../../widget/manga_item.dart';
+import '../../widget/paginated_button.dart';
+import '../../widget/refresh_snackbar.dart';
+import '../../widget/search_bar.dart';
+import '../error/error_screen.dart';
+import 'bloc/home_screen_bloc.dart';
+import 'carousell.dart';
+import 'home_placeholder.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -26,7 +29,12 @@ class _HomePageState extends State<HomePage> {
           text: "Search something...",
           function: () {},
         ),
-        body: BlocBuilder<HomeScreenBloc, HomeScreenState>(
+        body: BlocConsumer<HomeScreenBloc, HomeScreenState>(
+          listener: (context, state) {
+            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+              BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
+            }));
+          },
           builder: (context, state) {
             if (state is HomeScreenLoaded) {
               return ListView(
@@ -81,6 +89,8 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               );
+            } else if (state is HomeScreenError) {
+              return ErrorPage();
             } else {
               return buildHomeScreenPlaceholder();
             }
