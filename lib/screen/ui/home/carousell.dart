@@ -8,7 +8,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../core/model/best_series/best_series_model.dart';
 import '../../../core/util/route_generator.dart';
 import '../../util/color_series.dart';
-import '../../widget/circular_progress.dart';
 import '../manga_detail/bloc/manga_detail_screen_bloc.dart';
 import '../manga_detail/manga_detail_screen.dart';
 

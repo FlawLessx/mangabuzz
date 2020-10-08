@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
 import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/repository/local/moor_repository.dart';
@@ -34,14 +35,25 @@ class MangaDetailScreenBloc
   Stream<MangaDetailScreenState> getMangaDetailScreenDataToState(
       GetMangaDetailScreenData event) async* {
     try {
-      var historyResult;
+      var historyResult = HistoryModel();
+      var bookmarkResult = BookmarkModel();
+      bool isBookmarked = false;
+
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield MangaDetailScreenError();
 
       final dataManga = await apiRepo.getMangaDetail(event.mangaEndpoint);
       final listHistory = await dbRepo.searchHistoryByQuery(event.title);
       final listBookmark = await dbRepo.searchBookmarkByQuery(event.title);
-      bool isBookmarked = listBookmark.length != 0 ? true : false;
+
+      for (var item in listBookmark) {
+        if (item.title == event.title &&
+            item.mangaEndpoint == event.mangaEndpoint) {
+          bookmarkResult = bookmarkResult;
+          isBookmarked = true;
+          break;
+        }
+      }
 
       for (var item in listHistory) {
         if (item.title == event.title) {
@@ -57,7 +69,8 @@ class MangaDetailScreenBloc
       yield MangaDetailScreenLoaded(
           mangaDetail: dataManga,
           isBookmarked: isBookmarked,
-          historyModel: historyResult != null ? historyResult : HistoryModel());
+          bookmarkModel: bookmarkResult,
+          historyModel: historyResult);
     } on Exception {
       yield MangaDetailScreenError();
     }

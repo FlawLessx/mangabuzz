@@ -35,10 +35,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
       ),
       body: BlocConsumer<BookmarkScreenBloc, BookmarkScreenState>(
         listener: (context, state) {
-          Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-            BlocProvider.of<BookmarkScreenBloc>(context)
-                .add(GetBookmarkScreenData(limit: 20, offset: 0));
-          }));
+          if (state is BookmarkScreenError) {
+            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+              BlocProvider.of<BookmarkScreenBloc>(context)
+                  .add(GetBookmarkScreenData(limit: 20, offset: 0));
+            }));
+          }
         },
         builder: (context, state) {
           if (state is BookmarkScreenLoaded) {

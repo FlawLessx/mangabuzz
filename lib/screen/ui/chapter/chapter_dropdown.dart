@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
+import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
+
+import 'chapter_screen.dart';
 
 class ChapterDropdownButton extends StatefulWidget {
-  final List<ChapterList> chapterList;
+  final MangaDetail mangaDetail;
+  final String chapterEndpoint;
   final int selectedIndex;
   ChapterDropdownButton(
-      {@required this.chapterList, @required this.selectedIndex});
+      {@required this.mangaDetail,
+      @required this.selectedIndex,
+      @required this.chapterEndpoint});
 
   @override
   _ChapterDropdownButtonState createState() => _ChapterDropdownButtonState();
@@ -20,8 +28,10 @@ class _ChapterDropdownButtonState extends State<ChapterDropdownButton> {
         showDialog(
             context: context,
             child: ChapterDropdownMenu(
-                chapterList: widget.chapterList,
-                selectedIndex: widget.selectedIndex));
+              mangaDetail: widget.mangaDetail,
+              selectedIndex: widget.selectedIndex,
+              chapterEndpoint: widget.chapterEndpoint,
+            ));
       },
       child: Container(
         width: ScreenUtil().setWidth(400),
@@ -38,7 +48,8 @@ class _ChapterDropdownButtonState extends State<ChapterDropdownButton> {
                 padding:
                     EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
                 child: Text(
-                  widget.chapterList[widget.selectedIndex].chapterName,
+                  widget.mangaDetail.chapterList[widget.selectedIndex]
+                      .chapterName,
                   style: TextStyle(fontSize: 13),
                 ),
               ),
@@ -55,10 +66,13 @@ class _ChapterDropdownButtonState extends State<ChapterDropdownButton> {
 }
 
 class ChapterDropdownMenu extends StatefulWidget {
-  final List<ChapterList> chapterList;
+  final MangaDetail mangaDetail;
+  final String chapterEndpoint;
   final int selectedIndex;
   ChapterDropdownMenu(
-      {@required this.chapterList, @required this.selectedIndex});
+      {@required this.mangaDetail,
+      @required this.selectedIndex,
+      @required this.chapterEndpoint});
 
   @override
   _ChapterDropdownMenuState createState() => _ChapterDropdownMenuState();
@@ -80,6 +94,18 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
 
   _scrollToSelectedItem(int index) {
     _scrollController.jumpTo(0 + (itemSize * index));
+  }
+
+  _navigate(int index) {
+    BlocProvider.of<ChapterScreenBloc>(context)
+        .add(InitialStateChapterScreen());
+    Navigator.pushReplacementNamed(context, chapterRoute,
+        arguments: ChapterPageArguments(
+          chapterEndpoint:
+              widget.mangaDetail.chapterList[index].chapterEndpoint,
+          selectedIndex: index,
+          mangaDetail: widget.mangaDetail,
+        ));
   }
 
   @override
@@ -111,7 +137,7 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
               ListView.builder(
                   shrinkWrap: true,
                   controller: _scrollController,
-                  itemCount: widget.chapterList.length,
+                  itemCount: widget.mangaDetail.chapterList.length,
                   itemBuilder: (context, index) {
                     return Container(
                       height: itemSize,
@@ -123,6 +149,7 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
                               setState(() {
                                 selectedIndex = index;
                               });
+                              _navigate(index);
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -132,7 +159,8 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    widget.chapterList[index].chapterName,
+                                    widget.mangaDetail.chapterList[index]
+                                        .chapterName,
                                     style: TextStyle(fontSize: 14),
                                   ),
                                   Container(
@@ -146,13 +174,16 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
                                             Theme.of(context).primaryColor,
                                         activeColor:
                                             Theme.of(context).primaryColor,
-                                        value: widget.chapterList[index],
-                                        groupValue:
-                                            widget.chapterList[selectedIndex],
+                                        value: widget
+                                            .mangaDetail.chapterList[index],
+                                        groupValue: widget.mangaDetail
+                                            .chapterList[selectedIndex],
                                         onChanged: (value) {
                                           setState(() {
                                             selectedIndex = index;
                                           });
+
+                                          _navigate(index);
                                         }),
                                   )
                                 ],

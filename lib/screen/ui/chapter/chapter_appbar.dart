@@ -3,15 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/chapter/chapter_dropdown.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
 import 'package:mangabuzz/screen/widget/round_button.dart';
 
 class ChapterAppbar extends StatefulWidget {
-  final List<ChapterList> chapterList;
+  final MangaDetail mangaDetail;
+  final String chapterEndpoint;
   final int selectedIndex;
   ChapterAppbar({
-    @required this.chapterList,
+    @required this.mangaDetail,
+    @required this.chapterEndpoint,
     @required this.selectedIndex,
   });
 
@@ -52,14 +55,17 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.chapterList[widget.selectedIndex].chapterName,
+                      widget.mangaDetail.chapterList[widget.selectedIndex]
+                          .chapterName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style:
                           TextStyle(fontSize: 18, fontFamily: "Poppins-Bold"),
                     ),
                     ChapterDropdownButton(
-                      chapterList: widget.chapterList,
+                      mangaDetail: widget.mangaDetail,
+                      chapterEndpoint: widget.mangaDetail
+                          .chapterList[widget.selectedIndex].chapterEndpoint,
                       selectedIndex: widget.selectedIndex,
                     )
                   ],
@@ -70,9 +76,8 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                     backgroundColor: Theme.of(context).primaryColor,
                     enableShadow: true,
                     onTap: () {
-                      BlocProvider.of<ChapterScreenBloc>(context)
-                          .add(InitialStateChapterScreen());
-                      Navigator.pop(context);
+                      Navigator.popUntil(
+                          context, ModalRoute.withName(mangaDetailRoute));
                     })
               ],
             ),

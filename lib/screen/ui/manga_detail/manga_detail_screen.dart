@@ -3,6 +3,8 @@ import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/bloc/bookmark_bloc/bookmark_bloc.dart';
+import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
 import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 import 'package:readmore/readmore.dart';
 
@@ -11,7 +13,6 @@ import '../../../core/util/route_generator.dart';
 import '../../widget/rating.dart';
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/round_button.dart';
-import '../chapter/bloc/chapter_screen_bloc.dart';
 import '../error/error_screen.dart';
 import 'bloc/manga_detail_screen_bloc.dart';
 import 'chapter_item.dart';
@@ -36,7 +37,17 @@ class MangaDetailPage extends StatefulWidget {
 }
 
 class _MangaDetailPageState extends State<MangaDetailPage> {
-  bool isBookmark = false;
+  bool isBookmarked = false;
+
+  _bookmarkFunction(BookmarkModel bookmarkModel) {
+    if (isBookmarked == true) {
+      BlocProvider.of<BookmarkBloc>(context)
+          .add(DeleteBookmark(bookmarkModel: bookmarkModel));
+    } else {
+      BlocProvider.of<BookmarkBloc>(context)
+          .add(DeleteBookmark(bookmarkModel: bookmarkModel));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +114,10 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                       mangaEndpoint: widget.mangaEndpoint,
                       title: widget.title));
             }));
+          } else if (state is MangaDetailScreenLoaded) {
+            setState(() {
+              isBookmarked = state.isBookmarked;
+            });
           }
         },
         builder: (context, state) {
@@ -122,8 +137,17 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         icons: Icons.arrow_back,
                         onTap: () => Navigator.pop(context)),
                     GestureDetector(
+                      onTap: () {
+                        print("pressed");
+                        setState(() {
+                          isBookmarked = !isBookmarked;
+                        });
+                        _bookmarkFunction(state.bookmarkModel);
+                      },
                       child: Icon(
-                        isBookmark ? Icons.favorite : Icons.favorite_border,
+                        isBookmarked == true
+                            ? Icons.favorite
+                            : Icons.favorite_border,
                         color: Theme.of(context).primaryColor,
                         size: ScreenUtil().setHeight(80),
                       ),

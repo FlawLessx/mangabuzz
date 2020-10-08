@@ -1,12 +1,12 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/util/route_generator.dart';
 
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../widget/round_button.dart';
@@ -80,6 +80,22 @@ class _ChapterPageState extends State<ChapterPage> {
     return index;
   }
 
+  _navigate(
+      String chapterEndpoint, int selectedIndex, MangaDetail mangaDetail) {
+    Navigator.pushReplacementNamed(context, chapterRoute,
+        arguments: ChapterPageArguments(
+          chapterEndpoint: chapterEndpoint,
+          selectedIndex: selectedIndex,
+          mangaDetail: mangaDetail,
+        ));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -95,7 +111,9 @@ class _ChapterPageState extends State<ChapterPage> {
                 builder: (context, state) {
                   if (state is ChapterScreenLoaded) {
                     return ChapterAppbar(
-                      chapterList: state.chapterList,
+                      mangaDetail: widget.mangaDetail,
+                      chapterEndpoint: state.mangaDetail
+                          .chapterList[state.selectedIndex].chapterEndpoint,
                       selectedIndex: state.selectedIndex,
                     );
                   } else {
@@ -120,10 +138,33 @@ class _ChapterPageState extends State<ChapterPage> {
                             itemCount: state.chapterImg.length,
                             itemBuilder: (context, index) {
                               return Image(
+                                  filterQuality: FilterQuality.high,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(Icons.error_outline);
+                                  },
                                   image: AdvancedNetworkImage(
                                       state.chapterImg[index].imageLink,
                                       retryLimit: 5,
                                       timeoutDuration: Duration(seconds: 60),
+                                      printError: true,
+                                      disableMemoryCache: true,
                                       fallbackAssetImage:
                                           "resources/img/error.png"));
                             }),
@@ -151,15 +192,32 @@ class _ChapterPageState extends State<ChapterPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    RoundButton(
-                                        icons: Icons.arrow_back,
-                                        iconColor:
-                                            Theme.of(context).primaryColor,
-                                        backgroundColor: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.2),
-                                        enableShadow: false,
-                                        onTap: () {}),
+                                    Visibility(
+                                      visible: state.selectedIndex ==
+                                              state.mangaDetail.chapterList
+                                                  .length
+                                          ? false
+                                          : true,
+                                      child: RoundButton(
+                                          icons: Icons.arrow_back,
+                                          iconColor:
+                                              Theme.of(context).primaryColor,
+                                          backgroundColor: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.2),
+                                          enableShadow: false,
+                                          onTap: () {
+                                            _navigate(
+                                                state
+                                                    .mangaDetail
+                                                    .chapterList[
+                                                        (state.selectedIndex +
+                                                            1)]
+                                                    .chapterEndpoint,
+                                                state.selectedIndex + 1,
+                                                state.mangaDetail);
+                                          }),
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
@@ -177,15 +235,30 @@ class _ChapterPageState extends State<ChapterPage> {
                                         )
                                       ],
                                     ),
-                                    RoundButton(
-                                        iconColor:
-                                            Theme.of(context).primaryColor,
-                                        backgroundColor: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.2),
-                                        enableShadow: false,
-                                        icons: Icons.arrow_forward,
-                                        onTap: () {}),
+                                    Visibility(
+                                      visible: widget.selectedIndex == 0
+                                          ? false
+                                          : true,
+                                      child: RoundButton(
+                                          iconColor:
+                                              Theme.of(context).primaryColor,
+                                          backgroundColor: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.2),
+                                          enableShadow: false,
+                                          icons: Icons.arrow_forward,
+                                          onTap: () {
+                                            _navigate(
+                                                state
+                                                    .mangaDetail
+                                                    .chapterList[
+                                                        (state.selectedIndex -
+                                                            1)]
+                                                    .chapterEndpoint,
+                                                state.selectedIndex - 1,
+                                                state.mangaDetail);
+                                          }),
+                                    ),
                                   ],
                                 ),
                               ),

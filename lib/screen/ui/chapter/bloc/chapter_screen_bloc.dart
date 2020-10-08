@@ -46,7 +46,7 @@ class ChapterScreenBloc extends Bloc<ChapterScreenEvent, ChapterScreenState> {
       yield ChapterScreenLoaded(
           selectedIndex: event.selectedIndex,
           mangaDetail: mangaDetail,
-          chapterList: event.mangaDetail.chapterList,
+          chapterList: mangaDetail.chapterList,
           chapterImg: data);
     } on Exception {
       yield ChapterScreenError();

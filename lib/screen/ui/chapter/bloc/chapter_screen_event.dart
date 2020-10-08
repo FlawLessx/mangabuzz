@@ -21,5 +21,6 @@ class GetChapterScreenData extends ChapterScreenEvent {
       this.mangaEndpoint});
 
   @override
-  List<Object> get props => [chapterEndpoint, selectedIndex, mangaDetail];
+  List<Object> get props =>
+      [chapterEndpoint, selectedIndex, mangaDetail, mangaEndpoint];
 }

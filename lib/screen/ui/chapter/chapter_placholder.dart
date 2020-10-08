@@ -30,14 +30,14 @@ Widget chapterAppbarPlaceholder(BuildContext context) {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ContentPlaceholder.block(
-                    topSpacing: ScreenUtil().setHeight(30),
+                    topSpacing: ScreenUtil().setHeight(40),
                     height: ScreenUtil().setHeight(40),
                     width: ScreenUtil().setWidth(500),
                   ),
                   ContentPlaceholder.block(
-                    height: ScreenUtil().setHeight(40),
-                    width: ScreenUtil().setWidth(300),
-                  ),
+                      height: ScreenUtil().setHeight(40),
+                      width: ScreenUtil().setWidth(300),
+                      bottomSpacing: 0),
                 ],
               ),
             ),

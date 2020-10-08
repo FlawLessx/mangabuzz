@@ -43,11 +43,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(20)),
                       child: textMenu("List Manga", () {})),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
-                    child: buildListManga(state.listManga),
-                  ),
+                  buildListManga(state.listManga),
                   SizedBox(
                     height: ScreenUtil().setHeight(30),
                   ),
@@ -55,11 +51,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(20)),
                       child: textMenu("List Manhwa", () {})),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
-                    child: buildListManga(state.listManhwa),
-                  ),
+                  buildListManga(state.listManhwa),
                   SizedBox(
                     height: ScreenUtil().setHeight(30),
                   ),
@@ -67,11 +59,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(20)),
                       child: textMenu("List Manhua", () {})),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
-                    child: buildListManga(state.listManhua),
-                  )
+                  buildListManga(state.listManhua)
                 ],
               );
             } else {
@@ -135,7 +123,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
   Widget buildListManga(List<Manga> list) {
     return SingleChildScrollView(
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

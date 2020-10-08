@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/search_bar.dart';
@@ -32,10 +33,12 @@ class _HistoryPageState extends State<HistoryPage> {
         appBar: SearchBar(text: "Search bookmark...", function: () {}),
         body: BlocConsumer<HistoryScreenBloc, HistoryScreenState>(
           listener: (context, state) {
-            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-              BlocProvider.of<HistoryScreenBloc>(context)
-                  .add(GetHistoryScreenData(limit: 20, offset: 0));
-            }));
+            if (state is BookmarkScreenError) {
+              Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+                BlocProvider.of<HistoryScreenBloc>(context)
+                    .add(GetHistoryScreenData(limit: 20, offset: 0));
+              }));
+            }
           },
           builder: (context, state) {
             if (state is HistoryScreenLoaded) {
