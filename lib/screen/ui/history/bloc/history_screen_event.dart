@@ -7,9 +7,4 @@ abstract class HistoryScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetHistoryScreenData extends HistoryScreenEvent {
-  final int limit;
-  final int offset;
-
-  GetHistoryScreenData({@required this.limit, this.offset});
-}
+class GetHistoryScreenData extends HistoryScreenEvent {}

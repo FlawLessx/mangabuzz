@@ -14,29 +14,7 @@ import 'bloc/chapter_screen_bloc.dart';
 import 'chapter_appbar.dart';
 import 'chapter_placholder.dart';
 
-class ChapterPageArguments {
-  final String chapterEndpoint;
-  final int selectedIndex;
-  final MangaDetail mangaDetail;
-  final String mangaEndpoint;
-  ChapterPageArguments(
-      {@required this.chapterEndpoint,
-      @required this.selectedIndex,
-      @required this.mangaDetail,
-      this.mangaEndpoint});
-}
-
 class ChapterPage extends StatefulWidget {
-  final String chapterEndpoint;
-  final int selectedIndex;
-  final MangaDetail mangaDetail;
-  final String mangaEndpoint;
-  ChapterPage(
-      {@required this.chapterEndpoint,
-      @required this.selectedIndex,
-      @required this.mangaDetail,
-      this.mangaEndpoint});
-
   @override
   _ChapterPageState createState() => _ChapterPageState();
 }
@@ -57,11 +35,7 @@ class _ChapterPageState extends State<ChapterPage> {
           }
         });
       });
-    BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
-        chapterEndpoint: widget.chapterEndpoint,
-        selectedIndex: widget.selectedIndex,
-        mangaDetail: widget.mangaDetail,
-        mangaEndpoint: widget.mangaEndpoint));
+
     super.initState();
   }
 
@@ -80,14 +54,17 @@ class _ChapterPageState extends State<ChapterPage> {
     return index;
   }
 
-  _navigate(
-      String chapterEndpoint, int selectedIndex, MangaDetail mangaDetail) {
-    Navigator.pushReplacementNamed(context, chapterRoute,
-        arguments: ChapterPageArguments(
-          chapterEndpoint: chapterEndpoint,
-          selectedIndex: selectedIndex,
-          mangaDetail: mangaDetail,
-        ));
+  _navigate(String chapterEndpoint, int selectedIndex, MangaDetail mangaDetail,
+      bool fromHome) {
+    BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
+        chapterEndpoint: chapterEndpoint,
+        selectedIndex: selectedIndex,
+        mangaDetail: mangaDetail,
+        fromHome: fromHome));
+    Navigator.pushReplacementNamed(
+      context,
+      chapterRoute,
+    );
   }
 
   @override
@@ -111,10 +88,11 @@ class _ChapterPageState extends State<ChapterPage> {
                 builder: (context, state) {
                   if (state is ChapterScreenLoaded) {
                     return ChapterAppbar(
-                      mangaDetail: widget.mangaDetail,
+                      mangaDetail: state.mangaDetail,
                       chapterEndpoint: state.mangaDetail
                           .chapterList[state.selectedIndex].chapterEndpoint,
                       selectedIndex: state.selectedIndex,
+                      fromHome: state.fromHome,
                     );
                   } else {
                     return chapterAppbarPlaceholder(context);
@@ -215,7 +193,8 @@ class _ChapterPageState extends State<ChapterPage> {
                                                             1)]
                                                     .chapterEndpoint,
                                                 state.selectedIndex + 1,
-                                                state.mangaDetail);
+                                                state.mangaDetail,
+                                                state.fromHome);
                                           }),
                                     ),
                                     Column(
@@ -236,7 +215,7 @@ class _ChapterPageState extends State<ChapterPage> {
                                       ],
                                     ),
                                     Visibility(
-                                      visible: widget.selectedIndex == 0
+                                      visible: state.selectedIndex == 0
                                           ? false
                                           : true,
                                       child: RoundButton(
@@ -256,7 +235,8 @@ class _ChapterPageState extends State<ChapterPage> {
                                                             1)]
                                                     .chapterEndpoint,
                                                 state.selectedIndex - 1,
-                                                state.mangaDetail);
+                                                state.mangaDetail,
+                                                state.fromHome);
                                           }),
                                     ),
                                   ],

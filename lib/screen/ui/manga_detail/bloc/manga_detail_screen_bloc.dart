@@ -35,40 +35,22 @@ class MangaDetailScreenBloc
   Stream<MangaDetailScreenState> getMangaDetailScreenDataToState(
       GetMangaDetailScreenData event) async* {
     try {
-      var historyResult = HistoryModel();
-      var bookmarkResult = BookmarkModel();
-      bool isBookmarked = false;
+      var historyResult;
+      var bookmarkResult;
 
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield MangaDetailScreenError();
 
       final dataManga = await apiRepo.getMangaDetail(event.mangaEndpoint);
-      final listHistory = await dbRepo.searchHistoryByQuery(event.title);
-      final listBookmark = await dbRepo.searchBookmarkByQuery(event.title);
 
-      for (var item in listBookmark) {
-        if (item.title == event.title &&
-            item.mangaEndpoint == event.mangaEndpoint) {
-          bookmarkResult = bookmarkResult;
-          isBookmarked = true;
-          break;
-        }
-      }
+      bookmarkResult =
+          await dbRepo.getBookmark(event.title, event.mangaEndpoint);
 
-      for (var item in listHistory) {
-        if (item.title == event.title) {
-          if (item.totalChapter != dataManga.chapterList.length) {
-            item.totalChapter = dataManga.chapterList.length;
-          }
-
-          historyResult = item;
-          break;
-        }
-      }
+      historyResult = await dbRepo.getHistory(event.title, event.mangaEndpoint);
 
       yield MangaDetailScreenLoaded(
           mangaDetail: dataManga,
-          isBookmarked: isBookmarked,
+          isBookmarked: bookmarkResult != null ? true : false,
           bookmarkModel: bookmarkResult,
           historyModel: historyResult);
     } on Exception {

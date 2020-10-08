@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../core/model/best_series/best_series_model.dart';
@@ -66,6 +67,15 @@ class _CarousellState extends State<Carousell> {
                                 width: ScreenUtil().setWidth(1100),
                                 height: ScreenUtil().setHeight(370),
                                 filterQuality: FilterQuality.high,
+                                placeholder: (context, url) => Container(
+                                  child: Center(
+                                    child: SizedBox(
+                                        height: ScreenUtil().setWidth(60),
+                                        width: ScreenUtil().setWidth(60),
+                                        child:
+                                            CustomCircularProgressIndicator()),
+                                  ),
+                                ),
                                 fit: BoxFit.fitWidth,
                                 errorWidget: (context, url, error) =>
                                     Icon(Icons.error),

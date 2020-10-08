@@ -16,15 +16,17 @@ class ChapterScreenLoaded extends ChapterScreenState {
   final MangaDetail mangaDetail;
   final List<Chapter> chapterImg;
   final List<ChapterList> chapterList;
+  final bool fromHome;
   ChapterScreenLoaded(
       {@required this.selectedIndex,
       @required this.mangaDetail,
       @required this.chapterImg,
-      @required this.chapterList});
+      @required this.chapterList,
+      @required this.fromHome});
 
   @override
   List<Object> get props =>
-      [selectedIndex, mangaDetail, chapterImg, chapterList];
+      [selectedIndex, mangaDetail, chapterImg, chapterList, fromHome];
 }
 
 class ChapterScreenError extends ChapterScreenState {}

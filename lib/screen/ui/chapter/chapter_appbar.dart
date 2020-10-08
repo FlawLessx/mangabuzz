@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/chapter/chapter_dropdown.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
 import 'package:mangabuzz/screen/widget/round_button.dart';
 
 class ChapterAppbar extends StatefulWidget {
   final MangaDetail mangaDetail;
   final String chapterEndpoint;
   final int selectedIndex;
-  ChapterAppbar({
-    @required this.mangaDetail,
-    @required this.chapterEndpoint,
-    @required this.selectedIndex,
-  });
+  final bool fromHome;
+  ChapterAppbar(
+      {@required this.mangaDetail,
+      @required this.chapterEndpoint,
+      @required this.selectedIndex,
+      @required this.fromHome});
 
   @override
   _ChapterAppbarState createState() => _ChapterAppbarState();
@@ -67,6 +65,7 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                       chapterEndpoint: widget.mangaDetail
                           .chapterList[widget.selectedIndex].chapterEndpoint,
                       selectedIndex: widget.selectedIndex,
+                      fromHome: widget.fromHome,
                     )
                   ],
                 ),
@@ -76,8 +75,13 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                     backgroundColor: Theme.of(context).primaryColor,
                     enableShadow: true,
                     onTap: () {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(mangaDetailRoute));
+                      if (widget.fromHome == false) {
+                        Navigator.popUntil(
+                            context, ModalRoute.withName(mangaDetailRoute));
+                      } else {
+                        Navigator.popUntil(
+                            context, ModalRoute.withName(baseRoute));
+                      }
                     })
               ],
             ),

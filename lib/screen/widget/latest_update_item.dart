@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 
 import '../../core/model/latest_update/latest_update_model.dart';
 import '../../core/util/route_generator.dart';
@@ -10,6 +9,7 @@ import '../ui/chapter/bloc/chapter_screen_bloc.dart';
 import '../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import '../ui/manga_detail/manga_detail_screen.dart';
 import '../util/color_series.dart';
+import 'circular_progress.dart';
 import 'tag.dart';
 
 Widget buildLatestUpdateGridview(LatestUpdate listUpdate) {
@@ -71,6 +71,14 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                     imageUrl: widget.item.image,
                     width: ScreenUtil().setWidth(180),
                     height: ScreenUtil().setWidth(300),
+                    placeholder: (context, url) => Container(
+                      child: Center(
+                        child: SizedBox(
+                            height: ScreenUtil().setWidth(60),
+                            width: ScreenUtil().setWidth(60),
+                            child: CustomCircularProgressIndicator()),
+                      ),
+                    ),
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
@@ -135,16 +143,20 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pushNamed(context, chapterRoute,
-                                          arguments: ChapterPageArguments(
+                                      BlocProvider.of<ChapterScreenBloc>(
+                                              context)
+                                          .add(GetChapterScreenData(
                                               chapterEndpoint: widget
                                                   .item
                                                   .listNewChapter[index]
                                                   .chapterEndpoint,
                                               selectedIndex: index,
                                               mangaDetail: null,
+                                              fromHome: true,
                                               mangaEndpoint:
                                                   widget.item.mangaEndpoint));
+                                      Navigator.pushNamed(
+                                          context, chapterRoute);
                                     },
                                     child: Text(
                                       widget.item.listNewChapter[index]

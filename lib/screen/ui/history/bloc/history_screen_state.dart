@@ -13,10 +13,19 @@ class HistoryScreenLoading extends HistoryScreenState {}
 
 class HistoryScreenLoaded extends HistoryScreenState {
   final List<HistoryModel> listHistoryData;
-  HistoryScreenLoaded({@required this.listHistoryData});
+  final bool hasReachedMax;
+  HistoryScreenLoaded(
+      {@required this.listHistoryData, @required this.hasReachedMax});
+
+  HistoryScreenLoaded copyWith(
+      {List<HistoryModel> listBookmarkData, bool hasReachedMax}) {
+    return HistoryScreenLoaded(
+        listHistoryData: listBookmarkData ?? this.listHistoryData,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax);
+  }
 
   @override
-  List<Object> get props => [listHistoryData];
+  List<Object> get props => [listHistoryData, hasReachedMax];
 }
 
 class HistoryScreenError extends HistoryScreenState {}

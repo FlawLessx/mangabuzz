@@ -5,16 +5,16 @@ import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
 
-import 'chapter_screen.dart';
-
 class ChapterDropdownButton extends StatefulWidget {
   final MangaDetail mangaDetail;
   final String chapterEndpoint;
   final int selectedIndex;
+  final bool fromHome;
   ChapterDropdownButton(
       {@required this.mangaDetail,
       @required this.selectedIndex,
-      @required this.chapterEndpoint});
+      @required this.chapterEndpoint,
+      @required this.fromHome});
 
   @override
   _ChapterDropdownButtonState createState() => _ChapterDropdownButtonState();
@@ -31,6 +31,7 @@ class _ChapterDropdownButtonState extends State<ChapterDropdownButton> {
               mangaDetail: widget.mangaDetail,
               selectedIndex: widget.selectedIndex,
               chapterEndpoint: widget.chapterEndpoint,
+              fromHome: widget.fromHome,
             ));
       },
       child: Container(
@@ -69,10 +70,12 @@ class ChapterDropdownMenu extends StatefulWidget {
   final MangaDetail mangaDetail;
   final String chapterEndpoint;
   final int selectedIndex;
+  final bool fromHome;
   ChapterDropdownMenu(
       {@required this.mangaDetail,
       @required this.selectedIndex,
-      @required this.chapterEndpoint});
+      @required this.chapterEndpoint,
+      @required this.fromHome});
 
   @override
   _ChapterDropdownMenuState createState() => _ChapterDropdownMenuState();
@@ -97,15 +100,15 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
   }
 
   _navigate(int index) {
-    BlocProvider.of<ChapterScreenBloc>(context)
-        .add(InitialStateChapterScreen());
-    Navigator.pushReplacementNamed(context, chapterRoute,
-        arguments: ChapterPageArguments(
-          chapterEndpoint:
-              widget.mangaDetail.chapterList[index].chapterEndpoint,
-          selectedIndex: index,
-          mangaDetail: widget.mangaDetail,
-        ));
+    BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
+        chapterEndpoint: widget.mangaDetail.chapterList[index].chapterEndpoint,
+        selectedIndex: index,
+        mangaDetail: widget.mangaDetail,
+        fromHome: widget.fromHome));
+    Navigator.pushReplacementNamed(
+      context,
+      chapterRoute,
+    );
   }
 
   @override

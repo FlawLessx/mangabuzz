@@ -17,15 +17,22 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: SearchBar(text: "Search something..", function: () {}),
         body: BlocConsumer<ExploreScreenBloc, ExploreScreenState>(
           listener: (context, state) {
-            Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-              BlocProvider.of<ExploreScreenBloc>(context)
-                  .add(GetExploreScreenData());
-            }));
+            if (state is ExploreScreenError) {
+              Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+                BlocProvider.of<ExploreScreenBloc>(context)
+                    .add(GetExploreScreenData());
+              }));
+            }
           },
           builder: (context, state) {
             if (state is ExploreScreenLoaded) {

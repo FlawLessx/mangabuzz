@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
-import 'package:mangabuzz/core/provider/local/moor_db_provider.dart';
 import 'package:mangabuzz/core/repository/local/moor_repository.dart';
 import 'package:mangabuzz/core/repository/remote/api_repository.dart';
 import 'package:mangabuzz/core/util/connectivity_check.dart';
@@ -21,52 +20,47 @@ class BookmarkScreenBloc
   final apiRepo = APIRepository();
   final dbRepo = MoorDBRepository();
   final connectivity = ConnectivityCheck();
+  List<BookmarkModel> listBookmarkModel = [];
 
   @override
   Stream<BookmarkScreenState> mapEventToState(
     BookmarkScreenEvent event,
   ) async* {
-    yield BookmarkScreenLoading();
-
-    if (event is GetBookmarkScreenData) yield* getBookmarkDataToState(event);
+    if (state is BookmarkScreenInitial)
+      yield* getBookmarkDataInitialToState();
+    else
+      yield* getBookmarkDataToState();
   }
 
-  Stream<BookmarkScreenState> getBookmarkDataToState(
-      GetBookmarkScreenData event) async* {
+  Stream<BookmarkScreenState> getBookmarkDataInitialToState() async* {
     try {
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield BookmarkScreenError();
 
-      final data =
-          await dbRepo.listAllBookmark(event.limit, offset: event.offset);
-      List<BookmarkModel> result = [];
+      listBookmarkModel = await dbRepo.listAllBookmark(10, offset: 0);
 
-      // Get new release from api
-      for (var item in data) {
-        var dataFromAPI = await apiRepo.getMangaDetail(item.mangaEndpoint);
+      yield BookmarkScreenLoaded(
+          listBookmarkData: listBookmarkModel, hasReachedMax: false);
+    } on Exception {
+      yield BookmarkScreenError();
+    }
+  }
 
-        if (dataFromAPI.chapterList.length != item.totalChapter) {
-          item.isNew = true;
-          item.totalChapter = dataFromAPI.chapterList.length;
+  Stream<BookmarkScreenState> getBookmarkDataToState() async* {
+    try {
+      bool isConnected = await connectivity.checkConnectivity();
+      if (isConnected == false) yield BookmarkScreenError();
 
-          await dbRepo.updateBookmark(BookmarksCompanion(
-              title: Value(item.title),
-              author: Value(item.author),
-              description: Value(item.description),
-              image: Value(item.image),
-              mangaEndpoint: Value(item.mangaEndpoint),
-              rating: Value(item.rating),
-              type: Value(item.type),
-              totalChapter: Value(item.totalChapter),
-              isNew: Value(false)));
-        } else {
-          item.isNew = false;
-        }
+      BookmarkScreenLoaded bookmarkScreenLoaded = state as BookmarkScreenLoaded;
+      listBookmarkModel = await dbRepo.listAllBookmark(10,
+          offset: bookmarkScreenLoaded.listBookmarkData.length);
 
-        result.add(item);
-      }
-
-      yield BookmarkScreenLoaded(listBookmarkData: result);
+      yield listBookmarkModel.isEmpty
+          ? bookmarkScreenLoaded.copyWith(hasReachedMax: true)
+          : BookmarkScreenLoaded(
+              listBookmarkData:
+                  bookmarkScreenLoaded.listBookmarkData + listBookmarkModel,
+              hasReachedMax: false);
     } on Exception {
       yield BookmarkScreenError();
     }

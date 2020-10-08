@@ -15,20 +15,18 @@ void main() {
 
   group("Bookmark Group Test", () {
     test('bookmark can be created & search', () async {
-      await _db.bookmarkDao.insertBookmark(BookmarksCompanion(
-          title: Value('One Piece'),
-          mangaEndpoint: Value('one-piece/'),
-          image: Value('imge')));
+      await _db.bookmarkDao.insertBookmark(Bookmark(
+          title: 'One Piece',
+          mangaEndpoint: 'one-piece/',
+          image: 'imge',
+          totalChapter: 900));
       final result = await _db.bookmarkDao.searchBookmarkByQuery('One Piece');
 
       expect(result.first.title, 'One Piece');
     });
 
     test('bookmark can be deleted', () async {
-      await _db.bookmarkDao.deleteBookmark(BookmarksCompanion(
-          title: Value('One Piece'),
-          mangaEndpoint: Value('one-piece/'),
-          image: Value('imge')));
+      await _db.bookmarkDao.deleteBookmark("One Piece", "one-piece/");
       final result = await _db.bookmarkDao.listAllBookmark(5, offset: 0);
 
       expect(result.length, 0);
@@ -47,10 +45,7 @@ void main() {
     });
 
     test('history can be deleted', () async {
-      await _db.historyDao.deleteHistory(HistorysCompanion(
-          title: Value('One Piece'),
-          mangaEndpoint: Value('one-piece/'),
-          image: Value('imge')));
+      await _db.historyDao.deleteHistory("One Piece", "one-piece/");
       final result = await _db.bookmarkDao.listAllBookmark(5, offset: 0);
 
       expect(result.length, 0);

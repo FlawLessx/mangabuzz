@@ -14,7 +14,7 @@ part 'bookmark_state.dart';
 
 class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   BookmarkBloc() : super(BookmarkInitial());
-  MoorDBRepository _moorDBRepository = MoorDBRepository();
+  final _moorDBRepository = MoorDBRepository();
 
   @override
   Stream<BookmarkState> mapEventToState(
@@ -30,18 +30,17 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   Stream<BookmarkState> insertBookmarkToState(InsertBookmark event) async* {
     try {
       final data = event.bookmarkModel;
-      await _moorDBRepository.insertBookmark(BookmarksCompanion.insert(
+
+      _moorDBRepository.insertBookmark(Bookmark(
           title: data.title,
           mangaEndpoint: data.mangaEndpoint,
           image: data.image,
-          author: Value(data.author),
-          type: Value(data.type),
-          description: Value(data.description),
-          rating: Value(data.author),
+          author: data.author,
+          type: data.type,
+          description: data.description,
+          rating: data.rating,
           totalChapter: data.totalChapter,
-          isNew: Value(false)));
-
-      yield BookmarkSuccess();
+          isNew: false));
     } catch (e) {
       yield BookmarkError(error: e.toString());
     }
@@ -50,18 +49,16 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   Stream<BookmarkState> updateBookmarkToState(UpdateBookmark event) async* {
     try {
       final data = event.bookmarkModel;
-      await _moorDBRepository.updateBookmark(BookmarksCompanion.insert(
+      await _moorDBRepository.updateBookmark(Bookmark(
           title: data.title,
           mangaEndpoint: data.mangaEndpoint,
           image: data.image,
-          author: Value(data.author),
-          type: Value(data.type),
-          description: Value(data.description),
-          rating: Value(data.author),
+          author: data.author,
+          type: data.type,
+          description: data.description,
+          rating: data.rating,
           totalChapter: data.totalChapter,
-          isNew: Value(false)));
-
-      yield BookmarkSuccess();
+          isNew: false));
     } catch (e) {
       yield BookmarkError(error: e.toString());
     }
@@ -70,18 +67,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   Stream<BookmarkState> deleteBookmarkToState(DeleteBookmark event) async* {
     try {
       final data = event.bookmarkModel;
-      await _moorDBRepository.deleteBookmark(BookmarksCompanion.insert(
-          title: data.title,
-          mangaEndpoint: data.mangaEndpoint,
-          image: data.image,
-          author: Value(data.author),
-          type: Value(data.type),
-          description: Value(data.description),
-          rating: Value(data.author),
-          totalChapter: data.totalChapter,
-          isNew: Value(false)));
-
-      yield BookmarkSuccess();
+      await _moorDBRepository.deleteBookmark(data.title, data.mangaEndpoint);
     } catch (e) {
       yield BookmarkError(error: e.toString());
     }

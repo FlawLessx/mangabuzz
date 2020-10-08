@@ -1,5 +1,3 @@
-import 'package:moor_flutter/moor_flutter.dart';
-
 import '../../model/bookmark/bookmark_model.dart';
 import '../../model/history/history_model.dart';
 import '../../provider/local/moor_db_provider.dart';
@@ -10,12 +8,14 @@ class MoorDBRepository {
       moorDBProvider.bookmarkDao.listAllBookmark(limit, offset: offset);
   Stream<List<BookmarkModel>> watchAllBookmark() =>
       moorDBProvider.bookmarkDao.watchAllBookmark();
-  Future insertBookmark(Insertable<Bookmark> bookmark) =>
+  Future insertBookmark(Bookmark bookmark) =>
       moorDBProvider.bookmarkDao.insertBookmark(bookmark);
-  Future updateBookmark(Insertable<Bookmark> bookmark) =>
+  Future updateBookmark(Bookmark bookmark) =>
       moorDBProvider.bookmarkDao.updateBookmark(bookmark);
-  Future deleteBookmark(Insertable<Bookmark> bookmark) =>
-      moorDBProvider.bookmarkDao.deleteBookmark(bookmark);
+  Future deleteBookmark(String title, String mangaEndpoint) =>
+      moorDBProvider.bookmarkDao.deleteBookmark(title, mangaEndpoint);
+  Future<BookmarkModel> getBookmark(String title, String mangaEndpoint) =>
+      moorDBProvider.bookmarkDao.getBookmark(title, mangaEndpoint);
   Future<List<BookmarkModel>> searchBookmarkByQuery(String query) =>
       moorDBProvider.bookmarkDao.searchBookmarkByQuery(query);
 
@@ -24,12 +24,14 @@ class MoorDBRepository {
       moorDBProvider.historyDao.listAllHistory(limit, offset: offset);
   Stream<List<HistoryModel>> watchAllHistory() =>
       moorDBProvider.historyDao.watchAllHistory();
-  Future insertHistory(Insertable<History> history) =>
+  Future insertHistory(HistorysCompanion history) =>
       moorDBProvider.historyDao.insertHistory(history);
-  Future updateHistory(Insertable<History> history) =>
+  Future updateHistory(HistorysCompanion history) =>
       moorDBProvider.historyDao.updateHistory(history);
-  Future deleteHistory(Insertable<History> history) =>
-      moorDBProvider.historyDao.deleteHistory(history);
+  Future deleteHistory(String title, String mangaEndpoint) =>
+      moorDBProvider.historyDao.deleteHistory(title, mangaEndpoint);
+  Future<HistoryModel> getHistory(String title, String mangaEndpoint) =>
+      moorDBProvider.historyDao.getHistory(title, mangaEndpoint);
   Future<List<HistoryModel>> searchHistoryByQuery(String query) =>
       moorDBProvider.historyDao.searchHistoryByQuery(query);
 }

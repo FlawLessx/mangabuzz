@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/search_bar.dart';
@@ -15,14 +15,25 @@ class BookmarkPage extends StatefulWidget {
 }
 
 class _BookmarkPageState extends State<BookmarkPage> {
-  int offset = 0;
+  ScrollController _scrollController;
+  final _scrollThreshold = 200;
 
-  _loadMore(int count) {
-    setState(() {
-      offset += count;
-    });
-    BlocProvider.of<BookmarkScreenBloc>(context)
-        .add(GetBookmarkScreenData(limit: 20, offset: offset));
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()
+      ..addListener(() {
+        _loadMore();
+      });
+  }
+
+  _loadMore() {
+    double maxScroll = _scrollController.position.maxScrollExtent;
+    double currentScroll = _scrollController.position.pixels;
+
+    if (maxScroll - currentScroll <= _scrollThreshold) {
+      BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
+    }
   }
 
   @override
@@ -38,34 +49,49 @@ class _BookmarkPageState extends State<BookmarkPage> {
           if (state is BookmarkScreenError) {
             Scaffold.of(context).showSnackBar(refreshSnackBar(() {
               BlocProvider.of<BookmarkScreenBloc>(context)
-                  .add(GetBookmarkScreenData(limit: 20, offset: 0));
+                  .add(GetBookmarkScreenData());
             }));
           }
         },
         builder: (context, state) {
           if (state is BookmarkScreenLoaded) {
-            return LazyLoadScrollView(
-              onEndOfPage: () => _loadMore(state.listBookmarkData.length),
-              child: ListView(
-                padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-                children: [
-                  Text(
-                    "Bookmarked Series",
-                    style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(20),
-                  ),
-                  SingleChildScrollView(
+            return ListView(
+              controller: _scrollController,
+              padding:
+                  EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+              children: [
+                Text(
+                  "Bookmarked Series",
+                  style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(20),
+                ),
+                ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
-                    child: Column(
-                        children: state.listBookmarkData
-                            .map((e) => BookmarkItem(bookmarkModel: e))
-                            .toList()),
-                  )
-                ],
-              ),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    itemCount: state.hasReachedMax
+                        ? state.listBookmarkData.length
+                        : state.listBookmarkData.length + 1,
+                    itemBuilder: (context, index) => (index >=
+                            state.listBookmarkData.length)
+                        ? Visibility(
+                            visible: state.listBookmarkData.length == 0
+                                ? false
+                                : true,
+                            child: Container(
+                              child: Center(
+                                child: SizedBox(
+                                    height: ScreenUtil().setWidth(60),
+                                    width: ScreenUtil().setWidth(60),
+                                    child: CustomCircularProgressIndicator()),
+                              ),
+                            ),
+                          )
+                        : BookmarkItem(
+                            bookmarkModel: state.listBookmarkData[index])),
+              ],
             );
           } else {
             return buildBookmarkScreenPlaceholder();

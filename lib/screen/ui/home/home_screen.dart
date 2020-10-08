@@ -22,6 +22,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: false,
@@ -103,7 +108,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildHotMangaUpdate(List<Manga> listManga) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

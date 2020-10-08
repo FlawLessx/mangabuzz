@@ -33,10 +33,8 @@ class _BaseScreenState extends State<BaseScreen> {
   void initState() {
     BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
     BlocProvider.of<ExploreScreenBloc>(context).add(GetExploreScreenData());
-    BlocProvider.of<BookmarkScreenBloc>(context)
-        .add(GetBookmarkScreenData(limit: 20, offset: 0));
-    BlocProvider.of<HistoryScreenBloc>(context)
-        .add(GetHistoryScreenData(limit: 20, offset: 0));
+    BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
+    BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
     super.initState();
   }
 

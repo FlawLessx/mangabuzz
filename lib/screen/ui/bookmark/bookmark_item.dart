@@ -1,6 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
 
 import '../../../core/model/bookmark/bookmark_model.dart';
 import '../../widget/rating.dart';
@@ -15,6 +19,17 @@ class BookmarkItem extends StatefulWidget {
 }
 
 class _BookmarkItemState extends State<BookmarkItem> {
+  _navigate() {
+    BlocProvider.of<MangaDetailScreenBloc>(context).add(
+        GetMangaDetailScreenData(
+            mangaEndpoint: widget.bookmarkModel.mangaEndpoint,
+            title: widget.bookmarkModel.title));
+    Navigator.pushNamed(context, mangaDetailRoute,
+        arguments: MangaDetailPageArguments(
+            mangaEndpoint: widget.bookmarkModel.mangaEndpoint,
+            title: widget.bookmarkModel.title));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,14 +55,19 @@ class _BookmarkItemState extends State<BookmarkItem> {
                     Radius.circular(ScreenUtil().setWidth(20))),
                 child: Stack(
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: widget.bookmarkModel.image,
-                      width: ScreenUtil().setWidth(250),
-                      height: ScreenUtil().setWidth(350),
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    GestureDetector(
+                      onTap: () {
+                        _navigate();
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: widget.bookmarkModel.image,
+                        width: ScreenUtil().setWidth(280),
+                        height: ScreenUtil().setWidth(420),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
@@ -73,25 +93,12 @@ class _BookmarkItemState extends State<BookmarkItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.bookmarkModel.title,
-                      style: TextStyle(
-                          fontFamily: "Poppins-SemiBold",
-                          fontSize: 15,
-                          color: Colors.black),
-                    ),
-                    Container(
-                      child: Text(
-                        "New Chapter Released",
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    )
-                  ],
+                Text(
+                  widget.bookmarkModel.title,
+                  style: TextStyle(
+                      fontFamily: "Poppins-SemiBold",
+                      fontSize: 14,
+                      color: Colors.black),
                 ),
                 SizedBox(
                   height: ScreenUtil().setHeight(5),
@@ -100,7 +107,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                   widget.bookmarkModel.author,
                   style: TextStyle(
                       fontFamily: "Poppins-Medium",
-                      fontSize: 13,
+                      fontSize: 11,
                       color: Colors.grey),
                 ),
                 SizedBox(
@@ -110,7 +117,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                   widget.bookmarkModel.description,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13, color: Colors.black),
+                  style: TextStyle(fontSize: 11, color: Colors.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,21 +125,33 @@ class _BookmarkItemState extends State<BookmarkItem> {
                     Rating(
                       rating: widget.bookmarkModel.rating,
                     ),
-                    GestureDetector(
-                        onTap: () {},
+                    InkWell(
+                        onTap: () {
+                          _navigate();
+                        },
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 2,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 1),
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.6))
+                              ],
                               borderRadius: BorderRadius.all(
-                                  Radius.circular(ScreenUtil().setHeight(20)))),
-                          child: Padding(
-                            padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-                            child: Text(
-                              'Detail',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Poppins-Medium",
-                                  fontSize: 13),
+                                  Radius.circular(ScreenUtil().setWidth(20))),
+                              color: Theme.of(context).primaryColor),
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: ScreenUtil().setWidth(30),
+                                  vertical: ScreenUtil().setWidth(10)),
+                              child: Text("Detail",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Poppins-SemiBold")),
                             ),
                           ),
                         ))

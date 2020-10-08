@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
+import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../core/model/manga_detail/manga_detail_model.dart';
@@ -39,14 +40,31 @@ class MangaDetailPage extends StatefulWidget {
 class _MangaDetailPageState extends State<MangaDetailPage> {
   bool isBookmarked = false;
 
-  _bookmarkFunction(BookmarkModel bookmarkModel) {
+  _bookmarkFunction(BookmarkModel bookmarkModel, {MangaDetail mangaDetail}) {
+    var tempData = BookmarkModel(
+        title: mangaDetail.title,
+        author: mangaDetail.author,
+        description: mangaDetail.description,
+        image: mangaDetail.image,
+        mangaEndpoint: mangaDetail.mangaEndpoint,
+        rating: mangaDetail.rating,
+        type: mangaDetail.type,
+        totalChapter: mangaDetail.chapterList.length,
+        isNew: false);
+
     if (isBookmarked == true) {
-      BlocProvider.of<BookmarkBloc>(context)
-          .add(DeleteBookmark(bookmarkModel: bookmarkModel));
+      BlocProvider.of<BookmarkBloc>(context).add(DeleteBookmark(
+          bookmarkModel: bookmarkModel != null ? bookmarkModel : tempData));
     } else {
-      BlocProvider.of<BookmarkBloc>(context)
-          .add(DeleteBookmark(bookmarkModel: bookmarkModel));
+      BlocProvider.of<BookmarkBloc>(context).add(InsertBookmark(
+          bookmarkModel: bookmarkModel != null ? bookmarkModel : tempData));
     }
+
+    BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
+
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
   }
 
   @override
@@ -73,7 +91,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    state.historyModel.chapterReached != null
+                    state.historyModel != null
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -87,7 +105,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                           )
                         : SizedBox(),
                     Chip(
-                      label: state.historyModel.chapterReached != null
+                      label: state.historyModel != null
                           ? Text("Continue Read")
                           : Text("Start Read"),
                       labelStyle: TextStyle(
@@ -135,21 +153,24 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         backgroundColor: Theme.of(context).primaryColor,
                         enableShadow: true,
                         icons: Icons.arrow_back,
-                        onTap: () => Navigator.pop(context)),
+                        onTap: () {
+                          BlocProvider.of<BookmarkScreenBloc>(context)
+                              .add(GetBookmarkScreenData());
+                          Navigator.pop(context);
+                        }),
                     GestureDetector(
                       onTap: () {
-                        print("pressed");
                         setState(() {
-                          isBookmarked = !isBookmarked;
+                          _bookmarkFunction(state.bookmarkModel,
+                              mangaDetail: state.mangaDetail);
                         });
-                        _bookmarkFunction(state.bookmarkModel);
                       },
                       child: Icon(
                         isBookmarked == true
                             ? Icons.favorite
                             : Icons.favorite_border,
                         color: Theme.of(context).primaryColor,
-                        size: ScreenUtil().setHeight(80),
+                        size: ScreenUtil().setHeight(100),
                       ),
                     )
                   ],
@@ -291,13 +312,17 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
             padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, chapterRoute,
-                    arguments: ChapterPageArguments(
-                      chapterEndpoint:
-                          mangaDetail.chapterList[index].chapterEndpoint,
-                      selectedIndex: index,
-                      mangaDetail: mangaDetail,
-                    ));
+                BlocProvider.of<ChapterScreenBloc>(context).add(
+                    GetChapterScreenData(
+                        chapterEndpoint:
+                            mangaDetail.chapterList[index].chapterEndpoint,
+                        selectedIndex: index,
+                        mangaDetail: mangaDetail,
+                        fromHome: false));
+                Navigator.pushNamed(
+                  context,
+                  chapterRoute,
+                );
               },
               child: ChapterItem(
                 chapterListData: mangaDetail.chapterList[index],

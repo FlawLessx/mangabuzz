@@ -96,8 +96,8 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
             totalChapter: rows.totalChapter,
             isNew: rows.isNew);
       }).get();
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
@@ -118,35 +118,63 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
               isNew: e.isNew);
         }).toList();
       });
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   // Insert operation
-  Future insertBookmark(Insertable<Bookmark> bookmark) {
+  Future<int> insertBookmark(Bookmark bookmark) {
     try {
       return into(bookmarks).insert(bookmark);
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   // Update operation
-  Future updateBookmark(Insertable<Bookmark> bookmark) {
+  Future updateBookmark(Bookmark bookmark) {
     try {
       return update(bookmarks).replace(bookmark);
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   // Delete operation
-  Future deleteBookmark(Insertable<Bookmark> bookmark) {
+  Future<int> deleteBookmark(String title, String mangaEndpoint) {
     try {
-      return delete(bookmarks).delete(bookmark);
-    } on Exception {
-      throw Exception();
+      return (delete(bookmarks)
+            ..where((tbl) =>
+                tbl.title.equals(title) &
+                tbl.mangaEndpoint.equals(mangaEndpoint)))
+          .go();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  // Get bookmark data by title & mangaEndpoint
+  Future<BookmarkModel> getBookmark(String title, String mangaEndpoint) {
+    try {
+      final query = (select(bookmarks)
+        ..where((t) =>
+            t.title.equals(title) & t.mangaEndpoint.equals(mangaEndpoint)));
+
+      return query.map((rows) {
+        return BookmarkModel(
+            title: rows.title,
+            mangaEndpoint: rows.mangaEndpoint,
+            image: rows.image,
+            author: rows.author,
+            type: rows.type,
+            rating: rows.rating,
+            description: rows.description,
+            totalChapter: rows.totalChapter,
+            isNew: rows.isNew);
+      }).getSingle();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
@@ -166,8 +194,8 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
             totalChapter: rows.totalChapter,
             isNew: rows.isNew);
       }).get();
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 }
@@ -196,8 +224,8 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             chapterReached: rows.chapterReached,
             totalChapter: rows.totalChapter);
       }).get();
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
@@ -217,35 +245,62 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
               totalChapter: e.totalChapter);
         }).toList();
       });
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   // Insert operation
-  Future insertHistory(Insertable<History> history) {
+  Future insertHistory(HistorysCompanion history) {
     try {
       return into(historys).insert(history);
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   // Update operation
-  Future updateHistory(Insertable<History> history) {
+  Future updateHistory(HistorysCompanion history) {
     try {
       return update(historys).replace(history);
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   // Delete operation
-  Future deleteHistory(Insertable<History> history) {
+  Future deleteHistory(String title, String mangaEndpoint) {
     try {
-      return delete(historys).delete(history);
-    } on Exception {
-      throw Exception();
+      return (delete(historys)
+            ..where((tbl) =>
+                tbl.title.equals(title) &
+                tbl.mangaEndpoint.equals(mangaEndpoint)))
+          .go();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  // Get history data by title & mangaEndpoint
+  Future<HistoryModel> getHistory(String title, String mangaEndpoint) {
+    try {
+      final query = (select(historys)
+        ..where((t) =>
+            t.title.equals(title) & t.mangaEndpoint.equals(mangaEndpoint)));
+
+      return query.map((rows) {
+        return HistoryModel(
+            title: rows.title,
+            mangaEndpoint: rows.mangaEndpoint,
+            image: rows.image,
+            author: rows.author,
+            type: rows.type,
+            rating: rows.rating,
+            chapterReached: rows.chapterReached,
+            totalChapter: rows.totalChapter);
+      }).getSingle();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
@@ -264,8 +319,8 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             chapterReached: rows.chapterReached,
             totalChapter: rows.totalChapter);
       }).get();
-    } on Exception {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 }

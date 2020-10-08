@@ -18,26 +18,46 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
   // Variables
   final dbRepo = MoorDBRepository();
   final connectivity = ConnectivityCheck();
+  List<HistoryModel> listHistoryModel = [];
 
   @override
   Stream<HistoryScreenState> mapEventToState(
     HistoryScreenEvent event,
   ) async* {
-    yield HistoryScreenLoading();
-
-    if (event is GetHistoryScreenData) yield* getHistoryDataToState(event);
+    if (state is HistoryScreenInitial)
+      yield* getHistoryDataInitialToState();
+    else
+      yield* getHistoryDataToState();
   }
 
-  Stream<HistoryScreenState> getHistoryDataToState(
-      GetHistoryScreenData event) async* {
+  Stream<HistoryScreenState> getHistoryDataInitialToState() async* {
     try {
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield HistoryScreenError();
 
-      final data =
-          await dbRepo.listAllHistory(event.limit, offset: event.offset);
+      final data = await dbRepo.listAllHistory(10, offset: 0);
 
-      yield HistoryScreenLoaded(listHistoryData: data);
+      yield HistoryScreenLoaded(listHistoryData: data, hasReachedMax: false);
+    } on Exception {
+      yield HistoryScreenError();
+    }
+  }
+
+  Stream<HistoryScreenState> getHistoryDataToState() async* {
+    try {
+      bool isConnected = await connectivity.checkConnectivity();
+      if (isConnected == false) yield HistoryScreenError();
+
+      HistoryScreenLoaded historyScreenLoaded = state as HistoryScreenLoaded;
+      listHistoryModel = await dbRepo.listAllHistory(10,
+          offset: historyScreenLoaded.listHistoryData.length);
+
+      yield listHistoryModel.isEmpty
+          ? historyScreenLoaded.copyWith(hasReachedMax: true)
+          : HistoryScreenLoaded(
+              listHistoryData:
+                  historyScreenLoaded.listHistoryData + listHistoryModel,
+              hasReachedMax: false);
     } on Exception {
       yield HistoryScreenError();
     }

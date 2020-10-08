@@ -14,5 +14,5 @@ class GetMangaDetailScreenData extends MangaDetailScreenEvent {
       : assert(mangaEndpoint != null, title != null);
 
   @override
-  List<Object> get props => [mangaEndpoint];
+  List<Object> get props => [mangaEndpoint, title];
 }

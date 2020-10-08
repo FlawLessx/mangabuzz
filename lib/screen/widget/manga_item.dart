@@ -7,6 +7,7 @@ import 'package:mangabuzz/core/model/manga/manga_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/tag.dart';
 
 class MangaItem extends StatefulWidget {
@@ -56,6 +57,14 @@ class _MangaItemState extends State<MangaItem> {
                       imageUrl: widget.manga.image,
                       width: ScreenUtil().setWidth(240),
                       height: ScreenUtil().setWidth(340),
+                      placeholder: (context, url) => Container(
+                        child: Center(
+                          child: SizedBox(
+                              height: ScreenUtil().setWidth(60),
+                              width: ScreenUtil().setWidth(60),
+                              child: CustomCircularProgressIndicator()),
+                        ),
+                      ),
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
