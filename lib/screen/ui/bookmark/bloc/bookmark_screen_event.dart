@@ -7,4 +7,6 @@ abstract class BookmarkScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ResetStateToInitial extends BookmarkScreenEvent {}
+
 class GetBookmarkScreenData extends BookmarkScreenEvent {}

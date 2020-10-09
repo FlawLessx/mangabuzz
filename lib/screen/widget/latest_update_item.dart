@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 
 import '../../core/model/latest_update/latest_update_model.dart';
 import '../../core/util/route_generator.dart';
@@ -20,7 +21,7 @@ Widget buildLatestUpdateGridview(LatestUpdate listUpdate) {
       itemCount: listUpdate.latestUpdateList.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: ScreenUtil().setWidth(30),
+          crossAxisSpacing: ScreenUtil().setWidth(20),
           childAspectRatio: 3 / 2,
           mainAxisSpacing: 0),
       itemBuilder: (context, index) {
@@ -70,7 +71,7 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                   child: CachedNetworkImage(
                     imageUrl: widget.item.image,
                     width: ScreenUtil().setWidth(180),
-                    height: ScreenUtil().setWidth(300),
+                    height: ScreenUtil().setWidth(280),
                     placeholder: (context, url) => Container(
                       child: Center(
                         child: SizedBox(
@@ -152,11 +153,22 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                                                   .chapterEndpoint,
                                               selectedIndex: index,
                                               mangaDetail: null,
+                                              historyModel: null,
                                               fromHome: true,
                                               mangaEndpoint:
                                                   widget.item.mangaEndpoint));
-                                      Navigator.pushNamed(
-                                          context, chapterRoute);
+                                      Navigator.pushNamed(context, chapterRoute,
+                                          arguments: ChapterPageArguments(
+                                              chapterEndpoint: widget
+                                                  .item
+                                                  .listNewChapter[index]
+                                                  .chapterEndpoint,
+                                              selectedIndex: index,
+                                              mangaDetail: null,
+                                              fromHome: true,
+                                              historyModel: null,
+                                              mangaEndpoint:
+                                                  widget.item.mangaEndpoint));
                                     },
                                     child: Text(
                                       widget.item.listNewChapter[index]

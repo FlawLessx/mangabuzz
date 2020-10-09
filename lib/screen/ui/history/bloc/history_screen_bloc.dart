@@ -24,10 +24,14 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
   Stream<HistoryScreenState> mapEventToState(
     HistoryScreenEvent event,
   ) async* {
-    if (state is HistoryScreenInitial)
-      yield* getHistoryDataInitialToState();
-    else
-      yield* getHistoryDataToState();
+    if (event is ResetToInitialState) {
+      yield HistoryScreenInitial();
+    } else if (event is GetHistoryScreenData) {
+      if (state is HistoryScreenInitial)
+        yield* getHistoryDataInitialToState();
+      else
+        yield* getHistoryDataToState();
+    }
   }
 
   Stream<HistoryScreenState> getHistoryDataInitialToState() async* {
@@ -35,9 +39,10 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield HistoryScreenError();
 
-      final data = await dbRepo.listAllHistory(10, offset: 0);
+      listHistoryModel = await dbRepo.listAllHistory(10, offset: 0);
 
-      yield HistoryScreenLoaded(listHistoryData: data, hasReachedMax: false);
+      yield HistoryScreenLoaded(
+          listHistoryData: listHistoryModel, hasReachedMax: false);
     } on Exception {
       yield HistoryScreenError();
     }

@@ -15,12 +15,14 @@ class GetChapterScreenData extends ChapterScreenEvent {
   final MangaDetail mangaDetail;
   final String mangaEndpoint;
   final bool fromHome;
+  final HistoryModel historyModel;
   GetChapterScreenData(
       {@required this.chapterEndpoint,
       @required this.selectedIndex,
       @required this.mangaDetail,
       this.mangaEndpoint,
-      @required this.fromHome});
+      @required this.fromHome,
+      @required this.historyModel});
 
   @override
   List<Object> get props =>

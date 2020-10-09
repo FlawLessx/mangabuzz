@@ -53,7 +53,7 @@ Widget chapterAppbarPlaceholder(BuildContext context) {
 }
 
 Widget chapterBodyPlaceholder() {
-  List count = [1, 2, 3, 4, 5];
+  List count = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return ListView.builder(
       shrinkWrap: true,
@@ -61,6 +61,8 @@ Widget chapterBodyPlaceholder() {
       itemCount: count.length,
       itemBuilder: (context, index) {
         return Container(
+            height: ScreenUtil().setHeight(100),
+            width: ScreenUtil().setHeight(100),
             child: Center(child: CustomCircularProgressIndicator()));
       });
 }

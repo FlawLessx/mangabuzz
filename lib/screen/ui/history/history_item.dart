@@ -1,8 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/model/history/history_model.dart';
+import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/rating.dart';
 import 'package:mangabuzz/screen/widget/tag.dart';
 
@@ -17,6 +22,17 @@ class HistoryItem extends StatefulWidget {
 class _HistoryItemState extends State<HistoryItem> {
   double _getPercentage(int maxValue, int currentValue) {
     return (currentValue / maxValue) * 100;
+  }
+
+  _navigate() {
+    BlocProvider.of<MangaDetailScreenBloc>(context).add(
+        GetMangaDetailScreenData(
+            mangaEndpoint: widget.historyModel.mangaEndpoint,
+            title: widget.historyModel.title));
+    Navigator.pushNamed(context, mangaDetailRoute,
+        arguments: MangaDetailPageArguments(
+            mangaEndpoint: widget.historyModel.mangaEndpoint,
+            title: widget.historyModel.title));
   }
 
   @override
@@ -44,14 +60,23 @@ class _HistoryItemState extends State<HistoryItem> {
                     Radius.circular(ScreenUtil().setWidth(20))),
                 child: Stack(
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: widget.historyModel.image,
-                      width: ScreenUtil().setWidth(220),
-                      height: ScreenUtil().setWidth(320),
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    GestureDetector(
+                      onTap: () => _navigate(),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.historyModel.image,
+                        width: ScreenUtil().setWidth(280),
+                        height: ScreenUtil().setWidth(380),
+                        placeholder: (context, url) => Container(
+                          child: Center(
+                            child: SizedBox(
+                                height: ScreenUtil().setWidth(60),
+                                width: ScreenUtil().setWidth(60),
+                                child: CustomCircularProgressIndicator()),
+                          ),
+                        ),
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
@@ -77,12 +102,15 @@ class _HistoryItemState extends State<HistoryItem> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.historyModel.title,
-                  style: TextStyle(
-                      fontFamily: "Poppins-SemiBold",
-                      fontSize: 15,
-                      color: Colors.black),
+                GestureDetector(
+                  onTap: () => _navigate(),
+                  child: Text(
+                    widget.historyModel.title,
+                    style: TextStyle(
+                        fontFamily: "Poppins-SemiBold",
+                        fontSize: 14,
+                        color: Colors.black),
+                  ),
                 ),
                 SizedBox(
                   height: ScreenUtil().setHeight(5),
@@ -91,7 +119,7 @@ class _HistoryItemState extends State<HistoryItem> {
                   widget.historyModel.author,
                   style: TextStyle(
                       fontFamily: "Poppins-Medium",
-                      fontSize: 13,
+                      fontSize: 12,
                       color: Colors.grey),
                 ),
                 SizedBox(
@@ -110,10 +138,10 @@ class _HistoryItemState extends State<HistoryItem> {
                         progressColor: Color(0xFF4be2c0),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(20)),
                     Text(
                       '${_getPercentage(widget.historyModel.totalChapter, widget.historyModel.chapterReached).toStringAsFixed(0)}%',
-                      style: TextStyle(fontSize: 12),
+                      style:
+                          TextStyle(fontSize: 12, fontFamily: "Poppins-Medium"),
                     ),
                   ],
                 ),
@@ -133,7 +161,42 @@ class _HistoryItemState extends State<HistoryItem> {
                 SizedBox(
                   height: ScreenUtil().setHeight(20),
                 ),
-                Rating(rating: widget.historyModel.rating),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Rating(rating: widget.historyModel.rating),
+                    InkWell(
+                        onTap: () {
+                          _navigate();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 2,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 1),
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.6))
+                              ],
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(ScreenUtil().setWidth(20))),
+                              color: Theme.of(context).primaryColor),
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: ScreenUtil().setWidth(30),
+                                  vertical: ScreenUtil().setWidth(10)),
+                              child: Text("Continue",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Poppins-SemiBold")),
+                            ),
+                          ),
+                        )),
+                  ],
+                ),
               ],
             ),
           )

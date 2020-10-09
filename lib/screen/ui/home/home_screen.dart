@@ -21,8 +21,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ScrollController _scrollController;
+
   @override
   void initState() {
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -46,6 +49,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context, state) {
             if (state is HomeScreenLoaded) {
               return ListView(
+                controller: _scrollController,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(

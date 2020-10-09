@@ -19,6 +19,7 @@ class HistoryModel {
     this.type,
     this.rating,
     this.chapterReached,
+    this.selectedIndex,
     this.totalChapter,
   });
 
@@ -29,6 +30,7 @@ class HistoryModel {
   final String type;
   final String rating;
   final int chapterReached;
+  final int selectedIndex;
   int totalChapter;
 
   factory HistoryModel.fromJson(Map<String, dynamic> json) => HistoryModel(
@@ -39,6 +41,7 @@ class HistoryModel {
         type: json["type"],
         rating: json["rating"],
         chapterReached: json["chapterReached"],
+        selectedIndex: json["selectedIndex"],
         totalChapter: json["totalChapter"],
       );
 
@@ -50,6 +53,7 @@ class HistoryModel {
         "type": type,
         "rating": rating,
         "chapterReached": chapterReached,
+        "selectedIndex": selectedIndex,
         "totalChapter": totalChapter,
       };
 }

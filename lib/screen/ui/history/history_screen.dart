@@ -23,10 +23,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()
-      ..addListener(() {
-        _loadMore();
-      });
+    _scrollController = ScrollController();
   }
 
   _loadMore() {
@@ -38,13 +35,27 @@ class _HistoryPageState extends State<HistoryPage> {
     }
   }
 
+  bool _visibleLoad(int length) {
+    return length <= 3 ? false : true;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _scrollController.addListener(() {
+      _loadMore();
+    });
+
     return Scaffold(
         appBar: SearchBar(text: "Search bookmark...", function: () {}),
         body: BlocConsumer<HistoryScreenBloc, HistoryScreenState>(
           listener: (context, state) {
-            if (state is BookmarkScreenError) {
+            if (state is HistoryScreenError) {
               Scaffold.of(context).showSnackBar(refreshSnackBar(() {
                 BlocProvider.of<HistoryScreenBloc>(context)
                     .add(GetHistoryScreenData());
@@ -53,6 +64,8 @@ class _HistoryPageState extends State<HistoryPage> {
           },
           builder: (context, state) {
             if (state is HistoryScreenLoaded) {
+              print("history: ${state.listHistoryData.length}");
+
               return ListView(
                 controller: _scrollController,
                 padding:
@@ -72,9 +85,8 @@ class _HistoryPageState extends State<HistoryPage> {
                       itemBuilder: (context, index) => (index >=
                               state.listHistoryData.length)
                           ? Visibility(
-                              visible: state.listHistoryData.length == 0
-                                  ? false
-                                  : true,
+                              visible:
+                                  _visibleLoad(state.listHistoryData.length),
                               child: Container(
                                 child: Center(
                                   child: SizedBox(

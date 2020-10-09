@@ -1,5 +1,4 @@
 import 'package:mangabuzz/core/provider/local/moor_db_provider.dart';
-import 'package:moor_flutter/moor_flutter.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -35,10 +34,8 @@ void main() {
 
   group("History Group Test", () {
     test('history can be created & search', () async {
-      await _db.historyDao.insertHistory(HistorysCompanion(
-          title: Value('One Piece'),
-          mangaEndpoint: Value('one-piece/'),
-          image: Value('imge')));
+      await _db.historyDao.insertHistory(History(
+          title: 'One Piece', mangaEndpoint: 'one-piece/', image: 'imge'));
       final result = await _db.historyDao.searchHistoryByQuery('One Piece');
 
       expect(result.first.title, 'One Piece');

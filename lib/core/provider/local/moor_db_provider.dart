@@ -33,6 +33,7 @@ class Historys extends Table {
   TextColumn get type => text().nullable()();
   TextColumn get rating => text().nullable()();
   IntColumn get chapterReached => integer().nullable()();
+  IntColumn get selectedIndex => integer().nullable()();
   IntColumn get totalChapter => integer().nullable()();
 
   @override
@@ -222,6 +223,7 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             type: rows.type,
             rating: rows.rating,
             chapterReached: rows.chapterReached,
+            selectedIndex: rows.selectedIndex,
             totalChapter: rows.totalChapter);
       }).get();
     } catch (e) {
@@ -242,6 +244,7 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
               type: e.type,
               rating: e.rating,
               chapterReached: e.chapterReached,
+              selectedIndex: e.selectedIndex,
               totalChapter: e.totalChapter);
         }).toList();
       });
@@ -251,7 +254,7 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
   }
 
   // Insert operation
-  Future insertHistory(HistorysCompanion history) {
+  Future insertHistory(History history) {
     try {
       return into(historys).insert(history);
     } catch (e) {
@@ -260,7 +263,7 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
   }
 
   // Update operation
-  Future updateHistory(HistorysCompanion history) {
+  Future updateHistory(History history) {
     try {
       return update(historys).replace(history);
     } catch (e) {
@@ -297,6 +300,7 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             type: rows.type,
             rating: rows.rating,
             chapterReached: rows.chapterReached,
+            selectedIndex: rows.selectedIndex,
             totalChapter: rows.totalChapter);
       }).getSingle();
     } catch (e) {
@@ -317,6 +321,7 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             type: rows.type,
             rating: rows.rating,
             chapterReached: rows.chapterReached,
+            selectedIndex: rows.selectedIndex,
             totalChapter: rows.totalChapter);
       }).get();
     } catch (e) {

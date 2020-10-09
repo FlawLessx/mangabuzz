@@ -4,17 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 
 class ChapterDropdownButton extends StatefulWidget {
   final MangaDetail mangaDetail;
   final String chapterEndpoint;
   final int selectedIndex;
   final bool fromHome;
-  ChapterDropdownButton(
-      {@required this.mangaDetail,
-      @required this.selectedIndex,
-      @required this.chapterEndpoint,
-      @required this.fromHome});
+  ChapterDropdownButton({
+    @required this.mangaDetail,
+    @required this.selectedIndex,
+    @required this.chapterEndpoint,
+    @required this.fromHome,
+  });
 
   @override
   _ChapterDropdownButtonState createState() => _ChapterDropdownButtonState();
@@ -71,11 +73,12 @@ class ChapterDropdownMenu extends StatefulWidget {
   final String chapterEndpoint;
   final int selectedIndex;
   final bool fromHome;
-  ChapterDropdownMenu(
-      {@required this.mangaDetail,
-      @required this.selectedIndex,
-      @required this.chapterEndpoint,
-      @required this.fromHome});
+  ChapterDropdownMenu({
+    @required this.mangaDetail,
+    @required this.selectedIndex,
+    @required this.chapterEndpoint,
+    @required this.fromHome,
+  });
 
   @override
   _ChapterDropdownMenuState createState() => _ChapterDropdownMenuState();
@@ -104,11 +107,16 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
         chapterEndpoint: widget.mangaDetail.chapterList[index].chapterEndpoint,
         selectedIndex: index,
         mangaDetail: widget.mangaDetail,
+        historyModel: null,
         fromHome: widget.fromHome));
-    Navigator.pushReplacementNamed(
-      context,
-      chapterRoute,
-    );
+    Navigator.pushReplacementNamed(context, chapterRoute,
+        arguments: ChapterPageArguments(
+            chapterEndpoint:
+                widget.mangaDetail.chapterList[index].chapterEndpoint,
+            selectedIndex: index,
+            mangaDetail: widget.mangaDetail,
+            historyModel: null,
+            fromHome: widget.fromHome));
   }
 
   @override

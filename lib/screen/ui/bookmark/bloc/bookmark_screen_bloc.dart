@@ -26,10 +26,14 @@ class BookmarkScreenBloc
   Stream<BookmarkScreenState> mapEventToState(
     BookmarkScreenEvent event,
   ) async* {
-    if (state is BookmarkScreenInitial)
-      yield* getBookmarkDataInitialToState();
-    else
-      yield* getBookmarkDataToState();
+    if (event is ResetStateToInitial) {
+      yield BookmarkScreenInitial();
+    } else if (event is GetBookmarkScreenData) {
+      if (state is BookmarkScreenInitial)
+        yield* getBookmarkDataInitialToState();
+      else
+        yield* getBookmarkDataToState();
+    }
   }
 
   Stream<BookmarkScreenState> getBookmarkDataInitialToState() async* {

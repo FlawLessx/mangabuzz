@@ -24,9 +24,9 @@ class MoorDBRepository {
       moorDBProvider.historyDao.listAllHistory(limit, offset: offset);
   Stream<List<HistoryModel>> watchAllHistory() =>
       moorDBProvider.historyDao.watchAllHistory();
-  Future insertHistory(HistorysCompanion history) =>
+  Future insertHistory(History history) =>
       moorDBProvider.historyDao.insertHistory(history);
-  Future updateHistory(HistorysCompanion history) =>
+  Future updateHistory(History history) =>
       moorDBProvider.historyDao.updateHistory(history);
   Future deleteHistory(String title, String mangaEndpoint) =>
       moorDBProvider.historyDao.deleteHistory(title, mangaEndpoint);

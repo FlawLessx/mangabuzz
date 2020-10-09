@@ -21,10 +21,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()
-      ..addListener(() {
-        _loadMore();
-      });
+    _scrollController = ScrollController();
   }
 
   _loadMore() {
@@ -36,8 +33,22 @@ class _BookmarkPageState extends State<BookmarkPage> {
     }
   }
 
+  bool _visibleLoad(int length) {
+    return length <= 3 ? false : true;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _scrollController.addListener(() {
+      _loadMore();
+    });
+
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: SearchBar(
@@ -77,9 +88,8 @@ class _BookmarkPageState extends State<BookmarkPage> {
                     itemBuilder: (context, index) => (index >=
                             state.listBookmarkData.length)
                         ? Visibility(
-                            visible: state.listBookmarkData.length == 0
-                                ? false
-                                : true,
+                            visible:
+                                _visibleLoad(state.listBookmarkData.length),
                             child: Container(
                               child: Center(
                                 child: SizedBox(

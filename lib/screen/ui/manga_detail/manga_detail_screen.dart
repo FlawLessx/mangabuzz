@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
+import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../core/model/manga_detail/manga_detail_model.dart';
@@ -60,11 +62,49 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
           bookmarkModel: bookmarkModel != null ? bookmarkModel : tempData));
     }
 
+    BlocProvider.of<BookmarkScreenBloc>(context).add(ResetStateToInitial());
     BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
 
     setState(() {
       isBookmarked = !isBookmarked;
     });
+  }
+
+  _readFunction(HistoryModel historyModel, MangaDetail mangaDetail) {
+    if (historyModel == null) {
+      BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
+          chapterEndpoint: mangaDetail
+              .chapterList[mangaDetail.chapterList.length - 1].chapterEndpoint,
+          selectedIndex: (mangaDetail.chapterList.length - 1),
+          mangaDetail: mangaDetail,
+          historyModel: historyModel,
+          fromHome: false));
+      Navigator.pushNamed(context, chapterRoute,
+          arguments: ChapterPageArguments(
+              chapterEndpoint: mangaDetail
+                  .chapterList[mangaDetail.chapterList.length - 1]
+                  .chapterEndpoint,
+              selectedIndex: (mangaDetail.chapterList.length - 1),
+              historyModel: historyModel,
+              mangaDetail: mangaDetail,
+              fromHome: false));
+    } else {
+      BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
+          chapterEndpoint: mangaDetail
+              .chapterList[historyModel.selectedIndex].chapterEndpoint,
+          selectedIndex: historyModel.selectedIndex,
+          mangaDetail: mangaDetail,
+          historyModel: historyModel,
+          fromHome: false));
+      Navigator.pushNamed(context, chapterRoute,
+          arguments: ChapterPageArguments(
+              chapterEndpoint: mangaDetail
+                  .chapterList[historyModel.selectedIndex].chapterEndpoint,
+              selectedIndex: historyModel.selectedIndex,
+              mangaDetail: mangaDetail,
+              historyModel: historyModel,
+              fromHome: false));
+    }
   }
 
   @override
@@ -94,26 +134,36 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                     state.historyModel != null
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                  "${state.historyModel.chapterReached} Chapter Reached"),
+                                  "${state.historyModel.chapterReached} Chapter Reached",
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: "Poppins-Medium")),
                               Text(
                                 "${state.mangaDetail.chapterList.length - state.historyModel.chapterReached} Chapter Remaining",
-                                style: TextStyle(color: Colors.grey),
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 12),
                               ),
                             ],
                           )
                         : SizedBox(),
-                    Chip(
-                      label: state.historyModel != null
-                          ? Text("Continue Read")
-                          : Text("Start Read"),
-                      labelStyle: TextStyle(
-                          color: Colors.white, fontFamily: "Poppins-Bold"),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      elevation: 3.0,
-                      shadowColor:
-                          Theme.of(context).primaryColor.withOpacity(0.6),
+                    InkWell(
+                      onTap: () {
+                        _readFunction(state.historyModel, state.mangaDetail);
+                      },
+                      child: Chip(
+                        label: state.historyModel != null
+                            ? Text("Continue Read")
+                            : Text("Start Read"),
+                        labelStyle: TextStyle(
+                            color: Colors.white, fontFamily: "Poppins-Bold"),
+                        backgroundColor: Theme.of(context).primaryColor,
+                        elevation: 4.0,
+                        shadowColor:
+                            Theme.of(context).primaryColor.withOpacity(0.8),
+                      ),
                     )
                   ],
                 ));
@@ -154,8 +204,6 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         enableShadow: true,
                         icons: Icons.arrow_back,
                         onTap: () {
-                          BlocProvider.of<BookmarkScreenBloc>(context)
-                              .add(GetBookmarkScreenData());
                           Navigator.pop(context);
                         }),
                     GestureDetector(
@@ -284,7 +332,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         ],
                       ),
                     ),
-                    buildChapter(state.mangaDetail)
+                    buildChapter(state.mangaDetail, state.historyModel)
                   ],
                 )
               ],
@@ -299,7 +347,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
     );
   }
 
-  Widget buildChapter(MangaDetail mangaDetail) {
+  Widget buildChapter(MangaDetail mangaDetail, HistoryModel historyModel) {
     return ListView.builder(
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(
@@ -310,7 +358,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(10)),
-            child: GestureDetector(
+            child: InkWell(
               onTap: () {
                 BlocProvider.of<ChapterScreenBloc>(context).add(
                     GetChapterScreenData(
@@ -318,11 +366,16 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                             mangaDetail.chapterList[index].chapterEndpoint,
                         selectedIndex: index,
                         mangaDetail: mangaDetail,
+                        historyModel: historyModel,
                         fromHome: false));
-                Navigator.pushNamed(
-                  context,
-                  chapterRoute,
-                );
+                Navigator.pushNamed(context, chapterRoute,
+                    arguments: ChapterPageArguments(
+                        chapterEndpoint:
+                            mangaDetail.chapterList[index].chapterEndpoint,
+                        selectedIndex: index,
+                        mangaDetail: mangaDetail,
+                        historyModel: historyModel,
+                        fromHome: false));
               },
               child: ChapterItem(
                 chapterListData: mangaDetail.chapterList[index],

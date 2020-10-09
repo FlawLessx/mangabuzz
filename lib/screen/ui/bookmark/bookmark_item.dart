@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 
 import '../../../core/model/bookmark/bookmark_model.dart';
 import '../../widget/rating.dart';
@@ -62,9 +63,15 @@ class _BookmarkItemState extends State<BookmarkItem> {
                       child: CachedNetworkImage(
                         imageUrl: widget.bookmarkModel.image,
                         width: ScreenUtil().setWidth(280),
-                        height: ScreenUtil().setWidth(420),
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                        height: ScreenUtil().setWidth(380),
+                        placeholder: (context, url) => Container(
+                          child: Center(
+                            child: SizedBox(
+                                height: ScreenUtil().setWidth(60),
+                                width: ScreenUtil().setWidth(60),
+                                child: CustomCircularProgressIndicator()),
+                          ),
+                        ),
                         fit: BoxFit.cover,
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
@@ -95,6 +102,8 @@ class _BookmarkItemState extends State<BookmarkItem> {
               children: [
                 Text(
                   widget.bookmarkModel.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       fontFamily: "Poppins-SemiBold",
                       fontSize: 14,
@@ -105,9 +114,11 @@ class _BookmarkItemState extends State<BookmarkItem> {
                 ),
                 Text(
                   widget.bookmarkModel.author,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       fontFamily: "Poppins-Medium",
-                      fontSize: 11,
+                      fontSize: 12,
                       color: Colors.grey),
                 ),
                 SizedBox(

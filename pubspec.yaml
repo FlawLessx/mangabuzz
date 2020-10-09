@@ -52,7 +52,6 @@ dependencies:
   content_placeholder: ^0.1.0
   flutter_rating_bar: ^3.0.1+1
   flutter_animation_progress_bar: ^1.0.5
-  lazy_load_scrollview: ^1.1.0
   flutter_dropdown: ^0.0.8
   readmore: ^1.0.0
   flutter_advanced_networkimage: ^0.7.0

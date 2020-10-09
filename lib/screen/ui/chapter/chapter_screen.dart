@@ -1,12 +1,17 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/bloc/history_bloc/history_bloc.dart';
+import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/error/error_screen.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
+import 'package:mangabuzz/screen/widget/refresh_snackbar.dart';
 
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../widget/round_button.dart';
@@ -14,7 +19,37 @@ import 'bloc/chapter_screen_bloc.dart';
 import 'chapter_appbar.dart';
 import 'chapter_placholder.dart';
 
+class ChapterPageArguments {
+  final String chapterEndpoint;
+  final int selectedIndex;
+  final MangaDetail mangaDetail;
+  final String mangaEndpoint;
+  final bool fromHome;
+  final HistoryModel historyModel;
+  ChapterPageArguments(
+      {@required this.chapterEndpoint,
+      @required this.selectedIndex,
+      @required this.mangaDetail,
+      this.mangaEndpoint,
+      @required this.fromHome,
+      @required this.historyModel});
+}
+
 class ChapterPage extends StatefulWidget {
+  final String chapterEndpoint;
+  final int selectedIndex;
+  final MangaDetail mangaDetail;
+  final String mangaEndpoint;
+  final bool fromHome;
+  final HistoryModel historyModel;
+  ChapterPage(
+      {@required this.chapterEndpoint,
+      @required this.selectedIndex,
+      @required this.mangaDetail,
+      this.mangaEndpoint,
+      @required this.fromHome,
+      @required this.historyModel});
+
   @override
   _ChapterPageState createState() => _ChapterPageState();
 }
@@ -39,6 +74,22 @@ class _ChapterPageState extends State<ChapterPage> {
     super.initState();
   }
 
+  _addToHistory(MangaDetail mangaDetail, int selectedIndex) {
+    final model = HistoryModel(
+        author: mangaDetail.author,
+        image: mangaDetail.image,
+        mangaEndpoint: mangaDetail.mangaEndpoint,
+        rating: mangaDetail.rating,
+        title: mangaDetail.title,
+        type: mangaDetail.type,
+        totalChapter: mangaDetail.chapterList.length,
+        selectedIndex: selectedIndex,
+        chapterReached:
+            _getCurrentValue(mangaDetail.chapterList, selectedIndex));
+
+    BlocProvider.of<HistoryBloc>(context).add(AddHistory(historyModel: model));
+  }
+
   int _getCurrentValue(List<ChapterList> oldList, int selectedIndex) {
     List<ChapterList> newList = oldList.reversed.toList();
     var data = oldList[selectedIndex].chapterName;
@@ -47,8 +98,10 @@ class _ChapterPageState extends State<ChapterPage> {
     for (int i = 0; i < newList.length; i++) {
       if (data != newList[i].chapterName)
         index++;
-      else
+      else {
+        index++;
         break;
+      }
     }
 
     return index;
@@ -60,6 +113,7 @@ class _ChapterPageState extends State<ChapterPage> {
         chapterEndpoint: chapterEndpoint,
         selectedIndex: selectedIndex,
         mangaDetail: mangaDetail,
+        historyModel: null,
         fromHome: fromHome));
     Navigator.pushReplacementNamed(
       context,
@@ -100,9 +154,26 @@ class _ChapterPageState extends State<ChapterPage> {
                 },
               ),
               preferredSize: Size.fromHeight(ScreenUtil().setHeight(220))),
-          body: BlocBuilder<ChapterScreenBloc, ChapterScreenState>(
+          body: BlocConsumer<ChapterScreenBloc, ChapterScreenState>(
+            listener: (context, state) {
+              if (state is ChapterScreenError) {
+                Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+                  BlocProvider.of<ChapterScreenBloc>(context).add(
+                      GetChapterScreenData(
+                          chapterEndpoint: widget.chapterEndpoint,
+                          fromHome: widget.fromHome,
+                          mangaDetail: widget.mangaDetail,
+                          selectedIndex: widget.selectedIndex,
+                          historyModel: null,
+                          mangaEndpoint: widget.mangaEndpoint));
+                }));
+              }
+            },
             builder: (context, state) {
               if (state is ChapterScreenLoaded) {
+                _addToHistory(state.mangaDetail, state.selectedIndex);
+                print("selectedIndex: ${state.selectedIndex}");
+
                 return DraggableScrollbar.semicircle(
                   controller: _scrollController,
                   child: ListView(
@@ -115,36 +186,21 @@ class _ChapterPageState extends State<ChapterPage> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: state.chapterImg.length,
                             itemBuilder: (context, index) {
-                              return Image(
-                                  filterQuality: FilterQuality.high,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        value: loadingProgress
-                                                    .expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                    .cumulativeBytesLoaded /
-                                                loadingProgress
-                                                    .expectedTotalBytes
-                                            : null,
-                                      ),
-                                    );
-                                  },
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Icon(Icons.error_outline);
-                                  },
-                                  image: AdvancedNetworkImage(
-                                      state.chapterImg[index].imageLink,
-                                      retryLimit: 5,
-                                      timeoutDuration: Duration(seconds: 60),
-                                      printError: true,
-                                      disableMemoryCache: true,
-                                      fallbackAssetImage:
-                                          "resources/img/error.png"));
+                              return CachedNetworkImage(
+                                imageUrl: state.chapterImg[index].imageLink,
+                                placeholder: (context, url) => Container(
+                                  child: Center(
+                                    child: SizedBox(
+                                        height: ScreenUtil().setWidth(60),
+                                        width: ScreenUtil().setWidth(60),
+                                        child:
+                                            CustomCircularProgressIndicator()),
+                                  ),
+                                ),
+                                fit: BoxFit.cover,
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              );
                             }),
                       ),
                       Container(
@@ -249,6 +305,8 @@ class _ChapterPageState extends State<ChapterPage> {
                     ],
                   ),
                 );
+              } else if (state is ChapterScreenError) {
+                return ErrorPage();
               } else {
                 return chapterBodyPlaceholder();
               }

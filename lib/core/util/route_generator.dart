@@ -54,8 +54,16 @@ class RouteGenerator {
             settings: settings);
         break;
       case chapterRoute:
+        final args = settings.arguments as ChapterPageArguments;
         return MaterialPageRoute(
-            builder: (_) => ChapterPage(), settings: settings);
+            builder: (_) => ChapterPage(
+                  chapterEndpoint: args.chapterEndpoint,
+                  selectedIndex: args.selectedIndex,
+                  mangaDetail: args.mangaDetail,
+                  fromHome: args.fromHome,
+                  historyModel: args.historyModel,
+                ),
+            settings: settings);
         break;
       default:
         return MaterialPageRoute(

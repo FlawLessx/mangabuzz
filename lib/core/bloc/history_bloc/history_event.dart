@@ -7,9 +7,9 @@ abstract class HistoryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class InsertHistory extends HistoryEvent {
+class AddHistory extends HistoryEvent {
   final HistoryModel historyModel;
-  InsertHistory({@required this.historyModel});
+  AddHistory({@required this.historyModel});
 
   @override
   List<Object> get props => [historyModel];
@@ -24,9 +24,10 @@ class UpdateHistory extends HistoryEvent {
 }
 
 class DeleteHistory extends HistoryEvent {
-  final HistoryModel historyModel;
-  DeleteHistory({@required this.historyModel});
+  final String title;
+  final String mangaEndpoint;
+  DeleteHistory({@required this.title, @required this.mangaEndpoint});
 
   @override
-  List<Object> get props => [historyModel];
+  List<Object> get props => [title, mangaEndpoint];
 }

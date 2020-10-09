@@ -49,7 +49,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   Stream<BookmarkState> updateBookmarkToState(UpdateBookmark event) async* {
     try {
       final data = event.bookmarkModel;
-      await _moorDBRepository.updateBookmark(Bookmark(
+      _moorDBRepository.updateBookmark(Bookmark(
           title: data.title,
           mangaEndpoint: data.mangaEndpoint,
           image: data.image,
@@ -67,7 +67,7 @@ class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   Stream<BookmarkState> deleteBookmarkToState(DeleteBookmark event) async* {
     try {
       final data = event.bookmarkModel;
-      await _moorDBRepository.deleteBookmark(data.title, data.mangaEndpoint);
+      _moorDBRepository.deleteBookmark(data.title, data.mangaEndpoint);
     } catch (e) {
       yield BookmarkError(error: e.toString());
     }

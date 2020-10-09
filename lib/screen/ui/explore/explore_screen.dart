@@ -16,8 +16,11 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  ScrollController _scrollController;
+
   @override
   void initState() {
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -37,6 +40,7 @@ class _ExplorePageState extends State<ExplorePage> {
           builder: (context, state) {
             if (state is ExploreScreenLoaded) {
               return ListView(
+                controller: _scrollController,
                 children: [
                   Padding(
                       padding: EdgeInsets.symmetric(

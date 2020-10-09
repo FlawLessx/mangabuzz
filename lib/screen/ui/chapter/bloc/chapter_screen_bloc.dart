@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mangabuzz/core/model/chapter/chapter_model.dart';
+import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/repository/remote/api_repository.dart';
 import 'package:mangabuzz/core/util/connectivity_check.dart';
