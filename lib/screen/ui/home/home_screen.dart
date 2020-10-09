@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
 
 import '../../../core/model/manga/manga_model.dart';
-import '../../widget/latest_update_item.dart';
-import '../../widget/manga_item.dart';
+import '../../widget/latest_update/latest_update_item.dart';
+import '../../widget/manga_item/manga_item.dart';
 import '../../widget/paginated_button.dart';
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/search_bar.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: false,
+        drawer: DrawerWidget(),
         appBar: SearchBar(
           text: "Search something...",
           function: () {},
@@ -93,7 +95,10 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      PaginatedButton(text: "Next", function: () {}),
+                      PaginatedButton(
+                          text: "Next",
+                          icons: Icons.chevron_right,
+                          function: () {}),
                     ],
                   ),
                   SizedBox(

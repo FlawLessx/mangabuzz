@@ -9,6 +9,9 @@ import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
+import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
+import 'package:mangabuzz/screen/widget/genre_item.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../core/model/manga_detail/manga_detail_model.dart';
@@ -394,12 +397,32 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
         direction: Axis.horizontal,
         children: genreList
             .map(
-              (e) => Chip(
-                label: Text(e.genreName),
-                labelStyle: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 12),
-                backgroundColor:
-                    Theme.of(context).primaryColor.withOpacity(0.15),
+              (e) => InkWell(
+                onTap: () {
+                  BlocProvider.of<PaginatedScreenBloc>(context).add(
+                      GetPaginatedScreenScreenData(
+                          name: e.genreName,
+                          endpoint: e.genreEndpoint,
+                          pageNumber: 1,
+                          isGenre: true,
+                          isManga: false,
+                          isManhua: false,
+                          isManhwa: false));
+                  Navigator.pushNamed(context, paginatedRoute,
+                      arguments: PaginatedPageArguments(
+                          name: e.genreName,
+                          endpoint: e.genreEndpoint,
+                          pageNumber: 1,
+                          isGenre: true,
+                          isManga: false,
+                          isManhua: false,
+                          isManhwa: false));
+                },
+                child: GenreItem(
+                    text: e.genreName,
+                    textColor: Theme.of(context).primaryColor,
+                    backgroundColor:
+                        Theme.of(context).primaryColor.withOpacity(0.2)),
               ),
             )
             .toList(),

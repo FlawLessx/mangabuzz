@@ -13,6 +13,7 @@ import 'screen/ui/explore/bloc/explore_screen_bloc.dart';
 import 'screen/ui/history/bloc/history_screen_bloc.dart';
 import 'screen/ui/home/bloc/home_screen_bloc.dart';
 import 'screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import 'screen/ui/paginated/bloc/paginated_screen_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +61,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ChapterScreenBloc>(
           create: (context) => ChapterScreenBloc(),
+        ),
+        BlocProvider<PaginatedScreenBloc>(
+          create: (context) => PaginatedScreenBloc(),
         ),
       ],
       child: MaterialApp(

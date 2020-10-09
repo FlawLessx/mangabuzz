@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 
-import '../../core/model/latest_update/latest_update_model.dart';
-import '../../core/util/route_generator.dart';
-import '../ui/chapter/bloc/chapter_screen_bloc.dart';
-import '../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
-import '../ui/manga_detail/manga_detail_screen.dart';
-import '../util/color_series.dart';
-import 'circular_progress.dart';
-import 'tag.dart';
+import '../../../core/model/latest_update/latest_update_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../../ui/chapter/bloc/chapter_screen_bloc.dart';
+import '../../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import '../../ui/manga_detail/manga_detail_screen.dart';
+import '../../util/color_series.dart';
+import '../circular_progress.dart';
+import '../tag.dart';
 
 Widget buildLatestUpdateGridview(LatestUpdate listUpdate) {
   return GridView.builder(

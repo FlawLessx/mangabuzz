@@ -4,14 +4,16 @@ import 'package:flutter_screenutil/screenutil.dart';
 class PaginatedButton extends StatelessWidget {
   final String text;
   final Function function;
+  final IconData icons;
 
-  PaginatedButton({@required this.text, @required this.function});
+  PaginatedButton(
+      {@required this.text, @required this.function, @required this.icons});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Color(0xFFf3f4f6),
+          color: Theme.of(context).primaryColor.withOpacity(0.2),
           borderRadius:
               BorderRadius.all(Radius.circular(ScreenUtil().setWidth(60)))),
       child: Padding(
@@ -26,7 +28,7 @@ class PaginatedButton extends StatelessWidget {
                   color: Theme.of(context).primaryColor, fontSize: 16),
             ),
             Icon(
-              Icons.chevron_right,
+              icons,
               color: Theme.of(context).primaryColor,
             )
           ],

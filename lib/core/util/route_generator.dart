@@ -6,6 +6,7 @@ import 'package:mangabuzz/screen/ui/explore/explore_screen.dart';
 import 'package:mangabuzz/screen/ui/history/history_screen.dart';
 import 'package:mangabuzz/screen/ui/home/home_screen.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
+import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
 
 const String baseRoute = '/';
 const String homeRoute = '/home';
@@ -15,9 +16,7 @@ const String historyRoute = '/history';
 const String mangaDetailRoute = '/mangaDetail';
 const String chapterRoute = '/chapter';
 const String settingsRoute = '/settings';
-const String listMangaRoute = '/manga';
-const String listManhwaRoute = '/manhwa';
-const String listManhuaRoute = '/manhua';
+const String paginatedRoute = '/paginated';
 
 class RouteGenerator {
   Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -63,6 +62,19 @@ class RouteGenerator {
                   fromHome: args.fromHome,
                   historyModel: args.historyModel,
                 ),
+            settings: settings);
+        break;
+      case paginatedRoute:
+        final args = settings.arguments as PaginatedPageArguments;
+        return MaterialPageRoute(
+            builder: (_) => PaginatedPage(
+                name: args.name,
+                endpoint: args.endpoint,
+                isGenre: args.isGenre,
+                isManga: args.isManga,
+                isManhua: args.isManhua,
+                isManhwa: args.isManhwa,
+                pageNumber: args.pageNumber),
             settings: settings);
         break;
       default:
