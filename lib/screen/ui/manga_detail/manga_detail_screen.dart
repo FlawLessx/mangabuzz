@@ -422,7 +422,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                     text: e.genreName,
                     textColor: Theme.of(context).primaryColor,
                     backgroundColor:
-                        Theme.of(context).primaryColor.withOpacity(0.2)),
+                        Theme.of(context).primaryColor.withOpacity(0.15)),
               ),
             )
             .toList(),

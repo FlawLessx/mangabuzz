@@ -2,55 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/screen/ui/error/error_screen.dart';
-import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/paginated/paginated_screen_placeholder.dart';
-import 'package:mangabuzz/screen/widget/manga_item/manga_item.dart';
+import 'package:mangabuzz/screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
+import 'package:mangabuzz/screen/widget/latest_update/latest_update_item.dart';
+import 'package:mangabuzz/screen/widget/latest_update/latest_update_item_placeholder.dart';
 import 'package:mangabuzz/screen/widget/paginated_button.dart';
 import 'package:mangabuzz/screen/widget/refresh_snackbar.dart';
 import 'package:mangabuzz/screen/widget/round_button.dart';
 
-class PaginatedPageArguments {
-  final String name;
-  final String endpoint;
+class LatestUpdatePageArguments {
   final int pageNumber;
-  final bool isGenre;
-  final bool isManga;
-  final bool isManhwa;
-  final bool isManhua;
-  PaginatedPageArguments({
-    @required this.name,
-    @required this.endpoint,
+  LatestUpdatePageArguments({
     @required this.pageNumber,
-    @required this.isGenre,
-    @required this.isManga,
-    @required this.isManhua,
-    @required this.isManhwa,
   });
 }
 
-class PaginatedPage extends StatefulWidget {
-  final String name;
-  final String endpoint;
+class LatestUpdatePage extends StatefulWidget {
   final int pageNumber;
-  final bool isGenre;
-  final bool isManga;
-  final bool isManhwa;
-  final bool isManhua;
-  PaginatedPage({
-    @required this.name,
-    @required this.endpoint,
+  LatestUpdatePage({
     @required this.pageNumber,
-    @required this.isGenre,
-    @required this.isManga,
-    @required this.isManhua,
-    @required this.isManhwa,
   });
 
   @override
-  _PaginatedPageState createState() => _PaginatedPageState();
+  _LatestUpdatePageState createState() => _LatestUpdatePageState();
 }
 
-class _PaginatedPageState extends State<PaginatedPage> {
+class _LatestUpdatePageState extends State<LatestUpdatePage> {
   ScrollController _scrollController;
   bool resetScroll = false;
 
@@ -73,15 +49,8 @@ class _PaginatedPageState extends State<PaginatedPage> {
   }
 
   _getData(int pageNumber) {
-    BlocProvider.of<PaginatedScreenBloc>(context).add(
-        GetPaginatedScreenScreenData(
-            name: widget.name,
-            endpoint: widget.endpoint,
-            isGenre: widget.isGenre,
-            isManga: widget.isManga,
-            isManhua: widget.isManhua,
-            isManhwa: widget.isManhwa,
-            pageNumber: pageNumber));
+    BlocProvider.of<LatestUpdateScreenBloc>(context)
+        .add(GetLatestUpdateScreenData(pageNumber: pageNumber));
 
     setState(() {
       resetScroll = true;
@@ -94,13 +63,11 @@ class _PaginatedPageState extends State<PaginatedPage> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
-          title: BlocBuilder<PaginatedScreenBloc, PaginatedScreenState>(
+          title: BlocBuilder<LatestUpdateScreenBloc, LatestUpdateScreenState>(
             builder: (context, state) {
-              if (state is PaginatedScreenLoaded) {
+              if (state is LatestUpdateScreenLoaded) {
                 return Text(
-                  widget.isGenre == true
-                      ? "Genre ${state.name}"
-                      : "List ${state.name}",
+                  "Latest Update",
                   style: TextStyle(
                       color: Colors.white, fontFamily: "Poppins-Bold"),
                 );
@@ -122,43 +89,32 @@ class _PaginatedPageState extends State<PaginatedPage> {
                 enableShadow: false)
           ],
         ),
-        body: BlocConsumer<PaginatedScreenBloc, PaginatedScreenState>(
+        body: BlocConsumer<LatestUpdateScreenBloc, LatestUpdateScreenState>(
           listener: (context, state) {
-            if (state is PaginatedScreenError) {
+            if (state is LatestUpdateScreenError) {
               Scaffold.of(context).showSnackBar(refreshSnackBar(() {
                 _getData(widget.pageNumber);
               }));
             }
           },
           builder: (context, state) {
-            if (state is PaginatedScreenLoaded) {
+            if (state is LatestUpdateScreenLoaded) {
               return SafeArea(
                 child: ListView(
                   controller: _scrollController,
                   padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                   children: [
                     Text(
-                      "Results for ${state.name}",
+                      "Results for latest update",
                       style:
                           TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                     ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(20),
-                    ),
-                    Wrap(
-                      direction: Axis.horizontal,
-                      alignment: WrapAlignment.spaceAround,
-                      runSpacing: ScreenUtil().setHeight(20),
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: state.paginatedManga.result
-                          .map((e) => MangaItem(manga: e, maxline: 1))
-                          .toList(),
-                    ),
+                    buildLatestUpdateGridview(state.latestUpdate),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Visibility(
-                          visible: state.paginatedManga.previousPage != 0
+                          visible: state.latestUpdate.previousPage != 0
                               ? true
                               : false,
                           child: PaginatedButton(
@@ -166,7 +122,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
                               icons: Icons.chevron_left,
                               leftIcon: true,
                               function: () {
-                                _getData(state.paginatedManga.previousPage);
+                                _getData(state.latestUpdate.previousPage);
                               }),
                         ),
                         SizedBox(
@@ -176,11 +132,11 @@ class _PaginatedPageState extends State<PaginatedPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Visibility(
-                                visible: state.paginatedManga.previousPage != 0
+                                visible: state.latestUpdate.previousPage != 0
                                     ? true
                                     : false,
                                 child: Text(
-                                  state.paginatedManga.previousPage.toString(),
+                                  state.latestUpdate.previousPage.toString(),
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 14),
                                 )),
@@ -188,7 +144,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
                               width: ScreenUtil().setWidth(30),
                             ),
                             Text(
-                              state.paginatedManga.currentPage.toString(),
+                              state.latestUpdate.currentPage.toString(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontFamily: "Poppins-Medium",
@@ -198,11 +154,11 @@ class _PaginatedPageState extends State<PaginatedPage> {
                               width: ScreenUtil().setWidth(30),
                             ),
                             Visibility(
-                                visible: state.paginatedManga.nextPage != 0
+                                visible: state.latestUpdate.nextPage != 0
                                     ? true
                                     : false,
                                 child: Text(
-                                  state.paginatedManga.nextPage.toString(),
+                                  state.latestUpdate.nextPage.toString(),
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 14),
                                 ))
@@ -213,12 +169,12 @@ class _PaginatedPageState extends State<PaginatedPage> {
                         ),
                         Visibility(
                           visible:
-                              state.paginatedManga.nextPage != 0 ? true : false,
+                              state.latestUpdate.nextPage != 0 ? true : false,
                           child: PaginatedButton(
                               text: "Next",
                               icons: Icons.chevron_right,
                               function: () {
-                                _getData(state.paginatedManga.nextPage);
+                                _getData(state.latestUpdate.nextPage);
                               }),
                         )
                       ],
@@ -229,10 +185,13 @@ class _PaginatedPageState extends State<PaginatedPage> {
                   ],
                 ),
               );
-            } else if (state is PaginatedScreenError) {
+            } else if (state is LatestUpdateScreenError) {
               return ErrorPage();
             } else {
-              return buildPaginatedScreenPlaceholder();
+              return Padding(
+                padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                child: buildLatestUpdatePlaceholder(),
+              );
             }
           },
         ));

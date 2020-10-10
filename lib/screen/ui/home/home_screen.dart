@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/util/route_generator.dart';
+import 'package:mangabuzz/screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/latest_update/latest_update_screen.dart';
 import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
 
 import '../../../core/model/manga/manga_model.dart';
@@ -34,7 +37,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: false,
-        drawer: DrawerWidget(),
+        drawer: Drawer(
+          child: DrawerWidget(),
+        ),
         appBar: SearchBar(
           text: "Search something...",
           function: () {},
@@ -98,7 +103,16 @@ class _HomePageState extends State<HomePage> {
                       PaginatedButton(
                           text: "Next",
                           icons: Icons.chevron_right,
-                          function: () {}),
+                          function: () {
+                            BlocProvider.of<LatestUpdateScreenBloc>(context)
+                                .add(GetLatestUpdateScreenData(
+                                    pageNumber:
+                                        state.listLatestUpdate.nextPage));
+                            Navigator.pushNamed(context, latestUpdateRoute,
+                                arguments: LatestUpdatePageArguments(
+                                    pageNumber:
+                                        state.listLatestUpdate.nextPage));
+                          }),
                     ],
                   ),
                   SizedBox(
@@ -126,7 +140,10 @@ class _HomePageState extends State<HomePage> {
         children: listManga
             .map((item) => Padding(
                   padding: EdgeInsets.only(top: ScreenUtil().setHeight(15)),
-                  child: MangaItem(manga: item),
+                  child: MangaItem(
+                    manga: item,
+                    maxline: 2,
+                  ),
                 ))
             .toList(),
       ),

@@ -18,9 +18,9 @@ class GenreItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       label: Text(text),
-      labelStyle: TextStyle(color: Colors.white, fontSize: fontSize),
+      labelStyle: TextStyle(color: textColor, fontSize: fontSize),
       backgroundColor: backgroundColor,
-      shadowColor: backgroundColor.withOpacity(0.6),
+      shadowColor: backgroundColor,
       elevation: shadow == false ? 0 : 4.0,
     );
   }

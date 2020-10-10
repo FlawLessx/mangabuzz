@@ -12,7 +12,8 @@ import 'package:mangabuzz/screen/widget/tag.dart';
 
 class MangaItem extends StatefulWidget {
   final Manga manga;
-  MangaItem({@required this.manga});
+  final int maxline;
+  MangaItem({@required this.manga, @required this.maxline});
 
   @override
   _MangaItemState createState() => _MangaItemState();
@@ -89,7 +90,7 @@ class _MangaItemState extends State<MangaItem> {
             ),
             Text(
               widget.manga.title,
-              maxLines: 2,
+              maxLines: widget.maxline,
               overflow: TextOverflow.clip,
               textAlign: TextAlign.center,
               style: TextStyle(fontFamily: 'Poppins-SemiBold', fontSize: 13),

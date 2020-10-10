@@ -40,24 +40,22 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           }),
     ];
 
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          SvgPicture.asset("resources/img/ReadingDoodle.svg",
-              color: Theme.of(context).primaryColor,
-              semanticsLabel: 'Happy Reading'),
-          ListTile(
-            title: Text(items[0].text),
-            onTap: items[0].function,
-            trailing: Icon(Icons.chevron_right),
-          ),
-          ExpansionTile(
-            title: Text("Genres"),
-            children: [Text("test")],
-          )
-        ],
-      ),
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        SvgPicture.asset("resources/img/ReadingDoodle.svg",
+            color: Theme.of(context).primaryColor,
+            semanticsLabel: 'Happy Reading'),
+        ListTile(
+          title: Text(items[0].text),
+          onTap: items[0].function,
+          trailing: Icon(Icons.chevron_right),
+        ),
+        ExpansionTile(
+          title: Text("Genres"),
+          children: [Text("test")],
+        )
+      ],
     );
   }
 }

@@ -71,7 +71,7 @@ class APIProvider {
 
   Future<PaginatedManga> getGenre(String genreEndpoint, int pageNumber) async {
     final response =
-        await client.get("${_constant.latestUpdate}$genreEndpoint$pageNumber");
+        await client.get("${_constant.genre}$genreEndpoint$pageNumber");
 
     if (response.statusCode == 200) {
       return paginatedMangaFromJson(response.body);

@@ -167,7 +167,10 @@ class _ExplorePageState extends State<ExplorePage> {
         children: list
             .map((item) => Padding(
                   padding: EdgeInsets.only(top: ScreenUtil().setHeight(15)),
-                  child: MangaItem(manga: item),
+                  child: MangaItem(
+                    manga: item,
+                    maxline: 2,
+                  ),
                 ))
             .toList(),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'core/bloc/history_bloc/history_bloc.dart';
@@ -64,6 +65,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PaginatedScreenBloc>(
           create: (context) => PaginatedScreenBloc(),
+        ),
+        BlocProvider<LatestUpdateScreenBloc>(
+          create: (context) => LatestUpdateScreenBloc(),
         ),
       ],
       child: MaterialApp(
