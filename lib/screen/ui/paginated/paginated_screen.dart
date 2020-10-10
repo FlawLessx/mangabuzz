@@ -133,100 +133,109 @@ class _PaginatedPageState extends State<PaginatedPage> {
           builder: (context, state) {
             if (state is PaginatedScreenLoaded) {
               return SafeArea(
-                child: ListView(
-                  controller: _scrollController,
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-                  children: [
-                    Text(
-                      "Results for ${state.name}",
-                      style:
-                          TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(20),
-                    ),
-                    Wrap(
-                      direction: Axis.horizontal,
-                      alignment: WrapAlignment.spaceAround,
-                      runSpacing: ScreenUtil().setHeight(20),
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: state.paginatedManga.result
-                          .map((e) => MangaItem(manga: e, maxline: 1))
-                          .toList(),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Visibility(
-                          visible: state.paginatedManga.previousPage != 0
-                              ? true
-                              : false,
-                          child: PaginatedButton(
-                              text: "Prev",
-                              icons: Icons.chevron_left,
-                              leftIcon: true,
-                              function: () {
-                                _getData(state.paginatedManga.previousPage);
-                              }),
-                        ),
-                        SizedBox(
-                          width: ScreenUtil().setWidth(20),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Visibility(
-                                visible: state.paginatedManga.previousPage != 0
-                                    ? true
-                                    : false,
-                                child: Text(
-                                  state.paginatedManga.previousPage.toString(),
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 14),
-                                )),
-                            SizedBox(
-                              width: ScreenUtil().setWidth(30),
-                            ),
-                            Text(
-                              state.paginatedManga.currentPage.toString(),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "Poppins-Medium",
-                                  fontSize: 16),
-                            ),
-                            SizedBox(
-                              width: ScreenUtil().setWidth(30),
-                            ),
-                            Visibility(
-                                visible: state.paginatedManga.nextPage != 0
-                                    ? true
-                                    : false,
-                                child: Text(
-                                  state.paginatedManga.nextPage.toString(),
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 14),
-                                ))
-                          ],
-                        ),
-                        SizedBox(
-                          width: ScreenUtil().setWidth(30),
-                        ),
-                        Visibility(
-                          visible:
-                              state.paginatedManga.nextPage != 0 ? true : false,
-                          child: PaginatedButton(
-                              text: "Next",
-                              icons: Icons.chevron_right,
-                              function: () {
-                                _getData(state.paginatedManga.nextPage);
-                              }),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(60),
-                    )
-                  ],
+                child: RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
+                  onRefresh: () async {
+                    _getData(state.paginatedManga.currentPage);
+                  },
+                  child: ListView(
+                    controller: _scrollController,
+                    padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                    children: [
+                      Text(
+                        "Results for ${state.name}",
+                        style:
+                            TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(20),
+                      ),
+                      Wrap(
+                        direction: Axis.horizontal,
+                        alignment: WrapAlignment.spaceAround,
+                        runSpacing: ScreenUtil().setHeight(20),
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: state.paginatedManga.result
+                            .map((e) => MangaItem(manga: e, maxline: 1))
+                            .toList(),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Visibility(
+                            visible: state.paginatedManga.previousPage != 0
+                                ? true
+                                : false,
+                            child: PaginatedButton(
+                                text: "Prev",
+                                icons: Icons.chevron_left,
+                                leftIcon: true,
+                                function: () {
+                                  _getData(state.paginatedManga.previousPage);
+                                }),
+                          ),
+                          SizedBox(
+                            width: ScreenUtil().setWidth(20),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Visibility(
+                                  visible:
+                                      state.paginatedManga.previousPage != 0
+                                          ? true
+                                          : false,
+                                  child: Text(
+                                    state.paginatedManga.previousPage
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 14),
+                                  )),
+                              SizedBox(
+                                width: ScreenUtil().setWidth(30),
+                              ),
+                              Text(
+                                state.paginatedManga.currentPage.toString(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "Poppins-Medium",
+                                    fontSize: 16),
+                              ),
+                              SizedBox(
+                                width: ScreenUtil().setWidth(30),
+                              ),
+                              Visibility(
+                                  visible: state.paginatedManga.nextPage != 0
+                                      ? true
+                                      : false,
+                                  child: Text(
+                                    state.paginatedManga.nextPage.toString(),
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 14),
+                                  ))
+                            ],
+                          ),
+                          SizedBox(
+                            width: ScreenUtil().setWidth(30),
+                          ),
+                          Visibility(
+                            visible: state.paginatedManga.nextPage != 0
+                                ? true
+                                : false,
+                            child: PaginatedButton(
+                                text: "Next",
+                                icons: Icons.chevron_right,
+                                function: () {
+                                  _getData(state.paginatedManga.nextPage);
+                                }),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(60),
+                      )
+                    ],
+                  ),
                 ),
               );
             } else if (state is PaginatedScreenError) {

@@ -3,25 +3,26 @@ import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/bloc/bookmark_bloc/bookmark_bloc.dart';
-import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
-import 'package:mangabuzz/core/model/history/history_model.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
-import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
-import 'package:mangabuzz/screen/widget/genre_item.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../core/bloc/bookmark_bloc/bookmark_bloc.dart';
+import '../../../core/model/bookmark/bookmark_model.dart';
+import '../../../core/model/history/history_model.dart';
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../core/util/route_generator.dart';
+import '../../widget/genre_item.dart';
 import '../../widget/rating.dart';
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/round_button.dart';
+import '../bookmark/bloc/bookmark_screen_bloc.dart';
+import '../chapter/bloc/chapter_screen_bloc.dart';
+import '../chapter/chapter_screen.dart';
 import '../error/error_screen.dart';
+import '../paginated/bloc/paginated_screen_bloc.dart';
+import '../paginated/paginated_screen.dart';
 import 'bloc/manga_detail_screen_bloc.dart';
 import 'chapter_item.dart';
+import 'manga_detail_bottom_navbar.dart';
 import 'manga_detail_placeholder.dart';
 
 class MangaDetailPageArguments {
@@ -73,7 +74,8 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
     });
   }
 
-  _readFunction(HistoryModel historyModel, MangaDetail mangaDetail) {
+  _readFunction(HistoryModel historyModel, MangaDetail mangaDetail,
+      BuildContext context) {
     if (historyModel == null) {
       BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
           chapterEndpoint: mangaDetail
@@ -119,57 +121,9 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
           BlocBuilder<MangaDetailScreenBloc, MangaDetailScreenState>(
         builder: (context, state) {
           if (state is MangaDetailScreenLoaded) {
-            return Container(
-                height: ScreenUtil().setHeight(150),
-                width: double.infinity,
-                padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.7),
-                      blurRadius: 2,
-                      spreadRadius: 4,
-                      offset: Offset(2, 0))
-                ]),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    state.historyModel != null
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                  "${state.historyModel.chapterReached} Chapter Reached",
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontFamily: "Poppins-Medium")),
-                              Text(
-                                "${state.mangaDetail.chapterList.length - state.historyModel.chapterReached} Chapter Remaining",
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                              ),
-                            ],
-                          )
-                        : SizedBox(),
-                    InkWell(
-                      onTap: () {
-                        _readFunction(state.historyModel, state.mangaDetail);
-                      },
-                      child: Chip(
-                        label: state.historyModel != null
-                            ? Text("Continue Read")
-                            : Text("Start Read"),
-                        labelStyle: TextStyle(
-                            color: Colors.white, fontFamily: "Poppins-Bold"),
-                        backgroundColor: Theme.of(context).primaryColor,
-                        elevation: 4.0,
-                        shadowColor:
-                            Theme.of(context).primaryColor.withOpacity(0.8),
-                      ),
-                    )
-                  ],
-                ));
+            return MangaDetailNavbar(
+                historyModel: state.historyModel,
+                mangaDetail: state.mangaDetail);
           } else {
             return SizedBox();
           }
@@ -193,152 +147,161 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
         },
         builder: (context, state) {
           if (state is MangaDetailScreenLoaded) {
-            return ListView(
-              padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30),
-                  vertical: ScreenUtil().setWidth(30)),
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RoundButton(
-                        iconColor: Colors.white,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        enableShadow: true,
-                        icons: Icons.arrow_back,
+            return RefreshIndicator(
+              color: Theme.of(context).primaryColor,
+              onRefresh: () async {
+                BlocProvider.of<MangaDetailScreenBloc>(context).add(
+                    GetMangaDetailScreenData(
+                        mangaEndpoint: state.mangaDetail.mangaEndpoint,
+                        title: state.mangaDetail.title));
+              },
+              child: ListView(
+                padding: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil().setWidth(30),
+                    vertical: ScreenUtil().setWidth(30)),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RoundButton(
+                          iconColor: Colors.white,
+                          backgroundColor: Theme.of(context).primaryColor,
+                          enableShadow: true,
+                          icons: Icons.arrow_back,
+                          onTap: () {
+                            Navigator.pop(context);
+                          }),
+                      GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
-                        }),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _bookmarkFunction(state.bookmarkModel,
-                              mangaDetail: state.mangaDetail);
-                        });
-                      },
-                      child: Icon(
-                        isBookmarked == true
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: Theme.of(context).primaryColor,
-                        size: ScreenUtil().setHeight(100),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(20),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
+                          setState(() {
+                            _bookmarkFunction(state.bookmarkModel,
+                                mangaDetail: state.mangaDetail);
+                          });
+                        },
+                        child: Icon(
+                          isBookmarked == true
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: Theme.of(context).primaryColor,
+                          size: ScreenUtil().setHeight(100),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(20),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(ScreenUtil().setWidth(20))),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: Offset(0, 0))
+                            ]),
+                        child: ClipRRect(
                           borderRadius: BorderRadius.all(
                               Radius.circular(ScreenUtil().setWidth(20))),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 3,
-                                offset: Offset(0, 0))
-                          ]),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(ScreenUtil().setWidth(20))),
-                        child: CachedNetworkImage(
-                          imageUrl: state.mangaDetail.image,
-                          width: ScreenUtil().setWidth(300),
-                          height: ScreenUtil().setWidth(420),
-                          placeholder: (context, url) => ContentPlaceholder(
+                          child: CachedNetworkImage(
+                            imageUrl: state.mangaDetail.image,
                             width: ScreenUtil().setWidth(300),
                             height: ScreenUtil().setWidth(420),
+                            placeholder: (context, url) => ContentPlaceholder(
+                              width: ScreenUtil().setWidth(300),
+                              height: ScreenUtil().setWidth(420),
+                            ),
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(10),
-                    ),
-                    Text(
-                      state.mangaDetail.title,
-                      style: TextStyle(
-                          fontFamily: "Poppins-Bold",
-                          fontSize: 15,
-                          color: Colors.black),
-                    ),
-                    Text(
-                      state.mangaDetail.author,
-                      style: TextStyle(
-                          fontFamily: "Poppins-Medium",
-                          fontSize: 12,
-                          color: Colors.grey),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(5),
-                    ),
-                    Container(
-                      child: Rating(
-                        rating: state.mangaDetail.rating,
+                      SizedBox(
+                        height: ScreenUtil().setHeight(10),
                       ),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(20),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
-                      child: ReadMoreText(
-                        state.mangaDetail.description,
-                        trimLines: 3,
-                        style: TextStyle(fontSize: 12),
-                        textAlign: TextAlign.center,
-                        colorClickableText: Theme.of(context).primaryColor,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: '...Show more',
-                        trimExpandedText: ' Show less',
+                      Text(
+                        state.mangaDetail.title,
+                        style: TextStyle(
+                            fontFamily: "Poppins-Bold",
+                            fontSize: 15,
+                            color: Colors.black),
                       ),
-                    ),
-                    buildInfo(
-                        state.mangaDetail.status,
-                        state.mangaDetail.released,
-                        state.mangaDetail.type,
-                        state.mangaDetail.lastUpdated),
-                    buildGenre(state.mangaDetail.genreList),
-                    SizedBox(
-                      height: ScreenUtil().setWidth(30),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(30)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "List Chapter",
-                            style: TextStyle(
-                                fontFamily: "Poppins-Bold",
-                                fontSize: 16,
-                                color: Colors.black),
-                          ),
-                          Text(
-                            "Download",
-                            style: TextStyle(
-                                fontFamily: "Poppins-Bold",
-                                fontSize: 16,
-                                color: Colors.black),
-                          ),
-                        ],
+                      Text(
+                        state.mangaDetail.author,
+                        style: TextStyle(
+                            fontFamily: "Poppins-Medium",
+                            fontSize: 12,
+                            color: Colors.grey),
                       ),
-                    ),
-                    buildChapter(state.mangaDetail, state.historyModel)
-                  ],
-                )
-              ],
+                      SizedBox(
+                        height: ScreenUtil().setHeight(5),
+                      ),
+                      Container(
+                        child: Rating(
+                          rating: state.mangaDetail.rating,
+                        ),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(20),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(30)),
+                        child: ReadMoreText(
+                          state.mangaDetail.description,
+                          trimLines: 3,
+                          style: TextStyle(fontSize: 12),
+                          textAlign: TextAlign.center,
+                          colorClickableText: Theme.of(context).primaryColor,
+                          trimMode: TrimMode.Line,
+                          trimCollapsedText: '...Show more',
+                          trimExpandedText: ' Show less',
+                        ),
+                      ),
+                      buildInfo(
+                          state.mangaDetail.status,
+                          state.mangaDetail.released,
+                          state.mangaDetail.type,
+                          state.mangaDetail.lastUpdated),
+                      buildGenre(state.mangaDetail.genreList),
+                      SizedBox(
+                        height: ScreenUtil().setWidth(30),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(30)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "List Chapter",
+                              style: TextStyle(
+                                  fontFamily: "Poppins-Bold",
+                                  fontSize: 16,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              "Download",
+                              style: TextStyle(
+                                  fontFamily: "Poppins-Bold",
+                                  fontSize: 16,
+                                  color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                      buildChapter(state.mangaDetail, state.historyModel)
+                    ],
+                  )
+                ],
+              ),
             );
           } else if (state is MangaDetailScreenError) {
             return ErrorPage();

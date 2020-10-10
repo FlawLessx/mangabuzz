@@ -66,42 +66,51 @@ class _BookmarkPageState extends State<BookmarkPage> {
         },
         builder: (context, state) {
           if (state is BookmarkScreenLoaded) {
-            return ListView(
-              controller: _scrollController,
-              padding:
-                  EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-              children: [
-                Text(
-                  "Bookmarked Series",
-                  style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(20),
-                ),
-                ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    itemCount: state.hasReachedMax
-                        ? state.listBookmarkData.length
-                        : state.listBookmarkData.length + 1,
-                    itemBuilder: (context, index) => (index >=
-                            state.listBookmarkData.length)
-                        ? Visibility(
-                            visible:
-                                _visibleLoad(state.listBookmarkData.length),
-                            child: Container(
-                              child: Center(
-                                child: SizedBox(
-                                    height: ScreenUtil().setWidth(60),
-                                    width: ScreenUtil().setWidth(60),
-                                    child: CustomCircularProgressIndicator()),
+            return RefreshIndicator(
+              color: Theme.of(context).primaryColor,
+              onRefresh: () async {
+                BlocProvider.of<BookmarkScreenBloc>(context)
+                    .add(ResetStateToInitial());
+                BlocProvider.of<BookmarkScreenBloc>(context)
+                    .add(GetBookmarkScreenData());
+              },
+              child: ListView(
+                controller: _scrollController,
+                padding:
+                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+                children: [
+                  Text(
+                    "Bookmarked Series",
+                    style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(20),
+                  ),
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemCount: state.hasReachedMax
+                          ? state.listBookmarkData.length
+                          : state.listBookmarkData.length + 1,
+                      itemBuilder: (context, index) => (index >=
+                              state.listBookmarkData.length)
+                          ? Visibility(
+                              visible:
+                                  _visibleLoad(state.listBookmarkData.length),
+                              child: Container(
+                                child: Center(
+                                  child: SizedBox(
+                                      height: ScreenUtil().setWidth(60),
+                                      width: ScreenUtil().setWidth(60),
+                                      child: CustomCircularProgressIndicator()),
+                                ),
                               ),
-                            ),
-                          )
-                        : BookmarkItem(
-                            bookmarkModel: state.listBookmarkData[index])),
-              ],
+                            )
+                          : BookmarkItem(
+                              bookmarkModel: state.listBookmarkData[index])),
+                ],
+              ),
             );
           } else {
             return buildBookmarkScreenPlaceholder();

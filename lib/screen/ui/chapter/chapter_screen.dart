@@ -172,137 +172,153 @@ class _ChapterPageState extends State<ChapterPage> {
             builder: (context, state) {
               if (state is ChapterScreenLoaded) {
                 _addToHistory(state.mangaDetail, state.selectedIndex);
-                print("selectedIndex: ${state.selectedIndex}");
 
-                return DraggableScrollbar.semicircle(
-                  controller: _scrollController,
-                  child: ListView(
+                return RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
+                  onRefresh: () async {
+                    BlocProvider.of<ChapterScreenBloc>(context).add(
+                        GetChapterScreenData(
+                            chapterEndpoint: state
+                                .mangaDetail
+                                .chapterList[state.selectedIndex]
+                                .chapterEndpoint,
+                            fromHome: state.fromHome,
+                            mangaDetail: state.mangaDetail,
+                            selectedIndex: state.selectedIndex,
+                            historyModel: null,
+                            mangaEndpoint: state.mangaDetail.mangaEndpoint));
+                  },
+                  child: DraggableScrollbar.semicircle(
                     controller: _scrollController,
-                    physics: ScrollPhysics(),
-                    children: [
-                      InteractiveViewer(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: state.chapterImg.length,
-                            itemBuilder: (context, index) {
-                              return CachedNetworkImage(
-                                imageUrl: state.chapterImg[index].imageLink,
-                                placeholder: (context, url) => Container(
-                                  child: Center(
-                                    child: SizedBox(
-                                        height: ScreenUtil().setWidth(60),
-                                        width: ScreenUtil().setWidth(60),
-                                        child:
-                                            CustomCircularProgressIndicator()),
+                    child: ListView(
+                      controller: _scrollController,
+                      physics: ScrollPhysics(),
+                      children: [
+                        InteractiveViewer(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: state.chapterImg.length,
+                              itemBuilder: (context, index) {
+                                return CachedNetworkImage(
+                                  imageUrl: state.chapterImg[index].imageLink,
+                                  placeholder: (context, url) => Container(
+                                    child: Center(
+                                      child: SizedBox(
+                                          height: ScreenUtil().setWidth(60),
+                                          width: ScreenUtil().setWidth(60),
+                                          child:
+                                              CustomCircularProgressIndicator()),
+                                    ),
+                                  ),
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                );
+                              }),
+                        ),
+                        Container(
+                          height: ScreenUtil().setHeight(200),
+                          child: Column(
+                            children: [
+                              Transform.scale(
+                                scale: 1.1,
+                                child: FAProgressBar(
+                                  currentValue: _getCurrentValue(
+                                      state.chapterList, state.selectedIndex),
+                                  maxValue: state.chapterList.length,
+                                  size: ScreenUtil().setHeight(20),
+                                  backgroundColor: Color(0xFFE5E5E5),
+                                  progressColor: Color(0xFF4be2c0),
+                                  borderRadius: 10,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Visibility(
+                                        visible: state.selectedIndex ==
+                                                state.mangaDetail.chapterList
+                                                    .length
+                                            ? false
+                                            : true,
+                                        child: RoundButton(
+                                            icons: Icons.arrow_back,
+                                            iconColor:
+                                                Theme.of(context).primaryColor,
+                                            backgroundColor: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(0.2),
+                                            enableShadow: false,
+                                            onTap: () {
+                                              _navigate(
+                                                  state
+                                                      .mangaDetail
+                                                      .chapterList[
+                                                          (state.selectedIndex +
+                                                              1)]
+                                                      .chapterEndpoint,
+                                                  state.selectedIndex + 1,
+                                                  state.mangaDetail,
+                                                  state.fromHome);
+                                            }),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "${state.chapterList[state.selectedIndex].chapterName}",
+                                            style: TextStyle(
+                                                fontFamily: "Poppins-Medium",
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                            "From ${state.chapterList.length} chapter",
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12),
+                                          )
+                                        ],
+                                      ),
+                                      Visibility(
+                                        visible: state.selectedIndex == 0
+                                            ? false
+                                            : true,
+                                        child: RoundButton(
+                                            iconColor:
+                                                Theme.of(context).primaryColor,
+                                            backgroundColor: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(0.2),
+                                            enableShadow: false,
+                                            icons: Icons.arrow_forward,
+                                            onTap: () {
+                                              _navigate(
+                                                  state
+                                                      .mangaDetail
+                                                      .chapterList[
+                                                          (state.selectedIndex -
+                                                              1)]
+                                                      .chapterEndpoint,
+                                                  state.selectedIndex - 1,
+                                                  state.mangaDetail,
+                                                  state.fromHome);
+                                            }),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                fit: BoxFit.cover,
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                              );
-                            }),
-                      ),
-                      Container(
-                        height: ScreenUtil().setHeight(200),
-                        child: Column(
-                          children: [
-                            Transform.scale(
-                              scale: 1.1,
-                              child: FAProgressBar(
-                                currentValue: _getCurrentValue(
-                                    state.chapterList, state.selectedIndex),
-                                maxValue: state.chapterList.length,
-                                size: ScreenUtil().setHeight(20),
-                                backgroundColor: Color(0xFFE5E5E5),
-                                progressColor: Color(0xFF4be2c0),
-                                borderRadius: 10,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Visibility(
-                                      visible: state.selectedIndex ==
-                                              state.mangaDetail.chapterList
-                                                  .length
-                                          ? false
-                                          : true,
-                                      child: RoundButton(
-                                          icons: Icons.arrow_back,
-                                          iconColor:
-                                              Theme.of(context).primaryColor,
-                                          backgroundColor: Theme.of(context)
-                                              .primaryColor
-                                              .withOpacity(0.2),
-                                          enableShadow: false,
-                                          onTap: () {
-                                            _navigate(
-                                                state
-                                                    .mangaDetail
-                                                    .chapterList[
-                                                        (state.selectedIndex +
-                                                            1)]
-                                                    .chapterEndpoint,
-                                                state.selectedIndex + 1,
-                                                state.mangaDetail,
-                                                state.fromHome);
-                                          }),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${state.chapterList[state.selectedIndex].chapterName}",
-                                          style: TextStyle(
-                                              fontFamily: "Poppins-Medium",
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          "From ${state.chapterList.length} chapter",
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 12),
-                                        )
-                                      ],
-                                    ),
-                                    Visibility(
-                                      visible: state.selectedIndex == 0
-                                          ? false
-                                          : true,
-                                      child: RoundButton(
-                                          iconColor:
-                                              Theme.of(context).primaryColor,
-                                          backgroundColor: Theme.of(context)
-                                              .primaryColor
-                                              .withOpacity(0.2),
-                                          enableShadow: false,
-                                          icons: Icons.arrow_forward,
-                                          onTap: () {
-                                            _navigate(
-                                                state
-                                                    .mangaDetail
-                                                    .chapterList[
-                                                        (state.selectedIndex -
-                                                            1)]
-                                                    .chapterEndpoint,
-                                                state.selectedIndex - 1,
-                                                state.mangaDetail,
-                                                state.fromHome);
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               } else if (state is ChapterScreenError) {

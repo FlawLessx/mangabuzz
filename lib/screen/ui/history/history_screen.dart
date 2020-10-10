@@ -64,41 +64,50 @@ class _HistoryPageState extends State<HistoryPage> {
           },
           builder: (context, state) {
             if (state is HistoryScreenLoaded) {
-              print("history: ${state.listHistoryData.length}");
-
-              return ListView(
-                controller: _scrollController,
-                padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-                children: [
-                  Text(
-                    "Read History",
-                    style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                  ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: state.hasReachedMax
-                          ? state.listHistoryData.length
-                          : state.listHistoryData.length + 1,
-                      itemBuilder: (context, index) => (index >=
-                              state.listHistoryData.length)
-                          ? Visibility(
-                              visible:
-                                  _visibleLoad(state.listHistoryData.length),
-                              child: Container(
-                                child: Center(
-                                  child: SizedBox(
-                                      height: ScreenUtil().setWidth(60),
-                                      width: ScreenUtil().setWidth(60),
-                                      child: CustomCircularProgressIndicator()),
+              return RefreshIndicator(
+                color: Theme.of(context).primaryColor,
+                onRefresh: () async {
+                  BlocProvider.of<BookmarkScreenBloc>(context)
+                      .add(ResetStateToInitial());
+                  BlocProvider.of<BookmarkScreenBloc>(context)
+                      .add(GetBookmarkScreenData());
+                },
+                child: ListView(
+                  controller: _scrollController,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(20)),
+                  children: [
+                    Text(
+                      "Read History",
+                      style:
+                          TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
+                    ),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: state.hasReachedMax
+                            ? state.listHistoryData.length
+                            : state.listHistoryData.length + 1,
+                        itemBuilder: (context, index) => (index >=
+                                state.listHistoryData.length)
+                            ? Visibility(
+                                visible:
+                                    _visibleLoad(state.listHistoryData.length),
+                                child: Container(
+                                  child: Center(
+                                    child: SizedBox(
+                                        height: ScreenUtil().setWidth(60),
+                                        width: ScreenUtil().setWidth(60),
+                                        child:
+                                            CustomCircularProgressIndicator()),
+                                  ),
                                 ),
-                              ),
-                            )
-                          : HistoryItem(
-                              historyModel: state.listHistoryData[index]))
-                ],
+                              )
+                            : HistoryItem(
+                                historyModel: state.listHistoryData[index]))
+                  ],
+                ),
               );
             } else if (state is HistoryScreenError) {
               return ErrorPage();

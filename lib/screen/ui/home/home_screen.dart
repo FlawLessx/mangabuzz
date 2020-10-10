@@ -55,70 +55,77 @@ class _HomePageState extends State<HomePage> {
           },
           builder: (context, state) {
             if (state is HomeScreenLoaded) {
-              return ListView(
-                controller: _scrollController,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              return RefreshIndicator(
+                color: Theme.of(context).primaryColor,
+                onRefresh: () async {
+                  BlocProvider.of<HomeScreenBloc>(context)
+                      .add(GetHomeScreenData());
+                },
+                child: ListView(
+                  controller: _scrollController,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(20)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Carousell(itemList: state.listBestSeries),
+                          SizedBox(
+                            height: ScreenUtil().setHeight(30),
+                          ),
+                          Text(
+                            "Hot Series Update",
+                            style: TextStyle(
+                                fontFamily: "Poppins-Bold", fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(10),
+                    ),
+                    buildHotMangaUpdate(state.listHotMangaUpdate),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(20),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(20)),
+                      child: Text(
+                        "Latest Update",
+                        style:
+                            TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(20)),
+                      child: buildLatestUpdateGridview(state.listLatestUpdate),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Carousell(itemList: state.listBestSeries),
-                        SizedBox(
-                          height: ScreenUtil().setHeight(30),
-                        ),
-                        Text(
-                          "Hot Series Update",
-                          style: TextStyle(
-                              fontFamily: "Poppins-Bold", fontSize: 16),
-                        ),
+                        PaginatedButton(
+                            text: "Next",
+                            icons: Icons.chevron_right,
+                            function: () {
+                              BlocProvider.of<LatestUpdateScreenBloc>(context)
+                                  .add(GetLatestUpdateScreenData(
+                                      pageNumber:
+                                          state.listLatestUpdate.nextPage));
+                              Navigator.pushNamed(context, latestUpdateRoute,
+                                  arguments: LatestUpdatePageArguments(
+                                      pageNumber:
+                                          state.listLatestUpdate.nextPage));
+                            }),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(10),
-                  ),
-                  buildHotMangaUpdate(state.listHotMangaUpdate),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(20),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
-                    child: Text(
-                      "Latest Update",
-                      style:
-                          TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
-                    child: buildLatestUpdateGridview(state.listLatestUpdate),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      PaginatedButton(
-                          text: "Next",
-                          icons: Icons.chevron_right,
-                          function: () {
-                            BlocProvider.of<LatestUpdateScreenBloc>(context)
-                                .add(GetLatestUpdateScreenData(
-                                    pageNumber:
-                                        state.listLatestUpdate.nextPage));
-                            Navigator.pushNamed(context, latestUpdateRoute,
-                                arguments: LatestUpdatePageArguments(
-                                    pageNumber:
-                                        state.listLatestUpdate.nextPage));
-                          }),
-                    ],
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(20),
-                  )
-                ],
+                    SizedBox(
+                      height: ScreenUtil().setHeight(20),
+                    )
+                  ],
+                ),
               );
             } else if (state is HomeScreenError) {
               return ErrorPage();

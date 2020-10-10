@@ -43,39 +43,46 @@ class _ExplorePageState extends State<ExplorePage> {
           },
           builder: (context, state) {
             if (state is ExploreScreenLoaded) {
-              return ListView(
-                controller: _scrollController,
-                children: [
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(20)),
-                      child: textMenu("Genres", () {})),
-                  buildGenres(state.listGenre),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(30),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(20)),
-                      child: textMenu("List Manga", () {})),
-                  buildListManga(state.listManga),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(30),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(20)),
-                      child: textMenu("List Manhwa", () {})),
-                  buildListManga(state.listManhwa),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(30),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(20)),
-                      child: textMenu("List Manhua", () {})),
-                  buildListManga(state.listManhua)
-                ],
+              return RefreshIndicator(
+                color: Theme.of(context).primaryColor,
+                onRefresh: () async {
+                  BlocProvider.of<ExploreScreenBloc>(context)
+                      .add(GetExploreScreenData());
+                },
+                child: ListView(
+                  controller: _scrollController,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(20)),
+                        child: textMenu("Genres", () {})),
+                    buildGenres(state.listGenre),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(30),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(20)),
+                        child: textMenu("List Manga", () {})),
+                    buildListManga(state.listManga),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(30),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(20)),
+                        child: textMenu("List Manhwa", () {})),
+                    buildListManga(state.listManhwa),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(30),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(20)),
+                        child: textMenu("List Manhua", () {})),
+                    buildListManga(state.listManhua)
+                  ],
+                ),
               );
             } else {
               return buildExploreScreenPlaceholder();
