@@ -1,8 +1,15 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:content_placeholder/content_placeholder.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../core/bloc/bookmark_bloc/bookmark_bloc.dart';
@@ -45,6 +52,7 @@ class MangaDetailPage extends StatefulWidget {
 
 class _MangaDetailPageState extends State<MangaDetailPage> {
   bool isBookmarked = false;
+  ReceivePort _port = ReceivePort();
 
   _bookmarkFunction(BookmarkModel bookmarkModel, {MangaDetail mangaDetail}) {
     var tempData = BookmarkModel(
@@ -74,42 +82,58 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
     });
   }
 
-  _readFunction(HistoryModel historyModel, MangaDetail mangaDetail,
-      BuildContext context) {
-    if (historyModel == null) {
-      BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
-          chapterEndpoint: mangaDetail
-              .chapterList[mangaDetail.chapterList.length - 1].chapterEndpoint,
-          selectedIndex: (mangaDetail.chapterList.length - 1),
-          mangaDetail: mangaDetail,
-          historyModel: historyModel,
-          fromHome: false));
-      Navigator.pushNamed(context, chapterRoute,
-          arguments: ChapterPageArguments(
-              chapterEndpoint: mangaDetail
-                  .chapterList[mangaDetail.chapterList.length - 1]
-                  .chapterEndpoint,
-              selectedIndex: (mangaDetail.chapterList.length - 1),
-              historyModel: historyModel,
-              mangaDetail: mangaDetail,
-              fromHome: false));
+  _downloadListener() {
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      setState(() {});
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send.send([id, status, progress]);
+  }
+
+  _downloadFunction(String url, String fileName) async {
+    final status = await Permission.storage.request();
+
+    if (status.isGranted) {
+      var downloadPath = await ExtStorage.getExternalStoragePublicDirectory(
+          ExtStorage.DIRECTORY_DOWNLOADS);
+
+      await FlutterDownloader.enqueue(
+          url: url,
+          savedDir: downloadPath,
+          fileName: fileName,
+          showNotification: true,
+          openFileFromNotification: true);
     } else {
-      BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
-          chapterEndpoint: mangaDetail
-              .chapterList[historyModel.selectedIndex].chapterEndpoint,
-          selectedIndex: historyModel.selectedIndex,
-          mangaDetail: mangaDetail,
-          historyModel: historyModel,
-          fromHome: false));
-      Navigator.pushNamed(context, chapterRoute,
-          arguments: ChapterPageArguments(
-              chapterEndpoint: mangaDetail
-                  .chapterList[historyModel.selectedIndex].chapterEndpoint,
-              selectedIndex: historyModel.selectedIndex,
-              mangaDetail: mangaDetail,
-              historyModel: historyModel,
-              fromHome: false));
+      Fluttertoast.showToast(
+          msg: "Please enable storage permissions to start download",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
+  }
+
+  @override
+  void initState() {
+    _downloadListener();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
   }
 
   @override
@@ -344,8 +368,14 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         fromHome: false));
               },
               child: ChapterItem(
-                chapterListData: mangaDetail.chapterList[index],
-              ),
+                  chapterListData: mangaDetail.chapterList[index],
+                  downloadFunction: () {
+                    _downloadFunction(
+                        mangaDetail.chapterList[index].chapterDownload,
+                        (mangaDetail.title +
+                            "-" +
+                            mangaDetail.chapterList[index].chapterName));
+                  }),
             ),
           );
         });

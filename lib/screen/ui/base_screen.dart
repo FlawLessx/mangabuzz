@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../core/util/connectivity_check.dart';
 import '../../core/util/route_generator.dart';
 import 'bookmark/bloc/bookmark_screen_bloc.dart';
@@ -31,11 +32,19 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   void initState() {
+    _getPermissions();
     BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
     BlocProvider.of<ExploreScreenBloc>(context).add(GetExploreScreenData());
     BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
     BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
     super.initState();
+  }
+
+  _getPermissions() async {
+    await [
+      Permission.notification,
+      Permission.storage,
+    ].request();
   }
 
   @override

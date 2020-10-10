@@ -4,7 +4,9 @@ import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 
 class ChapterItem extends StatefulWidget {
   final ChapterList chapterListData;
-  ChapterItem({@required this.chapterListData});
+  final Function downloadFunction;
+  ChapterItem(
+      {@required this.chapterListData, @required this.downloadFunction});
 
   @override
   _ChapterItemState createState() => _ChapterItemState();
@@ -29,9 +31,7 @@ class _ChapterItemState extends State<ChapterItem> {
             Text(widget.chapterListData.chapterName,
                 style: TextStyle(color: Theme.of(context).primaryColor)),
             InkWell(
-              onTap: () {
-                print("press");
-              },
+              onTap: widget.downloadFunction,
               child: Icon(
                 Icons.file_download,
                 color: Theme.of(context).primaryColor,
