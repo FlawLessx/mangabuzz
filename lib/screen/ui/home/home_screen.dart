@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/latest_update/latest_update_screen.dart';
-import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
+import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
 import '../../../core/model/manga/manga_model.dart';
 import '../../widget/latest_update/latest_update_item.dart';
 import '../../widget/manga_item/manga_item.dart';
 import '../../widget/paginated_button.dart';
 import '../../widget/refresh_snackbar.dart';
-import '../../widget/search_bar.dart';
+import '../../widget/search/search_bar.dart';
 import '../error/error_screen.dart';
 import 'bloc/home_screen_bloc.dart';
 import 'carousell.dart';
@@ -37,12 +38,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: false,
-        drawer: Drawer(
-          child: DrawerWidget(),
-        ),
         appBar: SearchBar(
           text: "Search something...",
-          function: () {},
+          function: () {
+            showSearch(
+                context: context,
+                delegate: SearchWidget(
+                    searchBloc: BlocProvider.of<SearchBloc>(context),
+                    isFromAPI: true,
+                    isBookmark: false,
+                    isHistory: false));
+          },
+          drawerFunction: () {
+            Scaffold.of(context).openDrawer();
+          },
         ),
         body: BlocConsumer<HomeScreenBloc, HomeScreenState>(
           listener: (context, state) {

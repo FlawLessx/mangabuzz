@@ -24,7 +24,7 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
   Stream<HistoryScreenState> mapEventToState(
     HistoryScreenEvent event,
   ) async* {
-    if (event is ResetToInitialState) {
+    if (event is ResetHistoryScreenBlocToInitialState) {
       yield HistoryScreenInitial();
     } else if (event is GetHistoryScreenData) {
       if (state is HistoryScreenInitial)

@@ -70,13 +70,15 @@ class RouteGenerator {
         final args = settings.arguments as PaginatedPageArguments;
         return MaterialPageRoute(
             builder: (_) => PaginatedPage(
-                name: args.name,
-                endpoint: args.endpoint,
-                isGenre: args.isGenre,
-                isManga: args.isManga,
-                isManhua: args.isManhua,
-                isManhwa: args.isManhwa,
-                pageNumber: args.pageNumber),
+                  name: args.name,
+                  endpoint: args.endpoint,
+                  isGenre: args.isGenre,
+                  isManga: args.isManga,
+                  isManhua: args.isManhua,
+                  isManhwa: args.isManhwa,
+                  pageNumber: args.pageNumber,
+                  drawerSelectedIndex: args.drawerSelectedIndex,
+                ),
             settings: settings);
         break;
       case latestUpdateRoute:

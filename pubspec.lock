@@ -497,6 +497,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  list_tile_more_customizable:
+    dependency: "direct main"
+    description:
+      name: list_tile_more_customizable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.3"
   logging:
     dependency: transitive
     description:
@@ -756,6 +763,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.24.1"
+  search_page:
+    dependency: "direct main"
+    description:
+      name: search_page
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.0"
   shelf:
     dependency: transitive
     description:

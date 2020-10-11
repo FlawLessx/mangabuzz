@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/screen/ui/error/error_screen.dart';
 import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/paginated/paginated_screen_placeholder.dart';
+import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
 import 'package:mangabuzz/screen/widget/manga_item/manga_item.dart';
 import 'package:mangabuzz/screen/widget/paginated_button.dart';
 import 'package:mangabuzz/screen/widget/refresh_snackbar.dart';
-import 'package:mangabuzz/screen/widget/round_button.dart';
 
 class PaginatedPageArguments {
   final String name;
@@ -17,15 +17,16 @@ class PaginatedPageArguments {
   final bool isManga;
   final bool isManhwa;
   final bool isManhua;
-  PaginatedPageArguments({
-    @required this.name,
-    @required this.endpoint,
-    @required this.pageNumber,
-    @required this.isGenre,
-    @required this.isManga,
-    @required this.isManhua,
-    @required this.isManhwa,
-  });
+  final int drawerSelectedIndex;
+  PaginatedPageArguments(
+      {@required this.name,
+      @required this.endpoint,
+      @required this.pageNumber,
+      @required this.isGenre,
+      @required this.isManga,
+      @required this.isManhua,
+      @required this.isManhwa,
+      @required this.drawerSelectedIndex});
 }
 
 class PaginatedPage extends StatefulWidget {
@@ -36,15 +37,16 @@ class PaginatedPage extends StatefulWidget {
   final bool isManga;
   final bool isManhwa;
   final bool isManhua;
-  PaginatedPage({
-    @required this.name,
-    @required this.endpoint,
-    @required this.pageNumber,
-    @required this.isGenre,
-    @required this.isManga,
-    @required this.isManhua,
-    @required this.isManhwa,
-  });
+  final int drawerSelectedIndex;
+  PaginatedPage(
+      {@required this.name,
+      @required this.endpoint,
+      @required this.pageNumber,
+      @required this.isGenre,
+      @required this.isManga,
+      @required this.isManhua,
+      @required this.isManhwa,
+      @required this.drawerSelectedIndex});
 
   @override
   _PaginatedPageState createState() => _PaginatedPageState();
@@ -53,6 +55,7 @@ class PaginatedPage extends StatefulWidget {
 class _PaginatedPageState extends State<PaginatedPage> {
   ScrollController _scrollController;
   bool resetScroll = false;
+  GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -91,6 +94,8 @@ class _PaginatedPageState extends State<PaginatedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: key,
+        drawer: DrawerWidget(selectedIndex: widget.drawerSelectedIndex),
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
@@ -109,17 +114,27 @@ class _PaginatedPageState extends State<PaginatedPage> {
               }
             },
           ),
-          leading: SizedBox(),
+          leading: (widget.isGenre != true)
+              ? IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    key.currentState.openDrawer();
+                  })
+              : SizedBox(),
           elevation: 8.0,
           actions: [
-            RoundButton(
-                icons: Icons.close,
-                onTap: () {
+            IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: ScreenUtil().setWidth(80),
+                ),
+                onPressed: () {
                   Navigator.pop(context);
-                },
-                backgroundColor: Colors.white,
-                iconColor: Theme.of(context).primaryColor,
-                enableShadow: false)
+                }),
           ],
         ),
         body: BlocConsumer<PaginatedScreenBloc, PaginatedScreenState>(

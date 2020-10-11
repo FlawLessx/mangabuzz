@@ -74,7 +74,8 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
           bookmarkModel: bookmarkModel != null ? bookmarkModel : tempData));
     }
 
-    BlocProvider.of<BookmarkScreenBloc>(context).add(ResetStateToInitial());
+    BlocProvider.of<BookmarkScreenBloc>(context)
+        .add(ResetBookmarkScreenBlocToInitialState());
     BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
 
     setState(() {
@@ -409,7 +410,8 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                           isGenre: true,
                           isManga: false,
                           isManhua: false,
-                          isManhwa: false));
+                          isManhwa: false,
+                          drawerSelectedIndex: 1));
                 },
                 child: GenreItem(
                     text: e.genreName,

@@ -25,11 +25,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
+    yield SearchLoading();
+
     if (event is SearchManga)
       yield* _searchMangaToState(event);
     else if (event is SearchBookmark)
       yield* _searchBookmarkToState(event);
-    else if (event is SearchHistory) yield* _searchHistoryToState(event);
+    else if (event is SearchHistory)
+      yield* _searchHistoryToState(event);
+    else if (event is ResetSearchBlocToInitialState) yield SearchInitial();
   }
 
   Stream<SearchState> _searchMangaToState(SearchManga event) async* {

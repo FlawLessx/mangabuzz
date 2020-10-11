@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
 import 'package:mangabuzz/screen/widget/genre_item.dart';
+import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
 import '../../../core/model/genre/genre_model.dart';
 import '../../../core/model/manga/manga_model.dart';
 import '../../widget/manga_item/manga_item.dart';
 import '../../widget/refresh_snackbar.dart';
-import '../../widget/search_bar.dart';
+import '../../widget/search/search_bar.dart';
 import 'bloc/explore_screen_bloc.dart';
 import 'explore_placeholder.dart';
 
@@ -28,10 +30,47 @@ class _ExplorePageState extends State<ExplorePage> {
     super.initState();
   }
 
+  _navigateShowAllText(String name, String endpoint, int drawerSelectedIndex,
+      {bool isGenre, bool isManga, bool isManhwa, bool isManhua}) {
+    BlocProvider.of<PaginatedScreenBloc>(context).add(
+        GetPaginatedScreenScreenData(
+            name: name,
+            endpoint: endpoint,
+            pageNumber: 1,
+            isGenre: isGenre,
+            isManga: isManga,
+            isManhua: isManhua,
+            isManhwa: isManhwa));
+    Navigator.pushNamed(context, paginatedRoute,
+        arguments: PaginatedPageArguments(
+            name: name,
+            endpoint: endpoint,
+            pageNumber: 1,
+            isGenre: isGenre,
+            isManga: isManga,
+            isManhua: isManhua,
+            isManhwa: isManhwa,
+            drawerSelectedIndex: drawerSelectedIndex));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: SearchBar(text: "Search something..", function: () {}),
+        appBar: SearchBar(
+          text: "Search something..",
+          function: () {
+            showSearch(
+                context: context,
+                delegate: SearchWidget(
+                    searchBloc: BlocProvider.of<SearchBloc>(context),
+                    isFromAPI: true,
+                    isBookmark: false,
+                    isHistory: false));
+          },
+          drawerFunction: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
         body: BlocConsumer<ExploreScreenBloc, ExploreScreenState>(
           listener: (context, state) {
             if (state is ExploreScreenError) {
@@ -63,7 +102,13 @@ class _ExplorePageState extends State<ExplorePage> {
                     Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("List Manga", () {})),
+                        child: textMenu("List Manga", () {
+                          _navigateShowAllText("Manga", null, 2,
+                              isGenre: false,
+                              isManga: true,
+                              isManhua: false,
+                              isManhwa: false);
+                        })),
                     buildListManga(state.listManga),
                     SizedBox(
                       height: ScreenUtil().setHeight(30),
@@ -71,7 +116,13 @@ class _ExplorePageState extends State<ExplorePage> {
                     Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("List Manhwa", () {})),
+                        child: textMenu("List Manhwa", () {
+                          _navigateShowAllText("Manhwa", null, 3,
+                              isGenre: false,
+                              isManga: false,
+                              isManhua: false,
+                              isManhwa: true);
+                        })),
                     buildListManga(state.listManhwa),
                     SizedBox(
                       height: ScreenUtil().setHeight(30),
@@ -79,7 +130,13 @@ class _ExplorePageState extends State<ExplorePage> {
                     Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("List Manhua", () {})),
+                        child: textMenu("List Manhua", () {
+                          _navigateShowAllText("Manhua", null, 4,
+                              isGenre: false,
+                              isManga: false,
+                              isManhua: true,
+                              isManhwa: false);
+                        })),
                     buildListManga(state.listManhua)
                   ],
                 ),
@@ -149,7 +206,8 @@ class _ExplorePageState extends State<ExplorePage> {
                           isGenre: true,
                           isManga: false,
                           isManhua: false,
-                          isManhwa: false));
+                          isManhwa: false,
+                          drawerSelectedIndex: 1));
                 },
                 child: GenreItem(
                   text: e.genreSubtitle,

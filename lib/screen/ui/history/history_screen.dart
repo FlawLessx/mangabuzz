@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 import 'package:mangabuzz/screen/widget/circular_progress.dart';
+import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
 import '../../widget/refresh_snackbar.dart';
-import '../../widget/search_bar.dart';
+import '../../widget/search/search_bar.dart';
 import '../error/error_screen.dart';
 import 'bloc/history_screen_bloc.dart';
 import 'history_item.dart';
@@ -52,7 +54,21 @@ class _HistoryPageState extends State<HistoryPage> {
     });
 
     return Scaffold(
-        appBar: SearchBar(text: "Search bookmark...", function: () {}),
+        appBar: SearchBar(
+          text: "Search history...",
+          function: () {
+            showSearch(
+                context: context,
+                delegate: SearchWidget(
+                    searchBloc: BlocProvider.of<SearchBloc>(context),
+                    isFromAPI: false,
+                    isBookmark: false,
+                    isHistory: true));
+          },
+          drawerFunction: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
         body: BlocConsumer<HistoryScreenBloc, HistoryScreenState>(
           listener: (context, state) {
             if (state is HistoryScreenError) {
@@ -68,7 +84,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 color: Theme.of(context).primaryColor,
                 onRefresh: () async {
                   BlocProvider.of<BookmarkScreenBloc>(context)
-                      .add(ResetStateToInitial());
+                      .add(ResetBookmarkScreenBlocToInitialState());
                   BlocProvider.of<BookmarkScreenBloc>(context)
                       .add(GetBookmarkScreenData());
                 },

@@ -7,6 +7,6 @@ abstract class HistoryScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ResetToInitialState extends HistoryScreenEvent {}
+class ResetHistoryScreenBlocToInitialState extends HistoryScreenEvent {}
 
 class GetHistoryScreenData extends HistoryScreenEvent {}

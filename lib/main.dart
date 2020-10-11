@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/widget/drawer/bloc/drawer_widget_bloc.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'core/bloc/history_bloc/history_bloc.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
           create: (context) => HistoryBloc(),
         ),
 
-        // Sub BLoC
+        // Sub BLoC / Screen BLoC
         BlocProvider<BookmarkScreenBloc>(
           create: (context) => BookmarkScreenBloc(),
         ),
@@ -72,6 +73,11 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<LatestUpdateScreenBloc>(
           create: (context) => LatestUpdateScreenBloc(),
+        ),
+
+        // Widget BLoC
+        BlocProvider<DrawerWidgetBloc>(
+          create: (context) => DrawerWidgetBloc(),
         ),
       ],
       child: MaterialApp(

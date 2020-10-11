@@ -5,7 +5,11 @@ import 'package:mangabuzz/screen/widget/round_button.dart';
 class SearchBar extends PreferredSize {
   final String text;
   final Function function;
-  SearchBar({@required this.text, @required this.function});
+  final Function drawerFunction;
+  SearchBar(
+      {@required this.text,
+      @required this.function,
+      @required this.drawerFunction});
 
   @override
   Size get preferredSize => Size.fromHeight(ScreenUtil().setHeight(180));
@@ -33,9 +37,10 @@ class SearchBar extends PreferredSize {
                   padding: EdgeInsets.symmetric(
                       horizontal: ScreenUtil().setWidth(30)),
                   child: TextField(
+                      onTap: function,
                       style: TextStyle(color: Colors.black, fontSize: 16),
                       decoration: InputDecoration(
-                        hintText: "Search something...",
+                        hintText: text,
                         hintStyle:
                             TextStyle(color: Color(0xFFb8bbc4), fontSize: 16),
                         prefixIcon: Icon(
@@ -43,6 +48,7 @@ class SearchBar extends PreferredSize {
                           color: Color(0xFFb8bbc4),
                           size: ScreenUtil().setHeight(80),
                         ),
+                        enabled: true,
                         border: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -61,7 +67,7 @@ class SearchBar extends PreferredSize {
                   backgroundColor: Theme.of(context).primaryColor,
                   enableShadow: true,
                   icons: Icons.menu,
-                  onTap: () {})
+                  onTap: drawerFunction)
             ],
           ),
         ),

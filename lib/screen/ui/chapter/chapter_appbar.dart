@@ -29,7 +29,8 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
   }
 
   _navigate() {
-    BlocProvider.of<HistoryScreenBloc>(context).add(ResetToInitialState());
+    BlocProvider.of<HistoryScreenBloc>(context)
+        .add(ResetHistoryScreenBlocToInitialState());
     BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
 
     if (widget.fromHome == false) {

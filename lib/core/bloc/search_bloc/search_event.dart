@@ -7,6 +7,8 @@ abstract class SearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ResetSearchBlocToInitialState extends SearchEvent {}
+
 class SearchManga extends SearchEvent {
   final String query;
   SearchManga({@required this.query});
