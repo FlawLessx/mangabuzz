@@ -106,6 +106,8 @@ class _HistoryItemState extends State<HistoryItem> {
                   onTap: () => _navigate(),
                   child: Text(
                     widget.historyModel.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                     style: TextStyle(
                         fontFamily: "Poppins-SemiBold",
                         fontSize: 14,
@@ -117,6 +119,8 @@ class _HistoryItemState extends State<HistoryItem> {
                 ),
                 Text(
                   widget.historyModel.author,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   style: TextStyle(
                       fontFamily: "Poppins-Medium",
                       fontSize: 12,

@@ -196,21 +196,22 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                           onTap: () {
                             Navigator.pop(context);
                           }),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _bookmarkFunction(state.bookmarkModel,
-                                mangaDetail: state.mangaDetail);
-                          });
-                        },
-                        child: Icon(
+                      IconButton(
+                        tooltip: "Add to bookmark",
+                        icon: Icon(
                           isBookmarked == true
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: Theme.of(context).primaryColor,
                           size: ScreenUtil().setHeight(100),
                         ),
-                      )
+                        onPressed: () {
+                          setState(() {
+                            _bookmarkFunction(state.bookmarkModel,
+                                mangaDetail: state.mangaDetail);
+                          });
+                        },
+                      ),
                     ],
                   ),
                   SizedBox(

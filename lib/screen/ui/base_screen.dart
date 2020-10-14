@@ -78,7 +78,7 @@ class _BaseScreenState extends State<BaseScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   duration: Duration(milliseconds: 800),
                   tabBackgroundColor:
-                      Theme.of(context).primaryColor.withOpacity(0.25),
+                      Theme.of(context).primaryColor.withOpacity(0.15),
                   tabs: [
                     GButton(
                       icon: LineIcons.home,

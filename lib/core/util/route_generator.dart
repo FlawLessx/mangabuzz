@@ -8,6 +8,7 @@ import 'package:mangabuzz/screen/ui/home/home_screen.dart';
 import 'package:mangabuzz/screen/ui/latest_update/latest_update_screen.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
 import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
+import 'package:mangabuzz/screen/ui/settings/settings_screen.dart';
 
 const String baseRoute = '/';
 const String homeRoute = '/home';
@@ -86,6 +87,10 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => LatestUpdatePage(pageNumber: args.pageNumber),
             settings: settings);
+        break;
+      case settingsRoute:
+        return MaterialPageRoute(
+            builder: (_) => SettingsPage(), settings: settings);
         break;
       default:
         return MaterialPageRoute(

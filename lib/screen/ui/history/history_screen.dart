@@ -101,6 +101,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
+                        reverse: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: state.hasReachedMax
                             ? state.listHistoryData.length

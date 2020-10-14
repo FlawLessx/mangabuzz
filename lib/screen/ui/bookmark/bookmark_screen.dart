@@ -102,6 +102,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                   ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
+                      reverse: true,
                       padding: EdgeInsets.zero,
                       itemCount: state.hasReachedMax
                           ? state.listBookmarkData.length

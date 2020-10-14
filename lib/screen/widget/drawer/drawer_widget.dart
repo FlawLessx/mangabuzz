@@ -225,6 +225,34 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     },
                   ),
                 ]),
+            Container(
+              color: 5 == widget.selectedIndex
+                  ? Theme.of(context).primaryColor
+                  : Colors.transparent,
+              child: ListTile(
+                leading: Icon(
+                  Icons.settings,
+                  color:
+                      5 == widget.selectedIndex ? Colors.white : Colors.black,
+                ),
+                title: Text(
+                  "Settings",
+                  style: TextStyle(
+                      fontFamily: "Poppins-Bold",
+                      color: 5 == widget.selectedIndex
+                          ? Colors.white
+                          : Colors.black),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, settingsRoute);
+                },
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color:
+                      5 == widget.selectedIndex ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
           ],
         ),
       ),

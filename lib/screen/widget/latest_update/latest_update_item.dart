@@ -130,8 +130,8 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
-                              height: ScreenUtil().setHeight(25),
-                              width: ScreenUtil().setHeight(25),
+                              height: ScreenUtil().setHeight(20),
+                              width: ScreenUtil().setHeight(20),
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Theme.of(context).primaryColor),

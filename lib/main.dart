@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/ui/settings/bloc/settings_screen_bloc.dart';
 import 'package:mangabuzz/screen/widget/drawer/bloc/drawer_widget_bloc.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
@@ -73,6 +74,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<LatestUpdateScreenBloc>(
           create: (context) => LatestUpdateScreenBloc(),
+        ),
+        BlocProvider<SettingsScreenBloc>(
+          create: (context) => SettingsScreenBloc(),
         ),
 
         // Widget BLoC

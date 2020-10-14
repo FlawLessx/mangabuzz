@@ -94,7 +94,7 @@ class _ExplorePageState extends State<ExplorePage> {
                     Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("Genres", () {})),
+                        child: textMenu("Genres", () {}, isGenre: true)),
                     buildGenres(state.listGenre),
                     SizedBox(
                       height: ScreenUtil().setHeight(30),
@@ -148,7 +148,7 @@ class _ExplorePageState extends State<ExplorePage> {
         ));
   }
 
-  Widget textMenu(String text, Function onTap) {
+  Widget textMenu(String text, Function onTap, {bool isGenre = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -156,25 +156,27 @@ class _ExplorePageState extends State<ExplorePage> {
           text,
           style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
         ),
-        GestureDetector(
-          onTap: onTap,
-          child: Row(
-            children: [
-              Text(
-                "Show All",
-                style: TextStyle(
-                    fontFamily: "Poppins-Medium",
-                    fontSize: 13,
-                    color: Colors.grey),
-              ),
-              Icon(
-                Icons.chevron_right,
-                color: Colors.grey,
-                size: ScreenUtil().setWidth(60),
+        isGenre == false
+            ? GestureDetector(
+                onTap: onTap,
+                child: Row(
+                  children: [
+                    Text(
+                      "Show All",
+                      style: TextStyle(
+                          fontFamily: "Poppins-Medium",
+                          fontSize: 13,
+                          color: Colors.grey),
+                    ),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                      size: ScreenUtil().setWidth(60),
+                    )
+                  ],
+                ),
               )
-            ],
-          ),
-        ),
+            : SizedBox(),
       ],
     );
   }
