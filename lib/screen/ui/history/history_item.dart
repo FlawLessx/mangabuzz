@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
@@ -153,11 +154,11 @@ class _HistoryItemState extends State<HistoryItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${widget.historyModel.chapterReached} Chapter Reached",
+                      "${widget.historyModel.chapterReached} ${getTranslated(context, 'chapterReached')}",
                       style: TextStyle(fontSize: 11),
                     ),
                     Text(
-                      "${widget.historyModel.totalChapter} Chapter Total",
+                      "${widget.historyModel.totalChapter} ${getTranslated(context, 'chapterTotal')}",
                       style: TextStyle(color: Colors.grey, fontSize: 11),
                     )
                   ],
@@ -192,7 +193,7 @@ class _HistoryItemState extends State<HistoryItem> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: ScreenUtil().setWidth(30),
                                   vertical: ScreenUtil().setWidth(10)),
-                              child: Text("Continue",
+                              child: Text(getTranslated(context, 'continue'),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: "Poppins-SemiBold")),

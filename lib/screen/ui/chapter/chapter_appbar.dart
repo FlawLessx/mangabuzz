@@ -68,25 +68,28 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                     width: ScreenUtil().setHeight(110),
                     color: Colors.transparent,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.mangaDetail.chapterList[widget.selectedIndex]
-                            .chapterName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            TextStyle(fontSize: 18, fontFamily: "Poppins-Bold"),
-                      ),
-                      ChapterDropdownButton(
-                        mangaDetail: widget.mangaDetail,
-                        chapterEndpoint: widget.mangaDetail
-                            .chapterList[widget.selectedIndex].chapterEndpoint,
-                        selectedIndex: widget.selectedIndex,
-                        fromHome: widget.fromHome,
-                      )
-                    ],
+                  Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.mangaDetail.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 16, fontFamily: "Poppins-Bold"),
+                        ),
+                        ChapterDropdownButton(
+                          mangaDetail: widget.mangaDetail,
+                          chapterEndpoint: widget
+                              .mangaDetail
+                              .chapterList[widget.selectedIndex]
+                              .chapterEndpoint,
+                          selectedIndex: widget.selectedIndex,
+                          fromHome: widget.fromHome,
+                        )
+                      ],
+                    ),
                   ),
                   RoundButton(
                       icons: Icons.close,

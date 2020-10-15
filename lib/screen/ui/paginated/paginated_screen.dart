@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/screen/ui/error/error_screen.dart';
 import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/paginated/paginated_screen_placeholder.dart';
@@ -158,7 +159,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                     children: [
                       Text(
-                        "Results for ${state.name}",
+                        "${getTranslated(context, 'searchQuery')} ${state.name}",
                         style:
                             TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                       ),
@@ -182,7 +183,8 @@ class _PaginatedPageState extends State<PaginatedPage> {
                                 ? true
                                 : false,
                             child: PaginatedButton(
-                                text: "Prev",
+                                text: getTranslated(
+                                    context, "prevPaginatedButton"),
                                 icons: Icons.chevron_left,
                                 leftIcon: true,
                                 function: () {
@@ -238,7 +240,8 @@ class _PaginatedPageState extends State<PaginatedPage> {
                                 ? true
                                 : false,
                             child: PaginatedButton(
-                                text: "Next",
+                                text: getTranslated(
+                                    context, "nextPaginatedButton"),
                                 icons: Icons.chevron_right,
                                 function: () {
                                   _getData(state.paginatedManga.nextPage);
@@ -256,7 +259,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
             } else if (state is PaginatedScreenError) {
               return ErrorPage();
             } else {
-              return buildPaginatedScreenPlaceholder();
+              return buildPaginatedScreenPlaceholder(context);
             }
           },
         ));

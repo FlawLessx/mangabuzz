@@ -57,12 +57,16 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
       listHistoryModel = await dbRepo.listAllHistory(10,
           offset: historyScreenLoaded.listHistoryData.length);
 
+      List<HistoryModel> data;
+
+      if (listHistoryModel.isEmpty == false) {
+        data = historyScreenLoaded.listHistoryData + listHistoryModel;
+      }
+
       yield listHistoryModel.isEmpty
           ? historyScreenLoaded.copyWith(hasReachedMax: true)
           : HistoryScreenLoaded(
-              listHistoryData:
-                  historyScreenLoaded.listHistoryData + listHistoryModel,
-              hasReachedMax: false);
+              listHistoryData: data.reversed, hasReachedMax: false);
     } on Exception {
       yield HistoryScreenError();
     }

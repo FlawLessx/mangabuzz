@@ -7,6 +7,7 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/bloc/history_bloc/history_bloc.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/error/error_screen.dart';
@@ -278,7 +279,7 @@ class _ChapterPageState extends State<ChapterPage> {
                                                 fontSize: 14),
                                           ),
                                           Text(
-                                            "From ${state.chapterList.length} chapter",
+                                            "${getTranslated(context, 'fromChapter')} ${state.chapterList.length} chapter",
                                             style: TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 12),

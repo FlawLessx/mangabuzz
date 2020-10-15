@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
@@ -54,7 +55,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: SearchBar(
-        text: "Search bookmark...",
+        text: getTranslated(context, "searchBookmark"),
         function: () {
           showSearch(
               context: context,
@@ -93,16 +94,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
                     EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
                 children: [
                   Text(
-                    "Bookmarked Series",
+                    getTranslated(context, "bookmarkedSeries"),
                     style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(20),
                   ),
                   ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      reverse: true,
                       padding: EdgeInsets.zero,
                       itemCount: state.hasReachedMax
                           ? state.listBookmarkData.length
@@ -127,7 +124,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
               ),
             );
           } else {
-            return buildBookmarkScreenPlaceholder();
+            return buildBookmarkScreenPlaceholder(context);
           }
         },
       ),

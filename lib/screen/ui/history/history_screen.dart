@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/search/search_page.dart';
@@ -55,7 +56,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     return Scaffold(
         appBar: SearchBar(
-          text: "Search history...",
+          text: getTranslated(context, 'searchHistory'),
           function: () {
             showSearch(
                 context: context,
@@ -73,6 +74,8 @@ class _HistoryPageState extends State<HistoryPage> {
           listener: (context, state) {
             if (state is HistoryScreenError) {
               Scaffold.of(context).showSnackBar(refreshSnackBar(() {
+                BlocProvider.of<BookmarkScreenBloc>(context)
+                    .add(ResetBookmarkScreenBlocToInitialState());
                 BlocProvider.of<HistoryScreenBloc>(context)
                     .add(GetHistoryScreenData());
               }));
@@ -83,10 +86,10 @@ class _HistoryPageState extends State<HistoryPage> {
               return RefreshIndicator(
                 color: Theme.of(context).primaryColor,
                 onRefresh: () async {
-                  BlocProvider.of<BookmarkScreenBloc>(context)
-                      .add(ResetBookmarkScreenBlocToInitialState());
-                  BlocProvider.of<BookmarkScreenBloc>(context)
-                      .add(GetBookmarkScreenData());
+                  BlocProvider.of<HistoryScreenBloc>(context)
+                      .add(ResetHistoryScreenBlocToInitialState());
+                  BlocProvider.of<HistoryScreenBloc>(context)
+                      .add(GetHistoryScreenData());
                 },
                 child: ListView(
                   controller: _scrollController,
@@ -94,14 +97,13 @@ class _HistoryPageState extends State<HistoryPage> {
                       horizontal: ScreenUtil().setWidth(20)),
                   children: [
                     Text(
-                      "Read History",
+                      getTranslated(context, 'readHistory'),
                       style:
                           TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                     ),
                     ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
-                        reverse: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: state.hasReachedMax
                             ? state.listHistoryData.length
@@ -129,7 +131,7 @@ class _HistoryPageState extends State<HistoryPage> {
             } else if (state is HistoryScreenError) {
               return ErrorPage();
             } else {
-              return buildHistoryScreenPlaceholder();
+              return buildHistoryScreenPlaceholder(context);
             }
           },
         ));

@@ -60,6 +60,7 @@ dependencies:
   fluttertoast: ^7.1.1
   url_launcher: ^5.7.2
   cool_alert: ^1.0.1
+  shared_preferences: ^0.5.12
   flutter_localizations:
     sdk: flutter
 
@@ -89,6 +90,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - resources/img/
+    - resources/langs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
@@ -57,7 +58,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: SearchBar(
-          text: "Search something..",
+          text: getTranslated(context, 'searchHome'),
           function: () {
             showSearch(
                 context: context,
@@ -162,7 +163,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 child: Row(
                   children: [
                     Text(
-                      "Show All",
+                      getTranslated(context, 'showAll'),
                       style: TextStyle(
                           fontFamily: "Poppins-Medium",
                           fontSize: 13,

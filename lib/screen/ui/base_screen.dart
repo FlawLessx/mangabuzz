@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../core/util/connectivity_check.dart';
@@ -83,22 +84,22 @@ class _BaseScreenState extends State<BaseScreen> {
                     GButton(
                       icon: LineIcons.home,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: 'Home',
+                      text: getTranslated(context, "homeMenu"),
                     ),
                     GButton(
                       icon: LineIcons.compass,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: 'Explore',
+                      text: getTranslated(context, "exploreMenu"),
                     ),
                     GButton(
                       icon: Icons.favorite_border,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: 'Bookmark',
+                      text: getTranslated(context, "bookmarkMenu"),
                     ),
                     GButton(
                       icon: LineIcons.history,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: 'History',
+                      text: getTranslated(context, "historyMenu"),
                     ),
                   ],
                   selectedIndex: _selectedIndex,

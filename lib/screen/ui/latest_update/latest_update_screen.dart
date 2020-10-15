@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/screen/ui/error/error_screen.dart';
 import 'package:mangabuzz/screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
 import 'package:mangabuzz/screen/widget/latest_update/latest_update_item.dart';
@@ -67,7 +68,7 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
             builder: (context, state) {
               if (state is LatestUpdateScreenLoaded) {
                 return Text(
-                  "Latest Update",
+                  getTranslated(context, 'infoLatestUpdate'),
                   style: TextStyle(
                       color: Colors.white, fontFamily: "Poppins-Bold"),
                 );
@@ -109,11 +110,6 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                     controller: _scrollController,
                     padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                     children: [
-                      Text(
-                        "Results for latest update",
-                        style:
-                            TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                      ),
                       buildLatestUpdateGridview(state.latestUpdate),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +119,8 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                                 ? true
                                 : false,
                             child: PaginatedButton(
-                                text: "Prev",
+                                text: getTranslated(
+                                    context, "prevPaginatedButton"),
                                 icons: Icons.chevron_left,
                                 leftIcon: true,
                                 function: () {
@@ -176,7 +173,8 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                             visible:
                                 state.latestUpdate.nextPage != 0 ? true : false,
                             child: PaginatedButton(
-                                text: "Next",
+                                text: getTranslated(
+                                    context, "nextPaginatedButton"),
                                 icons: Icons.chevron_right,
                                 function: () {
                                   _getData(state.latestUpdate.nextPage);

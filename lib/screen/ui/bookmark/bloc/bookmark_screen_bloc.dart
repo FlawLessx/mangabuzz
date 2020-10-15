@@ -59,11 +59,13 @@ class BookmarkScreenBloc
       listBookmarkModel = await dbRepo.listAllBookmark(10,
           offset: bookmarkScreenLoaded.listBookmarkData.length);
 
+      List<BookmarkModel> finalData =
+          bookmarkScreenLoaded.listBookmarkData + listBookmarkModel;
+
       yield listBookmarkModel.isEmpty
           ? bookmarkScreenLoaded.copyWith(hasReachedMax: true)
           : BookmarkScreenLoaded(
-              listBookmarkData:
-                  bookmarkScreenLoaded.listBookmarkData + listBookmarkModel,
+              listBookmarkData: finalData.reversed.toList(),
               hasReachedMax: false);
     } on Exception {
       yield BookmarkScreenError();

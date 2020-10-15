@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/latest_update/latest_update_screen.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         extendBodyBehindAppBar: false,
         appBar: SearchBar(
-          text: "Search something...",
+          text: getTranslated(context, "searchHome"),
           function: () {
             showSearch(
                 context: context,
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                             height: ScreenUtil().setHeight(30),
                           ),
                           Text(
-                            "Hot Series Update",
+                            getTranslated(context, 'hotSeriesUpdate'),
                             style: TextStyle(
                                 fontFamily: "Poppins-Bold", fontSize: 16),
                           ),
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(20)),
                       child: Text(
-                        "Latest Update",
+                        getTranslated(context, "infoLatestUpdate"),
                         style:
                             TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                       ),
@@ -116,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         PaginatedButton(
-                            text: "Next",
+                            text: getTranslated(context, "nextPaginatedButton"),
                             icons: Icons.chevron_right,
                             function: () {
                               BlocProvider.of<LatestUpdateScreenBloc>(context)
@@ -139,7 +140,7 @@ class _HomePageState extends State<HomePage> {
             } else if (state is HomeScreenError) {
               return ErrorPage();
             } else {
-              return buildHomeScreenPlaceholder();
+              return buildHomeScreenPlaceholder(context);
             }
           },
         ));

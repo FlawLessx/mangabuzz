@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/core/model/manga/manga_model.dart';
 import 'package:mangabuzz/screen/ui/bookmark/bookmark_item.dart';
 import 'package:mangabuzz/screen/ui/history/history_item.dart';
@@ -57,21 +58,21 @@ class SearchWidget extends SearchDelegate<Manga> {
   Widget buildResults(BuildContext context) {
     _addBlocEventFunction();
 
-    return body();
+    return body(context);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return body();
+    return body(context);
   }
 
-  Widget body() {
+  Widget body(BuildContext context) {
     return SafeArea(
         child: ListView(
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       children: [
         Text(
-          "Results for '$query'",
+          "${getTranslated(context, 'searchQuery')} '$query'",
           style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
         ),
         SizedBox(

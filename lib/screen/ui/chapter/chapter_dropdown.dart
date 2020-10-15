@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
@@ -138,7 +139,7 @@ class _ChapterDropdownMenuState extends State<ChapterDropdownMenu> {
                 padding:
                     EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60)),
                 child: Text(
-                  "Select Chapter",
+                  getTranslated(context, 'selectChapter'),
                   style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                 ),
               ),

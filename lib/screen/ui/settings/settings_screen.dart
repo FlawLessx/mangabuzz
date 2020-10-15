@@ -3,9 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
+import 'package:mangabuzz/core/model/language/language_model.dart';
 import 'package:mangabuzz/screen/ui/settings/bloc/settings_screen_bloc.dart';
 import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../main.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -33,6 +37,11 @@ class _SettingsPageState extends State<SettingsPage> {
     launch(_emailLaunchUri.toString());
   }
 
+  void _changeLanguage(Language language) async {
+    Locale _locale = await setLocale(language.languageCode);
+    MyApp.setLocale(context, _locale);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
         title: Text(
-          "Settings",
+          getTranslated(context, "settingsName"),
           style: TextStyle(color: Colors.white, fontFamily: "Poppins-Bold"),
         ),
       ),
@@ -73,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Langguange Settings",
+                        getTranslated(context, "langguange"),
                         style: TextStyle(
                             color: Colors.black,
                             fontFamily: "Poppins-SemiBold",
@@ -86,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Center(
                           child: CupertinoSegmentedControl<int>(
                               children: {
-                                0: Text("English",
+                                0: Text(Language.languageList[0].langguangeName,
                                     style: TextStyle(
                                         color: selectedIndex == 0
                                             ? Colors.white
@@ -94,7 +103,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 1: Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: ScreenUtil().setWidth(120)),
-                                  child: Text("Indonesia",
+                                  child: Text(
+                                      Language.languageList[1].langguangeName,
                                       style: TextStyle(
                                           color: selectedIndex == 1
                                               ? Colors.white
@@ -106,6 +116,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               onValueChanged: (int index) {
                                 setState(() {
                                   selectedIndex = index;
+                                  _changeLanguage(
+                                      Language.languageList[selectedIndex]);
                                 });
                               },
                               selectedColor: Theme.of(context).primaryColor,
@@ -130,7 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Miscellaneus",
+                        getTranslated(context, "miscellaneous"),
                         style: TextStyle(
                             color: Colors.black,
                             fontFamily: "Poppins-SemiBold",
@@ -141,21 +153,22 @@ class _SettingsPageState extends State<SettingsPage> {
                           CoolAlert.show(
                             context: context,
                             type: CoolAlertType.warning,
-                            text:
-                                "Cache is useful for storing and then displaying downloaded images so you don't need to download them again",
-                            confirmBtnText: "Clear",
+                            text: getTranslated(context, "infoCache"),
+                            confirmBtnText:
+                                getTranslated(context, "confirmClearBtnText"),
                             confirmBtnColor: Colors.red,
                             onConfirmBtnTap: () {
                               BlocProvider.of<SettingsScreenBloc>(context)
                                   .add(ClearCache());
                               Navigator.pop(context);
                             },
-                            cancelBtnText: "Cancel",
+                            cancelBtnText:
+                                getTranslated(context, "cancelClearBtnText"),
                             showCancelBtn: true,
                           );
                         },
                         title: Text(
-                          "Clear Cache",
+                          getTranslated(context, "clearCache"),
                           style: TextStyle(fontSize: 14),
                         ),
                         trailing: Icon(Icons.chevron_right),
@@ -169,7 +182,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           _lauchEmail();
                         },
                         title: Text(
-                          "Contact Me",
+                          getTranslated(context, "contactMe"),
                           style: TextStyle(fontSize: 14),
                         ),
                         trailing: Icon(Icons.chevron_right),
@@ -183,7 +196,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           _lauchUrl();
                         },
                         title: Text(
-                          "Check New Releases",
+                          getTranslated(context, "checkNewRelease"),
                           style: TextStyle(fontSize: 14),
                         ),
                         trailing: Icon(Icons.chevron_right),

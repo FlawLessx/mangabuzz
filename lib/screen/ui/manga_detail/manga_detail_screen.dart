@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:readmore/readmore.dart';
 
@@ -115,7 +116,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
           openFileFromNotification: true);
     } else {
       Fluttertoast.showToast(
-          msg: "Please enable storage permissions to start download",
+          msg: getTranslated(context, "storagePermission"),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 2,
@@ -197,7 +198,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                             Navigator.pop(context);
                           }),
                       IconButton(
-                        tooltip: "Add to bookmark",
+                        tooltip: getTranslated(context, 'addToBookmarkTooltip'),
                         icon: Icon(
                           isBookmarked == true
                               ? Icons.favorite
@@ -254,6 +255,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                       ),
                       Text(
                         state.mangaDetail.title,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontFamily: "Poppins-Bold",
                             fontSize: 15,
@@ -287,8 +289,10 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                           textAlign: TextAlign.center,
                           colorClickableText: Theme.of(context).primaryColor,
                           trimMode: TrimMode.Line,
-                          trimCollapsedText: '...Show more',
-                          trimExpandedText: ' Show less',
+                          trimCollapsedText:
+                              getTranslated(context, "trimCollapsedText"),
+                          trimExpandedText:
+                              getTranslated(context, "trimExpandedText"),
                         ),
                       ),
                       buildInfo(
@@ -307,14 +311,14 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "List Chapter",
+                              getTranslated(context, "chapterList"),
                               style: TextStyle(
                                   fontFamily: "Poppins-Bold",
                                   fontSize: 16,
                                   color: Colors.black),
                             ),
                             Text(
-                              "Download",
+                              getTranslated(context, "download"),
                               style: TextStyle(
                                   fontFamily: "Poppins-Bold",
                                   fontSize: 16,
@@ -473,7 +477,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         width: ScreenUtil().setWidth(15),
                       ),
                       Text(
-                        "Released:",
+                        "${getTranslated(context, 'infoReleased')}:",
                         style: TextStyle(fontSize: 12),
                       )
                     ],
@@ -508,7 +512,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                     width: ScreenUtil().setWidth(15),
                   ),
                   Text(
-                    "Type: $type",
+                    "${getTranslated(context, 'infoType')}: $type",
                     style: TextStyle(fontSize: 12),
                   )
                 ],
@@ -532,7 +536,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         width: ScreenUtil().setWidth(15),
                       ),
                       Text(
-                        "Latest Update:",
+                        "${getTranslated(context, 'infoLatestUpdate')}:",
                         style: TextStyle(fontSize: 12),
                       )
                     ],

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/core/util/route_generator.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
@@ -159,7 +160,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: ScreenUtil().setWidth(30),
                                   vertical: ScreenUtil().setWidth(10)),
-                              child: Text("Detail",
+                              child: Text(getTranslated(context, 'detail'),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: "Poppins-SemiBold")),
