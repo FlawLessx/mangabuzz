@@ -2,7 +2,6 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:content_placeholder/content_placeholder.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +17,7 @@ import '../../../core/model/bookmark/bookmark_model.dart';
 import '../../../core/model/history/history_model.dart';
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../core/util/route_generator.dart';
+import '../../widget/circular_progress.dart';
 import '../../widget/genre_item.dart';
 import '../../widget/rating.dart';
 import '../../widget/refresh_snackbar.dart';
@@ -84,14 +84,25 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
     });
   }
 
-  _downloadListener() {
-    IsolateNameServer.registerPortWithName(
+  void _bindBackgroundIsolate() {
+    bool isSuccess = IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
+    if (!isSuccess) {
+      _unbindBackgroundIsolate();
+      _bindBackgroundIsolate();
+      return;
+    }
     _port.listen((dynamic data) {
-      setState(() {});
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      if (status == DownloadTaskStatus.complete) {
+        FlutterDownloader.open(taskId: id);
+      }
     });
+  }
 
-    FlutterDownloader.registerCallback(downloadCallback);
+  void _unbindBackgroundIsolate() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
 
   static void downloadCallback(
@@ -134,13 +145,15 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
 
   @override
   void initState() {
-    _downloadListener();
+    _bindBackgroundIsolate();
+    FlutterDownloader.registerCallback(downloadCallback);
+
     super.initState();
   }
 
   @override
   void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    _unbindBackgroundIsolate();
     super.dispose();
   }
 
@@ -241,11 +254,15 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                               Radius.circular(ScreenUtil().setWidth(20))),
                           child: CachedNetworkImage(
                             imageUrl: state.mangaDetail.image,
-                            width: ScreenUtil().setWidth(300),
-                            height: ScreenUtil().setWidth(420),
-                            placeholder: (context, url) => ContentPlaceholder(
-                              width: ScreenUtil().setWidth(300),
-                              height: ScreenUtil().setWidth(420),
+                            width: ScreenUtil().setWidth(320),
+                            height: ScreenUtil().setWidth(460),
+                            placeholder: (context, url) => Container(
+                              child: Center(
+                                child: SizedBox(
+                                    height: ScreenUtil().setWidth(80),
+                                    width: ScreenUtil().setWidth(80),
+                                    child: CustomCircularProgressIndicator()),
+                              ),
                             ),
                             fit: BoxFit.cover,
                             errorWidget: (context, url, error) =>

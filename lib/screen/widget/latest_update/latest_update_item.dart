@@ -185,10 +185,10 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                                     _convertUpdate(widget
                                         .item.listNewChapter[index].updatedOn),
                                     style: TextStyle(
-                                        color: Colors.grey, fontSize: 10),
+                                        color: Colors.grey, fontSize: 11),
                                     maxLines: 1,
-                                    maxFontSize: 10,
-                                    minFontSize: 9,
+                                    maxFontSize: 11,
+                                    minFontSize: 10,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ],

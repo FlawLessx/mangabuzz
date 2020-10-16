@@ -235,20 +235,26 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   Widget buildListManga(List<Manga> list) {
-    return SizedBox(
-      height: ScreenUtil().setHeight(550),
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return MangaItem(
-              manga: list[index],
-              maxline: 1,
-              isHot: false,
-            );
-          }),
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: list
+            .map((item) => Padding(
+                  padding: EdgeInsets.only(
+                    top: ScreenUtil().setHeight(15),
+                  ),
+                  child: MangaItem(
+                    manga: item,
+                    maxline: 2,
+                    isHot: true,
+                  ),
+                ))
+            .toList(),
+      ),
     );
   }
 }

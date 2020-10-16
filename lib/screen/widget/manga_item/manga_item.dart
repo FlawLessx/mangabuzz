@@ -37,7 +37,7 @@ class _MangaItemState extends State<MangaItem> {
                 title: widget.manga.title));
       },
       child: Container(
-        width: ScreenUtil().setWidth(300),
+        width: ScreenUtil().setWidth(310),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -80,7 +80,7 @@ class _MangaItemState extends State<MangaItem> {
                         padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
                         child: TypeTag(
                           type: widget.manga.type,
-                          fontSize: 10,
+                          fontSize: 12,
                         ),
                       ),
                     )
@@ -102,7 +102,7 @@ class _MangaItemState extends State<MangaItem> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RatingBarIndicator(
-                  rating: double.parse(widget.manga.rating) / 2,
+                  rating: (double.parse(widget.manga.rating) / 2),
                   itemCount: 5,
                   itemSize: ScreenUtil().setHeight(40),
                   itemBuilder: (context, _) => Icon(

@@ -96,8 +96,10 @@ class MangaDetailNavbar extends StatelessWidget {
                 label: historyModel != null
                     ? Text(getTranslated(context, "continueRead"))
                     : Text(getTranslated(context, "startRead")),
-                labelStyle:
-                    TextStyle(color: Colors.white, fontFamily: "Poppins-Bold"),
+                labelStyle: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Poppins-Bold",
+                    fontSize: 16),
                 backgroundColor: Theme.of(context).primaryColor,
                 elevation: 4.0,
                 shadowColor: Theme.of(context).primaryColor.withOpacity(0.8),

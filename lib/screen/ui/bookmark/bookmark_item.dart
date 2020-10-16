@@ -57,6 +57,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
       ],
       child: Container(
         width: double.infinity,
+        padding: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -106,7 +107,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                           padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
                           child: TypeTag(
                             type: widget.bookmarkModel.type,
-                            fontSize: 11,
+                            fontSize: 13,
                           ),
                         ),
                       )

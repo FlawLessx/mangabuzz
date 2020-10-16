@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/model/paginated_manga/paginated_manga_model.dart';
 
 import '../../../core/localization/langguage_constants.dart';
 import '../../widget/drawer/drawer_widget.dart';
@@ -180,82 +181,9 @@ class _PaginatedPageState extends State<PaginatedPage> {
                                 ))
                             .toList(),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Visibility(
-                            visible: state.paginatedManga.previousPage != 0
-                                ? true
-                                : false,
-                            child: PaginatedButton(
-                                text: getTranslated(
-                                    context, "prevPaginatedButton"),
-                                icons: Icons.chevron_left,
-                                leftIcon: true,
-                                function: () {
-                                  _getData(state.paginatedManga.previousPage);
-                                }),
-                          ),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(20),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Visibility(
-                                  visible:
-                                      state.paginatedManga.previousPage != 0
-                                          ? true
-                                          : false,
-                                  child: Text(
-                                    state.paginatedManga.previousPage
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 14),
-                                  )),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(30),
-                              ),
-                              Text(
-                                state.paginatedManga.currentPage.toString(),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins-Medium",
-                                    fontSize: 16),
-                              ),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(30),
-                              ),
-                              Visibility(
-                                  visible: state.paginatedManga.nextPage != 0
-                                      ? true
-                                      : false,
-                                  child: Text(
-                                    state.paginatedManga.nextPage.toString(),
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 14),
-                                  ))
-                            ],
-                          ),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(30),
-                          ),
-                          Visibility(
-                            visible: state.paginatedManga.nextPage != 0
-                                ? true
-                                : false,
-                            child: PaginatedButton(
-                                text: getTranslated(
-                                    context, "nextPaginatedButton"),
-                                icons: Icons.chevron_right,
-                                function: () {
-                                  _getData(state.paginatedManga.nextPage);
-                                }),
-                          )
-                        ],
-                      ),
+                      paginationWidget(state.paginatedManga),
                       SizedBox(
-                        height: ScreenUtil().setHeight(60),
+                        height: ScreenUtil().setHeight(40),
                       )
                     ],
                   ),
@@ -272,5 +200,76 @@ class _PaginatedPageState extends State<PaginatedPage> {
             }
           },
         ));
+  }
+
+  Widget paginationWidget(PaginatedManga paginatedManga) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Visibility(
+          visible: paginatedManga.previousPage != 0 ? true : false,
+          child: PaginatedButton(
+              text: getTranslated(context, "prevPaginatedButton"),
+              icons: Icons.chevron_left,
+              leftIcon: true,
+              function: () {
+                _getData(paginatedManga.previousPage);
+              }),
+        ),
+        SizedBox(
+          width: ScreenUtil().setWidth(20),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            paginatedManga.previousPage != 0
+                ? Visibility(
+                    visible: paginatedManga.previousPage != 0 ? true : false,
+                    child: Text(
+                      paginatedManga.previousPage.toString(),
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ))
+                : SizedBox(
+                    width: ScreenUtil().setWidth(100),
+                  ),
+            SizedBox(
+              width: ScreenUtil().setWidth(30),
+            ),
+            Text(
+              paginatedManga.currentPage.toString(),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "Poppins-Medium",
+                  fontSize: 16),
+            ),
+            SizedBox(
+              width: ScreenUtil().setWidth(30),
+            ),
+            Visibility(
+                visible: paginatedManga.nextPage != 0 ? true : false,
+                child: Text(
+                  paginatedManga.nextPage.toString(),
+                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                ))
+          ],
+        ),
+        SizedBox(
+          width: ScreenUtil().setWidth(30),
+        ),
+        paginatedManga.nextPage != 0
+            ? Visibility(
+                visible: paginatedManga.nextPage != 0 ? true : false,
+                child: PaginatedButton(
+                    text: getTranslated(context, "nextPaginatedButton"),
+                    icons: Icons.chevron_right,
+                    function: () {
+                      _getData(paginatedManga.nextPage);
+                    }),
+              )
+            : SizedBox(
+                width: ScreenUtil().setWidth(100),
+              )
+      ],
+    );
   }
 }

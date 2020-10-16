@@ -221,106 +221,8 @@ class _ChapterPageState extends State<ChapterPage> {
                                 );
                               }),
                         ),
-                        Container(
-                          height: ScreenUtil().setHeight(200),
-                          child: Column(
-                            children: [
-                              Transform.scale(
-                                scale: 1.1,
-                                child: FAProgressBar(
-                                  currentValue: _getCurrentValue(
-                                      state.chapterList, state.selectedIndex),
-                                  maxValue: state.chapterList.length,
-                                  size: ScreenUtil().setHeight(20),
-                                  backgroundColor: Color(0xFFE5E5E5),
-                                  progressColor: Color(0xFF4be2c0),
-                                  borderRadius: 10,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Visibility(
-                                        visible: state.selectedIndex ==
-                                                state.mangaDetail.chapterList
-                                                    .length
-                                            ? false
-                                            : true,
-                                        child: RoundButton(
-                                            icons: Icons.arrow_back,
-                                            iconColor:
-                                                Theme.of(context).primaryColor,
-                                            backgroundColor: Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(0.2),
-                                            enableShadow: false,
-                                            onTap: () {
-                                              _navigate(
-                                                  state
-                                                      .mangaDetail
-                                                      .chapterList[
-                                                          (state.selectedIndex +
-                                                              1)]
-                                                      .chapterEndpoint,
-                                                  state.selectedIndex + 1,
-                                                  state.mangaDetail,
-                                                  state.fromHome);
-                                            }),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "${state.chapterList[state.selectedIndex].chapterName}",
-                                            style: TextStyle(
-                                                fontFamily: "Poppins-Medium",
-                                                fontSize: 14),
-                                          ),
-                                          Text(
-                                            "${getTranslated(context, 'fromChapter')} ${state.chapterList.length} chapter",
-                                            style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 12),
-                                          )
-                                        ],
-                                      ),
-                                      Visibility(
-                                        visible: state.selectedIndex == 0
-                                            ? false
-                                            : true,
-                                        child: RoundButton(
-                                            iconColor:
-                                                Theme.of(context).primaryColor,
-                                            backgroundColor: Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(0.2),
-                                            enableShadow: false,
-                                            icons: Icons.arrow_forward,
-                                            onTap: () {
-                                              _navigate(
-                                                  state
-                                                      .mangaDetail
-                                                      .chapterList[
-                                                          (state.selectedIndex -
-                                                              1)]
-                                                      .chapterEndpoint,
-                                                  state.selectedIndex - 1,
-                                                  state.mangaDetail,
-                                                  state.fromHome);
-                                            }),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        bottomNavigation(state.selectedIndex, state.mangaDetail,
+                            state.fromHome)
                       ],
                     ),
                   ),
@@ -336,6 +238,89 @@ class _ChapterPageState extends State<ChapterPage> {
               }
             },
           )),
+    );
+  }
+
+  Widget bottomNavigation(
+      int selectedIndex, MangaDetail mangaDetail, bool fromHome) {
+    return Container(
+      height: ScreenUtil().setHeight(200),
+      child: Column(
+        children: [
+          Transform.scale(
+            scale: 1.1,
+            child: FAProgressBar(
+              currentValue:
+                  _getCurrentValue(mangaDetail.chapterList, selectedIndex),
+              maxValue: mangaDetail.chapterList.length,
+              size: ScreenUtil().setHeight(20),
+              backgroundColor: Color(0xFFE5E5E5),
+              progressColor: Color(0xFF4be2c0),
+              borderRadius: 10,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  selectedIndex == mangaDetail.chapterList.length
+                      ? SizedBox(
+                          width: ScreenUtil().setHeight(120),
+                        )
+                      : RoundButton(
+                          icons: Icons.arrow_back,
+                          iconColor: Theme.of(context).primaryColor,
+                          backgroundColor:
+                              Theme.of(context).primaryColor.withOpacity(0.2),
+                          enableShadow: false,
+                          onTap: () {
+                            _navigate(
+                                mangaDetail.chapterList[(selectedIndex + 1)]
+                                    .chapterEndpoint,
+                                selectedIndex + 1,
+                                mangaDetail,
+                                fromHome);
+                          }),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${mangaDetail.chapterList[selectedIndex].chapterName}",
+                        style: TextStyle(
+                            fontFamily: "Poppins-Medium", fontSize: 14),
+                      ),
+                      Text(
+                        "${getTranslated(context, 'fromChapter')} ${mangaDetail.chapterList.length} chapter",
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      )
+                    ],
+                  ),
+                  selectedIndex == 0
+                      ? SizedBox(
+                          width: ScreenUtil().setHeight(120),
+                        )
+                      : RoundButton(
+                          iconColor: Theme.of(context).primaryColor,
+                          backgroundColor:
+                              Theme.of(context).primaryColor.withOpacity(0.2),
+                          enableShadow: false,
+                          icons: Icons.arrow_forward,
+                          onTap: () {
+                            _navigate(
+                                mangaDetail.chapterList[(selectedIndex - 1)]
+                                    .chapterEndpoint,
+                                selectedIndex - 1,
+                                mangaDetail,
+                                fromHome);
+                          }),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

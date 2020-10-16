@@ -42,9 +42,9 @@ class ExploreScreenBloc extends Bloc<ExploreScreenEvent, ExploreScreenState> {
 
       yield ExploreScreenLoaded(
           listGenre: genres,
-          listManga: listManga.result,
-          listManhwa: listManhwa.result,
-          listManhua: listManhua.result);
+          listManga: listManga.result.getRange(0, 6).toList(),
+          listManhwa: listManhwa.result.getRange(0, 6).toList(),
+          listManhua: listManhua.result.getRange(0, 6).toList());
     } on Exception {
       yield ExploreScreenError();
     }

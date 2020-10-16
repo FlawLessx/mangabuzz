@@ -62,6 +62,7 @@ class _HistoryItemState extends State<HistoryItem> {
         ),
       ],
       child: Container(
+        padding: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
         width: double.infinity,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +111,7 @@ class _HistoryItemState extends State<HistoryItem> {
                           padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
                           child: TypeTag(
                             type: widget.historyModel.type,
-                            fontSize: 11,
+                            fontSize: 13,
                           ),
                         ),
                       )

@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
 import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:mangabuzz/screen/ui/error/error_screen.dart';
-import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
 import '../../widget/refresh_snackbar.dart';
@@ -40,10 +39,6 @@ class _BookmarkPageState extends State<BookmarkPage> {
     BlocProvider.of<BookmarkScreenBloc>(context)
         .add(ResetBookmarkScreenBlocToInitialState());
     BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
-  }
-
-  bool _visibleLoad(int length) {
-    return length <= 3 ? false : true;
   }
 
   @override

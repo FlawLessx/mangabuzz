@@ -41,14 +41,13 @@ class TypeTag extends StatelessWidget {
     ColorSeries colorSeries = ColorSeries();
 
     return Container(
-      height: ScreenUtil().setHeight(70),
       decoration: BoxDecoration(
           color: colorSeries.generateColor(type),
           borderRadius:
               BorderRadius.all(Radius.circular(ScreenUtil().setWidth(15)))),
       child: Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
           child: Text(
             type,
             textAlign: TextAlign.center,
