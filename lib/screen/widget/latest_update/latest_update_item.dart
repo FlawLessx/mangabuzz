@@ -108,7 +108,10 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                         GetMangaDetailScreenData(
                             mangaEndpoint: widget.item.mangaEndpoint,
                             title: widget.item.title));
-                    Navigator.pushNamed(context, mangaDetailRoute);
+                    Navigator.pushNamed(context, mangaDetailRoute,
+                        arguments: MangaDetailPageArguments(
+                            mangaEndpoint: widget.item.mangaEndpoint,
+                            title: widget.item.title));
                   },
                   child: Text(
                     widget.item.title,

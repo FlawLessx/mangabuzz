@@ -7,7 +7,6 @@ import '../../widget/latest_update/latest_update_item.dart';
 import '../../widget/latest_update/latest_update_item_placeholder.dart';
 import '../../widget/paginated_button.dart';
 import '../../widget/refresh_snackbar.dart';
-import '../../widget/round_button.dart';
 import '../error/error_screen.dart';
 import 'bloc/latest_update_screen_bloc.dart';
 
@@ -81,14 +80,15 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
           leading: SizedBox(),
           elevation: 8.0,
           actions: [
-            RoundButton(
-                icons: Icons.close,
-                onTap: () {
+            IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: ScreenUtil().setWidth(80),
+                ),
+                onPressed: () {
                   Navigator.pop(context);
-                },
-                backgroundColor: Colors.white,
-                iconColor: Theme.of(context).primaryColor,
-                enableShadow: false)
+                }),
           ],
         ),
         body: BlocConsumer<LatestUpdateScreenBloc, LatestUpdateScreenState>(
@@ -115,19 +115,16 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Visibility(
-                            visible: state.latestUpdate.previousPage != 0
-                                ? true
-                                : false,
-                            child: PaginatedButton(
-                                text: getTranslated(
-                                    context, "prevPaginatedButton"),
-                                icons: Icons.chevron_left,
-                                leftIcon: true,
-                                function: () {
-                                  _getData(state.latestUpdate.previousPage);
-                                }),
-                          ),
+                          state.latestUpdate.previousPage != 0
+                              ? PaginatedButton(
+                                  text: getTranslated(
+                                      context, "prevPaginatedButton"),
+                                  icons: Icons.chevron_left,
+                                  leftIcon: true,
+                                  function: () {
+                                    _getData(state.latestUpdate.previousPage);
+                                  })
+                              : SizedBox(width: ScreenUtil().setWidth(100)),
                           SizedBox(
                             width: ScreenUtil().setWidth(20),
                           ),
@@ -156,15 +153,13 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                               SizedBox(
                                 width: ScreenUtil().setWidth(30),
                               ),
-                              Visibility(
-                                  visible: state.latestUpdate.nextPage != 0
-                                      ? true
-                                      : false,
-                                  child: Text(
-                                    state.latestUpdate.nextPage.toString(),
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 14),
-                                  ))
+                              state.latestUpdate.nextPage != 0
+                                  ? Text(
+                                      state.latestUpdate.nextPage.toString(),
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 14),
+                                    )
+                                  : SizedBox(width: ScreenUtil().setWidth(100))
                             ],
                           ),
                           SizedBox(

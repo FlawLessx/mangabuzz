@@ -92,13 +92,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
       _bindBackgroundIsolate();
       return;
     }
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      if (status == DownloadTaskStatus.complete) {
-        FlutterDownloader.open(taskId: id);
-      }
-    });
+    _port.listen((dynamic data) {});
   }
 
   void _unbindBackgroundIsolate() {
@@ -403,7 +397,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                     _downloadFunction(
                         mangaDetail.chapterList[index].chapterDownload,
                         (mangaDetail.title +
-                            "-" +
+                            " - " +
                             mangaDetail.chapterList[index].chapterName));
                   }),
             ),

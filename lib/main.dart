@@ -12,6 +12,7 @@ import 'core/bloc/search_bloc/search_bloc.dart';
 import 'core/localization/app_localization.dart';
 import 'core/localization/langguage_constants.dart';
 import 'core/util/route_generator.dart';
+import 'injection_container.dart';
 import 'screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 import 'screen/ui/chapter/bloc/chapter_screen_bloc.dart';
 import 'screen/ui/explore/bloc/explore_screen_bloc.dart';
@@ -21,10 +22,12 @@ import 'screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
 import 'screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import 'screen/ui/paginated/bloc/paginated_screen_bloc.dart';
 import 'screen/widget/drawer/bloc/drawer_widget_bloc.dart';
+import 'injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   ScreenUtil.init(allowFontScaling: true);
+  await di.init();
   await FlutterDownloader.initialize(
       debug: false // optional: set false to disable printing logs to console
       );
@@ -79,47 +82,47 @@ class _MyAppState extends State<MyApp> {
         providers: [
           // Core BLoC
           BlocProvider<SearchBloc>(
-            create: (context) => SearchBloc(),
+            create: (context) => sl<SearchBloc>(),
           ),
           BlocProvider<BookmarkBloc>(
-            create: (context) => BookmarkBloc(),
+            create: (context) => sl<BookmarkBloc>(),
           ),
           BlocProvider<HistoryBloc>(
-            create: (context) => HistoryBloc(),
+            create: (context) => sl<HistoryBloc>(),
           ),
 
           // Sub BLoC / Screen BLoC
           BlocProvider<BookmarkScreenBloc>(
-            create: (context) => BookmarkScreenBloc(),
+            create: (context) => sl<BookmarkScreenBloc>(),
           ),
           BlocProvider<HistoryScreenBloc>(
-            create: (context) => HistoryScreenBloc(),
+            create: (context) => sl<HistoryScreenBloc>(),
           ),
           BlocProvider<HomeScreenBloc>(
-            create: (context) => HomeScreenBloc(),
+            create: (context) => sl<HomeScreenBloc>(),
           ),
           BlocProvider<ExploreScreenBloc>(
-            create: (context) => ExploreScreenBloc(),
+            create: (context) => sl<ExploreScreenBloc>(),
           ),
           BlocProvider<MangaDetailScreenBloc>(
-            create: (context) => MangaDetailScreenBloc(),
+            create: (context) => sl<MangaDetailScreenBloc>(),
           ),
           BlocProvider<ChapterScreenBloc>(
-            create: (context) => ChapterScreenBloc(),
+            create: (context) => sl<ChapterScreenBloc>(),
           ),
           BlocProvider<PaginatedScreenBloc>(
-            create: (context) => PaginatedScreenBloc(),
+            create: (context) => sl<PaginatedScreenBloc>(),
           ),
           BlocProvider<LatestUpdateScreenBloc>(
-            create: (context) => LatestUpdateScreenBloc(),
+            create: (context) => sl<LatestUpdateScreenBloc>(),
           ),
           BlocProvider<SettingsScreenCubit>(
-            create: (context) => SettingsScreenCubit(),
+            create: (context) => sl<SettingsScreenCubit>(),
           ),
 
           // Widget BLoC
           BlocProvider<DrawerWidgetBloc>(
-            create: (context) => DrawerWidgetBloc(),
+            create: (context) => sl<DrawerWidgetBloc>(),
           ),
         ],
         child: MaterialApp(

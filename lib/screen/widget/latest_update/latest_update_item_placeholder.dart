@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget buildLatestUpdatePlaceholder() {
-  List count = [1, 2, 3, 4];
+  int count = 10;
 
   return GridView.builder(
       shrinkWrap: true,
       padding: EdgeInsets.zero,
-      itemCount: count.length,
+      itemCount: count,
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
