@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/screen/ui/error/error_screen.dart';
-import 'package:mangabuzz/screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
-import 'package:mangabuzz/screen/widget/latest_update/latest_update_item.dart';
-import 'package:mangabuzz/screen/widget/latest_update/latest_update_item_placeholder.dart';
-import 'package:mangabuzz/screen/widget/paginated_button.dart';
-import 'package:mangabuzz/screen/widget/refresh_snackbar.dart';
-import 'package:mangabuzz/screen/widget/round_button.dart';
+
+import '../../../core/localization/langguage_constants.dart';
+import '../../widget/latest_update/latest_update_item.dart';
+import '../../widget/latest_update/latest_update_item_placeholder.dart';
+import '../../widget/paginated_button.dart';
+import '../../widget/refresh_snackbar.dart';
+import '../../widget/round_button.dart';
+import '../error/error_screen.dart';
+import 'bloc/latest_update_screen_bloc.dart';
 
 class LatestUpdatePageArguments {
   final int pageNumber;
@@ -190,7 +191,11 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                 ),
               );
             } else if (state is LatestUpdateScreenError) {
-              return ErrorPage();
+              return RefreshIndicator(
+                  onRefresh: () async {
+                    _getData(widget.pageNumber);
+                  },
+                  child: ErrorPage());
             } else {
               return Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(20)),

@@ -9,11 +9,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../core/bloc/bookmark_bloc/bookmark_bloc.dart';
+import '../../../core/localization/langguage_constants.dart';
 import '../../../core/model/bookmark/bookmark_model.dart';
 import '../../../core/model/history/history_model.dart';
 import '../../../core/model/manga_detail/manga_detail_model.dart';
@@ -126,6 +126,12 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
     }
   }
 
+  _refresh() {
+    BlocProvider.of<MangaDetailScreenBloc>(context).add(
+        GetMangaDetailScreenData(
+            mangaEndpoint: widget.mangaEndpoint, title: widget.title));
+  }
+
   @override
   void initState() {
     _downloadListener();
@@ -160,10 +166,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
         listener: (context, state) {
           if (state is MangaDetailScreenError) {
             Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-              BlocProvider.of<MangaDetailScreenBloc>(context).add(
-                  GetMangaDetailScreenData(
-                      mangaEndpoint: widget.mangaEndpoint,
-                      title: widget.title));
+              _refresh();
             }));
           } else if (state is MangaDetailScreenLoaded) {
             setState(() {
@@ -334,7 +337,11 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
               ),
             );
           } else if (state is MangaDetailScreenError) {
-            return ErrorPage();
+            return RefreshIndicator(
+                onRefresh: () async {
+                  _refresh();
+                },
+                child: ErrorPage());
           } else {
             return buildMangaDetailPagePlaceholder(context);
           }

@@ -1,7 +1,8 @@
 import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/screen/widget/manga_item/manga_item_placeholder.dart';
+
+import '../../widget/manga_item/manga_item_placeholder.dart';
 
 Widget buildExploreScreenPlaceholder() {
   return ListView(

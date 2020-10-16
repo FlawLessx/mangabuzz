@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mangabuzz/core/model/bookmark/bookmark_model.dart';
-import 'package:mangabuzz/core/model/history/history_model.dart';
-import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
-import 'package:mangabuzz/core/repository/local/moor_repository.dart';
-import 'package:mangabuzz/core/repository/remote/api_repository.dart';
-import 'package:mangabuzz/core/util/connectivity_check.dart';
+
+import '../../../../core/model/bookmark/bookmark_model.dart';
+import '../../../../core/model/history/history_model.dart';
+import '../../../../core/model/manga_detail/manga_detail_model.dart';
+import '../../../../core/repository/local/moor_repository.dart';
+import '../../../../core/repository/remote/api_repository.dart';
+import '../../../../core/util/connectivity_check.dart';
 
 part 'manga_detail_screen_event.dart';
 part 'manga_detail_screen_state.dart';

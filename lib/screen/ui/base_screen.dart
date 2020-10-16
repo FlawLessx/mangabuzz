@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../core/localization/langguage_constants.dart';
 import '../../core/util/connectivity_check.dart';
 import '../../core/util/route_generator.dart';
+import '../widget/drawer/drawer_widget.dart';
 import 'bookmark/bloc/bookmark_screen_bloc.dart';
 import 'bookmark/bookmark_screen.dart';
 import 'explore/bloc/explore_screen_bloc.dart';
@@ -57,7 +58,7 @@ class _BaseScreenState extends State<BaseScreen> {
       drawer: DrawerWidget(
         selectedIndex: 1,
       ),
-      body: widgetList.elementAt(_selectedIndex),
+      body: widgetList[_selectedIndex],
       bottomNavigationBar: Container(
           decoration: BoxDecoration(color: Colors.white, boxShadow: [
             BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))

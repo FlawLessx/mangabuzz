@@ -11,7 +11,7 @@
   "detail": "Detail",
   "chapterList": "Chapter List",
   "download": "Download",
-  "chapterReached": "Chapter Reached",
+  "chapterReached": "Chapter Reached", 
   "chapterRemains": "Chapter Remaining",
   "continueRead": "Continue Read",
   "startRead": "Start",
@@ -45,5 +45,6 @@
   "showAll": "Show All",
   "selectChapter": "Select Chapter",
   "fromChapter": "From",
-  "bookmarkedSeries": "Bookmarked Series"
+  "bookmarkedSeries": "Bookmarked Series",
+  "genres": "Genres"
 }

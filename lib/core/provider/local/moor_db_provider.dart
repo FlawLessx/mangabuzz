@@ -82,10 +82,27 @@ class BookmarkDao extends DatabaseAccessor<MyDatabase> with _$BookmarkDaoMixin {
   // Bookmark Table
   //
 
-  // Get all data from bookmarks table
-  Future<List<BookmarkModel>> listAllBookmark(int limit, {int offset}) {
+  // Get bookmarks table length
+  Future<int> getBookmarkLength() async {
     try {
-      return (select(bookmarks)..limit(limit, offset: offset)).map((rows) {
+      //Create expression of count
+      var countExp = bookmarks.title.count();
+
+      //Moor creates query from Expression so, they don't have value unless you execute it as query.
+      //Following query will execute experssion on Table.
+      final query = selectOnly(bookmarks)..addColumns([countExp]);
+      int result = await query.map((row) => row.read(countExp)).getSingle();
+
+      return result;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  // Get all data from bookmarks table
+  Future<List<BookmarkModel>> listAllBookmark() {
+    try {
+      return (select(bookmarks)).map((rows) {
         return BookmarkModel(
             title: rows.title,
             mangaEndpoint: rows.mangaEndpoint,
@@ -212,9 +229,9 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
   //
 
   // Get all data from bookmarks table
-  Future<List<HistoryModel>> listAllHistory(int limit, {int offset}) {
+  Future<List<HistoryModel>> listAllHistory() {
     try {
-      return (select(historys)..limit(limit, offset: offset)).map((rows) {
+      return (select(historys)).map((rows) {
         return HistoryModel(
             title: rows.title,
             mangaEndpoint: rows.mangaEndpoint,

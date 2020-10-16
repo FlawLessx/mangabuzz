@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
-import 'package:mangabuzz/screen/widget/circular_progress.dart';
-import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
+import '../../../core/bloc/search_bloc/search_bloc.dart';
+import '../../../core/localization/langguage_constants.dart';
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/search/search_bar.dart';
+import '../../widget/search/search_page.dart';
+import '../bookmark/bloc/bookmark_screen_bloc.dart';
 import '../error/error_screen.dart';
 import 'bloc/history_screen_bloc.dart';
 import 'history_item.dart';
@@ -21,7 +20,7 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   ScrollController _scrollController;
-  final _scrollThreshold = 200;
+  final _scrollThreshold = 500;
 
   @override
   void initState() {
@@ -30,16 +29,17 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   _loadMore() {
-    double maxScroll = _scrollController.position.maxScrollExtent;
-    double currentScroll = _scrollController.position.pixels;
-
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
-      BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
+      BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
     }
   }
 
-  bool _visibleLoad(int length) {
-    return length <= 3 ? false : true;
+  _refresh() {
+    BlocProvider.of<HistoryScreenBloc>(context)
+        .add(ResetHistoryScreenBlocToInitialState());
+    BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
   }
 
   @override
@@ -86,10 +86,7 @@ class _HistoryPageState extends State<HistoryPage> {
               return RefreshIndicator(
                 color: Theme.of(context).primaryColor,
                 onRefresh: () async {
-                  BlocProvider.of<HistoryScreenBloc>(context)
-                      .add(ResetHistoryScreenBlocToInitialState());
-                  BlocProvider.of<HistoryScreenBloc>(context)
-                      .add(GetHistoryScreenData());
+                  _refresh();
                 },
                 child: ListView(
                   controller: _scrollController,
@@ -108,28 +105,20 @@ class _HistoryPageState extends State<HistoryPage> {
                         itemCount: state.hasReachedMax
                             ? state.listHistoryData.length
                             : state.listHistoryData.length + 1,
-                        itemBuilder: (context, index) => (index >=
-                                state.listHistoryData.length)
-                            ? Visibility(
-                                visible:
-                                    _visibleLoad(state.listHistoryData.length),
-                                child: Container(
-                                  child: Center(
-                                    child: SizedBox(
-                                        height: ScreenUtil().setWidth(60),
-                                        width: ScreenUtil().setWidth(60),
-                                        child:
-                                            CustomCircularProgressIndicator()),
-                                  ),
-                                ),
-                              )
-                            : HistoryItem(
-                                historyModel: state.listHistoryData[index]))
+                        itemBuilder: (context, index) =>
+                            (index >= state.listHistoryData.length)
+                                ? SizedBox()
+                                : HistoryItem(
+                                    historyModel: state.listHistoryData[index]))
                   ],
                 ),
               );
             } else if (state is HistoryScreenError) {
-              return ErrorPage();
+              return RefreshIndicator(
+                  onRefresh: () async {
+                    _refresh();
+                  },
+                  child: ErrorPage());
             } else {
               return buildHistoryScreenPlaceholder(context);
             }

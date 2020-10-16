@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
-import 'package:mangabuzz/screen/widget/genre_item.dart';
-import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
+import '../../../core/bloc/search_bloc/search_bloc.dart';
+import '../../../core/localization/langguage_constants.dart';
 import '../../../core/model/genre/genre_model.dart';
 import '../../../core/model/manga/manga_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../../widget/genre_item.dart';
 import '../../widget/manga_item/manga_item.dart';
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/search/search_bar.dart';
+import '../../widget/search/search_page.dart';
+import '../error/error_screen.dart';
+import '../paginated/bloc/paginated_screen_bloc.dart';
+import '../paginated/paginated_screen.dart';
 import 'bloc/explore_screen_bloc.dart';
 import 'explore_placeholder.dart';
 
@@ -54,6 +55,10 @@ class _ExplorePageState extends State<ExplorePage> {
             drawerSelectedIndex: drawerSelectedIndex));
   }
 
+  _refresh() {
+    BlocProvider.of<ExploreScreenBloc>(context).add(GetExploreScreenData());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,8 +91,7 @@ class _ExplorePageState extends State<ExplorePage> {
               return RefreshIndicator(
                 color: Theme.of(context).primaryColor,
                 onRefresh: () async {
-                  BlocProvider.of<ExploreScreenBloc>(context)
-                      .add(GetExploreScreenData());
+                  _refresh();
                 },
                 child: ListView(
                   controller: _scrollController,
@@ -142,6 +146,12 @@ class _ExplorePageState extends State<ExplorePage> {
                   ],
                 ),
               );
+            } else if (state is ExploreScreenError) {
+              return RefreshIndicator(
+                  onRefresh: () async {
+                    _refresh();
+                  },
+                  child: ErrorPage());
             } else {
               return buildExploreScreenPlaceholder();
             }
@@ -225,23 +235,20 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   Widget buildListManga(List<Manga> list) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: list
-            .map((item) => Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(15)),
-                  child: MangaItem(
-                    manga: item,
-                    maxline: 2,
-                  ),
-                ))
-            .toList(),
-      ),
+    return SizedBox(
+      height: ScreenUtil().setHeight(550),
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          padding: EdgeInsets.zero,
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return MangaItem(
+              manga: list[index],
+              maxline: 1,
+              isHot: false,
+            );
+          }),
     );
   }
 }

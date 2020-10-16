@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_dropdown.dart';
-import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
-import 'package:mangabuzz/screen/widget/round_button.dart';
+
+import '../../../core/model/manga_detail/manga_detail_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../../widget/round_button.dart';
+import '../history/bloc/history_screen_bloc.dart';
+import 'chapter_dropdown.dart';
 
 class ChapterAppbar extends StatefulWidget {
   final MangaDetail mangaDetail;

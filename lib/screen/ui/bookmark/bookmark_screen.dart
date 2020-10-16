@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
 import 'package:mangabuzz/core/localization/langguage_constants.dart';
+import 'package:mangabuzz/screen/ui/error/error_screen.dart';
 import 'package:mangabuzz/screen/widget/circular_progress.dart';
 import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
@@ -19,7 +20,7 @@ class BookmarkPage extends StatefulWidget {
 
 class _BookmarkPageState extends State<BookmarkPage> {
   ScrollController _scrollController;
-  final _scrollThreshold = 200;
+  final _scrollThreshold = 500;
 
   @override
   void initState() {
@@ -28,12 +29,17 @@ class _BookmarkPageState extends State<BookmarkPage> {
   }
 
   _loadMore() {
-    double maxScroll = _scrollController.position.maxScrollExtent;
-    double currentScroll = _scrollController.position.pixels;
-
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreshold) {
       BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
     }
+  }
+
+  _refresh() {
+    BlocProvider.of<BookmarkScreenBloc>(context)
+        .add(ResetBookmarkScreenBlocToInitialState());
+    BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
   }
 
   bool _visibleLoad(int length) {
@@ -83,10 +89,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
             return RefreshIndicator(
               color: Theme.of(context).primaryColor,
               onRefresh: () async {
-                BlocProvider.of<BookmarkScreenBloc>(context)
-                    .add(ResetBookmarkScreenBlocToInitialState());
-                BlocProvider.of<BookmarkScreenBloc>(context)
-                    .add(GetBookmarkScreenData());
+                _refresh();
               },
               child: ListView(
                 controller: _scrollController,
@@ -106,23 +109,18 @@ class _BookmarkPageState extends State<BookmarkPage> {
                           : state.listBookmarkData.length + 1,
                       itemBuilder: (context, index) => (index >=
                               state.listBookmarkData.length)
-                          ? Visibility(
-                              visible:
-                                  _visibleLoad(state.listBookmarkData.length),
-                              child: Container(
-                                child: Center(
-                                  child: SizedBox(
-                                      height: ScreenUtil().setWidth(60),
-                                      width: ScreenUtil().setWidth(60),
-                                      child: CustomCircularProgressIndicator()),
-                                ),
-                              ),
-                            )
+                          ? SizedBox()
                           : BookmarkItem(
                               bookmarkModel: state.listBookmarkData[index])),
                 ],
               ),
             );
+          } else if (state is BookmarkScreenError) {
+            return RefreshIndicator(
+                onRefresh: () async {
+                  _refresh();
+                },
+                child: ErrorPage());
           } else {
             return buildBookmarkScreenPlaceholder(context);
           }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
+
+import '../../../core/model/manga_detail/manga_detail_model.dart';
 
 class ChapterItem extends StatefulWidget {
   final ChapterList chapterListData;

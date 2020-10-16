@@ -122,6 +122,16 @@ class _ChapterPageState extends State<ChapterPage> {
     );
   }
 
+  _refresh() {
+    BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
+        chapterEndpoint: widget.chapterEndpoint,
+        fromHome: widget.fromHome,
+        mangaDetail: widget.mangaDetail,
+        selectedIndex: widget.selectedIndex,
+        historyModel: null,
+        mangaEndpoint: widget.mangaEndpoint));
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -159,14 +169,7 @@ class _ChapterPageState extends State<ChapterPage> {
             listener: (context, state) {
               if (state is ChapterScreenError) {
                 Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-                  BlocProvider.of<ChapterScreenBloc>(context).add(
-                      GetChapterScreenData(
-                          chapterEndpoint: widget.chapterEndpoint,
-                          fromHome: widget.fromHome,
-                          mangaDetail: widget.mangaDetail,
-                          selectedIndex: widget.selectedIndex,
-                          historyModel: null,
-                          mangaEndpoint: widget.mangaEndpoint));
+                  _refresh();
                 }));
               }
             },
@@ -323,7 +326,11 @@ class _ChapterPageState extends State<ChapterPage> {
                   ),
                 );
               } else if (state is ChapterScreenError) {
-                return ErrorPage();
+                return RefreshIndicator(
+                    onRefresh: () async {
+                      _refresh();
+                    },
+                    child: ErrorPage());
               } else {
                 return chapterBodyPlaceholder();
               }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/screen/widget/manga_item/manga_item_placeholder.dart';
+
+import '../../../core/localization/langguage_constants.dart';
+import '../../widget/manga_item/manga_item_placeholder.dart';
 
 Widget buildPaginatedScreenPlaceholder(BuildContext context) {
   int count = 5;

@@ -1,9 +1,10 @@
 import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/screen/widget/latest_update/latest_update_item_placeholder.dart';
-import 'package:mangabuzz/screen/widget/manga_item/manga_item_placeholder.dart';
+
+import '../../../core/localization/langguage_constants.dart';
+import '../../widget/latest_update/latest_update_item_placeholder.dart';
+import '../../widget/manga_item/manga_item_placeholder.dart';
 
 Widget buildHomeScreenPlaceholder(BuildContext context) {
   List count = [1, 2, 3, 4];

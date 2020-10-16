@@ -1,7 +1,8 @@
 import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
+
+import '../../../core/localization/langguage_constants.dart';
 
 Widget buildHistoryScreenPlaceholder(BuildContext context) {
   List count = [1, 2, 3, 4];

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/core/model/history/history_model.dart';
-import 'package:mangabuzz/core/model/manga_detail/manga_detail_model.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/chapter/bloc/chapter_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
+
+import '../../../core/localization/langguage_constants.dart';
+import '../../../core/model/history/history_model.dart';
+import '../../../core/model/manga_detail/manga_detail_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../chapter/bloc/chapter_screen_bloc.dart';
+import '../chapter/chapter_screen.dart';
 
 class MangaDetailNavbar extends StatelessWidget {
   final HistoryModel historyModel;

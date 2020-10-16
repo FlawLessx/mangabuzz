@@ -26,7 +26,7 @@ void main() {
 
     test('bookmark can be deleted', () async {
       await _db.bookmarkDao.deleteBookmark("One Piece", "one-piece/");
-      final result = await _db.bookmarkDao.listAllBookmark(5, offset: 0);
+      final result = await _db.bookmarkDao.listAllBookmark();
 
       expect(result.length, 0);
     });
@@ -43,7 +43,7 @@ void main() {
 
     test('history can be deleted', () async {
       await _db.historyDao.deleteHistory("One Piece", "one-piece/");
-      final result = await _db.bookmarkDao.listAllBookmark(5, offset: 0);
+      final result = await _db.historyDao.listAllHistory();
 
       expect(result.length, 0);
     });

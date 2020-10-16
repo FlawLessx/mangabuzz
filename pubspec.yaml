@@ -61,6 +61,8 @@ dependencies:
   url_launcher: ^5.7.2
   cool_alert: ^1.0.1
   shared_preferences: ^0.5.12
+  auto_size_text: ^2.1.0
+  flutter_slidable: ^0.5.7
   flutter_localizations:
     sdk: flutter
 

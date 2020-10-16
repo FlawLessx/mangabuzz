@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/core/model/manga/manga_model.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bookmark_item.dart';
-import 'package:mangabuzz/screen/ui/history/history_item.dart';
-import 'package:mangabuzz/screen/widget/manga_item/manga_item.dart';
 
+import '../../../core/bloc/search_bloc/search_bloc.dart';
+import '../../../core/localization/langguage_constants.dart';
+import '../../../core/model/manga/manga_model.dart';
+import '../../ui/bookmark/bookmark_item.dart';
+import '../../ui/history/history_item.dart';
 import '../circular_progress.dart';
+import '../manga_item/manga_item.dart';
 
 class SearchWidget extends SearchDelegate<Manga> {
   final Bloc<SearchEvent, SearchState> searchBloc;
@@ -87,7 +87,11 @@ class SearchWidget extends SearchDelegate<Manga> {
                 runSpacing: ScreenUtil().setHeight(20),
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: state.listManga
-                    .map((e) => MangaItem(manga: e, maxline: 1))
+                    .map((e) => MangaItem(
+                          manga: e,
+                          maxline: 1,
+                          isHot: false,
+                        ))
                     .toList(),
               );
             } else if (state is SearchBookmarkLoaded) {

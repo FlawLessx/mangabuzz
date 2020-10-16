@@ -4,8 +4,10 @@ import '../../provider/local/moor_db_provider.dart';
 
 class MoorDBRepository {
   // Bookmark Table Repo
-  Future<List<BookmarkModel>> listAllBookmark(int limit, {int offset}) =>
-      moorDBProvider.bookmarkDao.listAllBookmark(limit, offset: offset);
+  Future<int> getBookmarkLength() =>
+      moorDBProvider.bookmarkDao.getBookmarkLength();
+  Future<List<BookmarkModel>> listAllBookmark() =>
+      moorDBProvider.bookmarkDao.listAllBookmark();
   Stream<List<BookmarkModel>> watchAllBookmark() =>
       moorDBProvider.bookmarkDao.watchAllBookmark();
   Future insertBookmark(Bookmark bookmark) =>
@@ -20,8 +22,8 @@ class MoorDBRepository {
       moorDBProvider.bookmarkDao.searchBookmarkByQuery(query);
 
   // History Table Repo
-  Future<List<HistoryModel>> listAllHistory(int limit, {int offset}) =>
-      moorDBProvider.historyDao.listAllHistory(limit, offset: offset);
+  Future<List<HistoryModel>> listAllHistory() =>
+      moorDBProvider.historyDao.listAllHistory();
   Stream<List<HistoryModel>> watchAllHistory() =>
       moorDBProvider.historyDao.watchAllHistory();
   Future insertHistory(History history) =>

@@ -3,17 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/model/manga/manga_model.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/manga_detail/manga_detail_screen.dart';
-import 'package:mangabuzz/screen/widget/circular_progress.dart';
-import 'package:mangabuzz/screen/widget/tag.dart';
+
+import '../../../core/model/manga/manga_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
+import '../../ui/manga_detail/manga_detail_screen.dart';
+import '../circular_progress.dart';
+import '../tag.dart';
 
 class MangaItem extends StatefulWidget {
   final Manga manga;
+  final bool isHot;
   final int maxline;
-  MangaItem({@required this.manga, @required this.maxline});
+  MangaItem(
+      {@required this.manga, @required this.maxline, @required this.isHot});
 
   @override
   _MangaItemState createState() => _MangaItemState();
@@ -69,7 +72,7 @@ class _MangaItemState extends State<MangaItem> {
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    Tag(isHot: true),
+                    widget.isHot == true ? Tag(isHot: true) : SizedBox(),
                     Positioned(
                       bottom: 0,
                       right: 0,

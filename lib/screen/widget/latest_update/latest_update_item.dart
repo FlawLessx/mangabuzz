@@ -1,12 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/screen/ui/chapter/chapter_screen.dart';
 
 import '../../../core/model/latest_update/latest_update_model.dart';
 import '../../../core/util/route_generator.dart';
 import '../../ui/chapter/bloc/chapter_screen_bloc.dart';
+import '../../ui/chapter/chapter_screen.dart';
 import '../../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import '../../ui/manga_detail/manga_detail_screen.dart';
 import '../../util/color_series.dart';
@@ -21,7 +22,7 @@ Widget buildLatestUpdateGridview(LatestUpdate listUpdate) {
       itemCount: listUpdate.latestUpdateList.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: ScreenUtil().setWidth(20),
+          crossAxisSpacing: ScreenUtil().setWidth(10),
           childAspectRatio: 3 / 2,
           mainAxisSpacing: 0),
       itemBuilder: (context, index) {
@@ -143,50 +144,53 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   GestureDetector(
-                                    onTap: () {
-                                      BlocProvider.of<ChapterScreenBloc>(
-                                              context)
-                                          .add(GetChapterScreenData(
-                                              chapterEndpoint: widget
-                                                  .item
-                                                  .listNewChapter[index]
-                                                  .chapterEndpoint,
-                                              selectedIndex: index,
-                                              mangaDetail: null,
-                                              historyModel: null,
-                                              fromHome: true,
-                                              mangaEndpoint:
-                                                  widget.item.mangaEndpoint));
-                                      Navigator.pushNamed(context, chapterRoute,
-                                          arguments: ChapterPageArguments(
-                                              chapterEndpoint: widget
-                                                  .item
-                                                  .listNewChapter[index]
-                                                  .chapterEndpoint,
-                                              selectedIndex: index,
-                                              mangaDetail: null,
-                                              fromHome: true,
-                                              historyModel: null,
-                                              mangaEndpoint:
-                                                  widget.item.mangaEndpoint));
-                                    },
-                                    child: Text(
-                                      widget.item.listNewChapter[index]
-                                          .chapterName,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 12),
-                                    ),
-                                  ),
-                                  Text(
+                                      onTap: () {
+                                        BlocProvider.of<ChapterScreenBloc>(
+                                                context)
+                                            .add(GetChapterScreenData(
+                                                chapterEndpoint: widget
+                                                    .item
+                                                    .listNewChapter[index]
+                                                    .chapterEndpoint,
+                                                selectedIndex: index,
+                                                mangaDetail: null,
+                                                historyModel: null,
+                                                fromHome: true,
+                                                mangaEndpoint:
+                                                    widget.item.mangaEndpoint));
+                                        Navigator.pushNamed(
+                                            context, chapterRoute,
+                                            arguments: ChapterPageArguments(
+                                                chapterEndpoint: widget
+                                                    .item
+                                                    .listNewChapter[index]
+                                                    .chapterEndpoint,
+                                                selectedIndex: index,
+                                                mangaDetail: null,
+                                                fromHome: true,
+                                                historyModel: null,
+                                                mangaEndpoint:
+                                                    widget.item.mangaEndpoint));
+                                      },
+                                      child: AutoSizeText(
+                                        widget.item.listNewChapter[index]
+                                            .chapterName,
+                                        minFontSize: 9,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 12),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      )),
+                                  AutoSizeText(
                                     _convertUpdate(widget
                                         .item.listNewChapter[index].updatedOn),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 10),
-                                  )
+                                    maxLines: 1,
+                                    maxFontSize: 10,
+                                    minFontSize: 9,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ],
                               ),
                             )

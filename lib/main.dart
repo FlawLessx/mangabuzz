@@ -4,13 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/localization/app_localization.dart';
-import 'package:mangabuzz/screen/ui/settings/bloc/settings_screen_bloc.dart';
-import 'package:mangabuzz/screen/widget/drawer/bloc/drawer_widget_bloc.dart';
+import 'package:mangabuzz/screen/ui/settings/cubit/settings_screen_cubit.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'core/bloc/history_bloc/history_bloc.dart';
 import 'core/bloc/search_bloc/search_bloc.dart';
+import 'core/localization/app_localization.dart';
 import 'core/localization/langguage_constants.dart';
 import 'core/util/route_generator.dart';
 import 'screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
@@ -21,6 +20,7 @@ import 'screen/ui/home/bloc/home_screen_bloc.dart';
 import 'screen/ui/latest_update/bloc/latest_update_screen_bloc.dart';
 import 'screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import 'screen/ui/paginated/bloc/paginated_screen_bloc.dart';
+import 'screen/widget/drawer/bloc/drawer_widget_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -113,8 +113,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<LatestUpdateScreenBloc>(
             create: (context) => LatestUpdateScreenBloc(),
           ),
-          BlocProvider<SettingsScreenBloc>(
-            create: (context) => SettingsScreenBloc(),
+          BlocProvider<SettingsScreenCubit>(
+            create: (context) => SettingsScreenCubit(),
           ),
 
           // Widget BLoC

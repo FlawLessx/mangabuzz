@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:mangabuzz/core/model/best_series/best_series_model.dart';
-import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
-import 'package:mangabuzz/core/model/manga/manga_model.dart';
-import 'package:mangabuzz/core/repository/remote/api_repository.dart';
-import 'package:mangabuzz/core/util/connectivity_check.dart';
+
+import '../../../../core/model/best_series/best_series_model.dart';
+import '../../../../core/model/latest_update/latest_update_model.dart';
+import '../../../../core/model/manga/manga_model.dart';
+import '../../../../core/repository/remote/api_repository.dart';
+import '../../../../core/util/connectivity_check.dart';
 
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/screen/ui/error/error_screen.dart';
-import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/paginated/paginated_screen_placeholder.dart';
-import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
-import 'package:mangabuzz/screen/widget/manga_item/manga_item.dart';
-import 'package:mangabuzz/screen/widget/paginated_button.dart';
-import 'package:mangabuzz/screen/widget/refresh_snackbar.dart';
+
+import '../../../core/localization/langguage_constants.dart';
+import '../../widget/drawer/drawer_widget.dart';
+import '../../widget/manga_item/manga_item.dart';
+import '../../widget/paginated_button.dart';
+import '../../widget/refresh_snackbar.dart';
+import '../error/error_screen.dart';
+import 'bloc/paginated_screen_bloc.dart';
+import 'paginated_screen_placeholder.dart';
 
 class PaginatedPageArguments {
   final String name;
@@ -172,7 +173,11 @@ class _PaginatedPageState extends State<PaginatedPage> {
                         runSpacing: ScreenUtil().setHeight(20),
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: state.paginatedManga.result
-                            .map((e) => MangaItem(manga: e, maxline: 1))
+                            .map((e) => MangaItem(
+                                  manga: e,
+                                  maxline: 1,
+                                  isHot: false,
+                                ))
                             .toList(),
                       ),
                       Row(
@@ -257,7 +262,11 @@ class _PaginatedPageState extends State<PaginatedPage> {
                 ),
               );
             } else if (state is PaginatedScreenError) {
-              return ErrorPage();
+              return RefreshIndicator(
+                  onRefresh: () async {
+                    _getData(widget.pageNumber);
+                  },
+                  child: ErrorPage());
             } else {
               return buildPaginatedScreenPlaceholder(context);
             }

@@ -10,8 +10,8 @@ class ErrorPage extends StatelessWidget {
       child: Center(
         child: Image.asset(
           "resources/img/error.png",
-          width: ScreenUtil().setWidth(400),
-          height: ScreenUtil().setWidth(400),
+          width: ScreenUtil().setWidth(600),
+          height: ScreenUtil().setWidth(600),
           filterQuality: FilterQuality.high,
         ),
       ),

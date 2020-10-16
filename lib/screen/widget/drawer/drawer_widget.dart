@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:mangabuzz/core/model/drawer/drawer_model.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/paginated/bloc/paginated_screen_bloc.dart';
-import 'package:mangabuzz/screen/ui/paginated/paginated_screen.dart';
-import 'package:mangabuzz/screen/widget/drawer/bloc/drawer_widget_bloc.dart';
-import 'package:mangabuzz/screen/widget/genre_item.dart';
+
+import '../../../core/localization/langguage_constants.dart';
+import '../../../core/model/drawer/drawer_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../../ui/paginated/bloc/paginated_screen_bloc.dart';
+import '../../ui/paginated/paginated_screen.dart';
+import '../genre_item.dart';
+import 'bloc/drawer_widget_bloc.dart';
 
 class DrawerWidget extends StatefulWidget {
   final int selectedIndex;
@@ -30,7 +32,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     List<DrawerItem> items = [
       DrawerItem(
-          text: "Home",
+          text: getTranslated(context, "homeMenu"),
           icons: LineIcons.home,
           selectedIndex: 1,
           function: () {
@@ -169,7 +171,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   color: Colors.black,
                 ),
                 title: Text(
-                  "Genres",
+                  getTranslated(context, "genres"),
                   style: TextStyle(
                       fontFamily: "Poppins-Bold", color: Colors.black),
                 ),
@@ -236,7 +238,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       5 == widget.selectedIndex ? Colors.white : Colors.black,
                 ),
                 title: Text(
-                  "Settings",
+                  getTranslated(context, "settingsName"),
                   style: TextStyle(
                       fontFamily: "Poppins-Bold",
                       color: 5 == widget.selectedIndex
