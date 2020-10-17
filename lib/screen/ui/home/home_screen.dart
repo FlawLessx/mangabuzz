@@ -99,9 +99,6 @@ class _HomePageState extends State<HomePage> {
                       height: ScreenUtil().setHeight(10),
                     ),
                     buildHotMangaUpdate(state.listHotMangaUpdate),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(20),
-                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(20)),

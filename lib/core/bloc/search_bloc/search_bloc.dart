@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
+import '../../../injection_container.dart';
 import '../../model/bookmark/bookmark_model.dart';
 import '../../model/history/history_model.dart';
 import '../../model/manga/manga_model.dart';
@@ -17,9 +18,9 @@ part 'search_state.dart';
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(SearchInitial());
 
-  APIRepository _apiRepository = APIRepository();
-  MoorDBRepository _moorRepository = MoorDBRepository();
-  ConnectivityCheck _connectivityCheck = ConnectivityCheck();
+  final _apiRepository = sl.get<APIRepository>();
+  final _moorRepository = sl.get<MoorDBRepository>();
+  final _connectivityCheck = sl.get<ConnectivityCheck>();
 
   @override
   Stream<SearchState> mapEventToState(

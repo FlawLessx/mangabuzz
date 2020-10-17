@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
+import '../../../injection_container.dart';
 import '../../model/bookmark/bookmark_model.dart';
 import '../../provider/local/moor_db_provider.dart';
 import '../../repository/local/moor_repository.dart';
@@ -14,7 +15,7 @@ part 'bookmark_state.dart';
 
 class BookmarkBloc extends Bloc<BookmarkEvent, BookmarkState> {
   BookmarkBloc() : super(BookmarkInitial());
-  final _moorDBRepository = MoorDBRepository();
+  final _moorDBRepository = sl.get<MoorDBRepository>();
 
   @override
   Stream<BookmarkState> mapEventToState(

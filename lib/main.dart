@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'core/bloc/history_bloc/history_bloc.dart';
@@ -25,9 +24,6 @@ import 'screen/widget/drawer/bloc/drawer_widget_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ScreenUtil.init(
-    allowFontScaling: true,
-  );
   await di.init();
   await FlutterDownloader.initialize(
       debug: false // optional: set false to disable printing logs to console
@@ -50,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    RouteGenerator routeGenerator = RouteGenerator();
+    final routeGenerator = sl.get<RouteGenerator>();
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Color(0xFFa78df7)));
 

@@ -7,6 +7,7 @@ import 'package:moor_flutter/moor_flutter.dart';
 import '../../../../core/model/latest_update/latest_update_model.dart';
 import '../../../../core/repository/remote/api_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'latest_update_screen_event.dart';
 part 'latest_update_screen_state.dart';
@@ -16,8 +17,8 @@ class LatestUpdateScreenBloc
   LatestUpdateScreenBloc() : super(LatestUpdateScreenInitial());
 
   // Variables
-  final apiRepo = APIRepository();
-  final connectivity = ConnectivityCheck();
+  final apiRepo = sl.get<APIRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
 
   @override
   Stream<LatestUpdateScreenState> mapEventToState(

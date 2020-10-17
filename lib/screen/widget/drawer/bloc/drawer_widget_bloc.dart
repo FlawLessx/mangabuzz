@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/model/genre/genre_model.dart';
 import '../../../../core/repository/remote/api_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'drawer_widget_event.dart';
 part 'drawer_widget_state.dart';
@@ -15,8 +16,8 @@ class DrawerWidgetBloc extends Bloc<DrawerWidgetEvent, DrawerWidgetState> {
   DrawerWidgetBloc() : super(DrawerWidgetInitial());
 
   // Variables
-  final apiRepo = APIRepository();
-  final connectivity = ConnectivityCheck();
+  final apiRepo = sl.get<APIRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
 
   @override
   Stream<DrawerWidgetState> mapEventToState(

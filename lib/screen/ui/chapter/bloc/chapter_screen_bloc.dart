@@ -9,6 +9,7 @@ import '../../../../core/model/history/history_model.dart';
 import '../../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../../core/repository/remote/api_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'chapter_screen_event.dart';
 part 'chapter_screen_state.dart';
@@ -17,8 +18,8 @@ class ChapterScreenBloc extends Bloc<ChapterScreenEvent, ChapterScreenState> {
   ChapterScreenBloc() : super(ChapterScreenInitial());
 
   // Variables
-  final apiRepo = APIRepository();
-  final connectivity = ConnectivityCheck();
+  final apiRepo = sl.get<APIRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
 
   @override
   Stream<ChapterScreenState> mapEventToState(

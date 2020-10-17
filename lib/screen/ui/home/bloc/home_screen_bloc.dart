@@ -9,6 +9,7 @@ import '../../../../core/model/latest_update/latest_update_model.dart';
 import '../../../../core/model/manga/manga_model.dart';
 import '../../../../core/repository/remote/api_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'home_screen_event.dart';
 part 'home_screen_state.dart';
@@ -17,8 +18,8 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   HomeScreenBloc() : super(HomeScreenInitial());
 
   // Variables
-  final apiRepo = APIRepository();
-  final connectivity = ConnectivityCheck();
+  final apiRepo = sl.get<APIRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
 
   @override
   Stream<HomeScreenState> mapEventToState(

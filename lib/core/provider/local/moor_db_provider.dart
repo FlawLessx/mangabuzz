@@ -349,4 +349,4 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
 }
 
 // Call Database
-final moorDBProvider = MyDatabase();
+//final moorDBProvider = MyDatabase();

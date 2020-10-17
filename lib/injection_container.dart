@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:mangabuzz/screen/util/color_series.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'core/bloc/history_bloc/history_bloc.dart';
@@ -20,6 +21,7 @@ import 'screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import 'screen/ui/paginated/bloc/paginated_screen_bloc.dart';
 import 'screen/ui/settings/cubit/settings_screen_cubit.dart';
 import 'screen/widget/drawer/bloc/drawer_widget_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
@@ -31,17 +33,21 @@ Future<void> init() async {
   sl.registerFactory(() => SearchBloc());
 
   // Provider
-  sl.registerLazySingleton(() => MyDatabase());
-  sl.registerLazySingleton(() => APIProvider(client: sl()));
-  sl.registerLazySingleton(() => http.Client);
+  sl.registerLazySingleton<MyDatabase>(() => MyDatabase());
+  sl.registerLazySingleton<http.Client>(() => http.Client());
+  sl.registerLazySingleton<APIProvider>(
+      () => APIProvider(client: sl.get<http.Client>()));
+
+  final sharedPref = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPref);
 
   // Repository
-  sl.registerLazySingleton(() => APIRepository());
-  sl.registerLazySingleton(() => MoorDBRepository());
+  sl.registerLazySingleton<APIRepository>(() => APIRepository());
+  sl.registerLazySingleton<MoorDBRepository>(() => MoorDBRepository());
 
   // Util
-  sl.registerLazySingleton(() => ConnectivityCheck());
-  sl.registerLazySingleton(() => RouteGenerator());
+  sl.registerLazySingleton<ConnectivityCheck>(() => ConnectivityCheck());
+  sl.registerLazySingleton<RouteGenerator>(() => RouteGenerator());
 
   //! Screen
   //Screen BLoC
@@ -57,4 +63,7 @@ Future<void> init() async {
 
   // Widget BLoC
   sl.registerFactory(() => DrawerWidgetBloc());
+
+  // Util
+  sl.registerLazySingleton<ColorSeries>(() => ColorSeries());
 }

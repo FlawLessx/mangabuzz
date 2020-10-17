@@ -8,6 +8,7 @@ import 'package:moor_flutter/moor_flutter.dart';
 import '../../../../core/model/history/history_model.dart';
 import '../../../../core/repository/local/moor_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'history_screen_event.dart';
 part 'history_screen_state.dart';
@@ -16,8 +17,8 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
   HistoryScreenBloc() : super(HistoryScreenInitial());
 
   // Variables
-  final dbRepo = MoorDBRepository();
-  final connectivity = ConnectivityCheck();
+  final dbRepo = sl.get<MoorDBRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
   List<HistoryModel> listHistoryModel = [];
   int startIndex;
   int endIndex;

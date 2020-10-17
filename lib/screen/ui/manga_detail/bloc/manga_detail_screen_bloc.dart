@@ -10,6 +10,7 @@ import '../../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../../core/repository/local/moor_repository.dart';
 import '../../../../core/repository/remote/api_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'manga_detail_screen_event.dart';
 part 'manga_detail_screen_state.dart';
@@ -19,9 +20,9 @@ class MangaDetailScreenBloc
   MangaDetailScreenBloc() : super(MangaDetailScreenInitial());
 
   // Variables
-  final apiRepo = APIRepository();
-  final dbRepo = MoorDBRepository();
-  final connectivity = ConnectivityCheck();
+  final apiRepo = sl.get<APIRepository>();
+  final dbRepo = sl.get<MoorDBRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
 
   @override
   Stream<MangaDetailScreenState> mapEventToState(

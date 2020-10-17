@@ -49,6 +49,8 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, allowFontScaling: true);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: null,

@@ -8,6 +8,7 @@ import 'package:moor_flutter/moor_flutter.dart';
 import '../../../../core/model/bookmark/bookmark_model.dart';
 import '../../../../core/repository/local/moor_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'bookmark_screen_event.dart';
 part 'bookmark_screen_state.dart';
@@ -17,8 +18,8 @@ class BookmarkScreenBloc
   BookmarkScreenBloc() : super(BookmarkScreenInitial());
 
   // Variables
-  final dbRepo = MoorDBRepository();
-  final connectivity = ConnectivityCheck();
+  final dbRepo = sl.get<MoorDBRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
   List<BookmarkModel> listBookmarkModel = [];
   int startIndex, endIndex;
 
@@ -65,7 +66,6 @@ class BookmarkScreenBloc
 
       List<BookmarkModel> data;
       BookmarkScreenLoaded bookmarkScreenLoaded = state as BookmarkScreenLoaded;
-
 
       if (startIndex <= listBookmarkModel.length) {
         startIndex = bookmarkScreenLoaded.listBookmarkData.length + 1;

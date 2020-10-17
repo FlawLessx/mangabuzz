@@ -8,6 +8,7 @@ import '../../../../core/model/genre/genre_model.dart';
 import '../../../../core/model/manga/manga_model.dart';
 import '../../../../core/repository/remote/api_repository.dart';
 import '../../../../core/util/connectivity_check.dart';
+import '../../../../injection_container.dart';
 
 part 'explore_screen_event.dart';
 part 'explore_screen_state.dart';
@@ -16,8 +17,8 @@ class ExploreScreenBloc extends Bloc<ExploreScreenEvent, ExploreScreenState> {
   ExploreScreenBloc() : super(ExploreScreenInitial());
 
   // Variables
-  final apiRepo = APIRepository();
-  final connectivity = ConnectivityCheck();
+  final apiRepo = sl.get<APIRepository>();
+  final connectivity = sl.get<ConnectivityCheck>();
 
   @override
   Stream<ExploreScreenState> mapEventToState(

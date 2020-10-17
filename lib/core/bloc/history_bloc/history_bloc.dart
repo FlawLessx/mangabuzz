@@ -8,12 +8,14 @@ import 'package:mangabuzz/core/provider/local/moor_db_provider.dart';
 import 'package:mangabuzz/core/repository/local/moor_repository.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
+import '../../../injection_container.dart';
+
 part 'history_event.dart';
 part 'history_state.dart';
 
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   HistoryBloc() : super(HistoryInitial());
-  MoorDBRepository _moorDBRepository = MoorDBRepository();
+  final _moorDBRepository = sl.get<MoorDBRepository>();
 
   @override
   Stream<HistoryState> mapEventToState(
