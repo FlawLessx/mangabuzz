@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
 import '../../../core/bloc/search_bloc/search_bloc.dart';
-import '../../../core/localization/langguage_constants.dart';
 import '../../../core/model/genre/genre_model.dart';
 import '../../../core/model/manga/manga_model.dart';
 import '../../../core/util/route_generator.dart';
@@ -63,7 +63,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: SearchBar(
-          text: getTranslated(context, 'searchHome'),
+          text: 'searchHome'.tr(),
           function: () {
             showSearch(
                 context: context,
@@ -173,7 +173,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 child: Row(
                   children: [
                     Text(
-                      getTranslated(context, 'showAll'),
+                      'showAll'.tr(),
                       style: TextStyle(
                           fontFamily: "Poppins-Medium",
                           fontSize: 13,

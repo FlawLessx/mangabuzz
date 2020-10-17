@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:line_icons/line_icons.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../core/model/drawer/drawer_model.dart';
 import '../../../core/util/route_generator.dart';
 import '../../ui/paginated/bloc/paginated_screen_bloc.dart';
@@ -32,7 +32,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     List<DrawerItem> items = [
       DrawerItem(
-          text: getTranslated(context, "homeMenu"),
+          text: "homeMenu".tr(),
           icons: LineIcons.home,
           selectedIndex: 1,
           function: () {
@@ -171,7 +171,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   color: Colors.black,
                 ),
                 title: Text(
-                  getTranslated(context, "genres"),
+                  "genres".tr(),
                   style: TextStyle(
                       fontFamily: "Poppins-Bold", color: Colors.black),
                 ),
@@ -238,7 +238,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       5 == widget.selectedIndex ? Colors.white : Colors.black,
                 ),
                 title: Text(
-                  getTranslated(context, "settingsName"),
+                  "settingsName".tr(),
                   style: TextStyle(
                       fontFamily: "Poppins-Bold",
                       color: 5 == widget.selectedIndex

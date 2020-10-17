@@ -1,13 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mangabuzz/core/bloc/history_bloc/history_bloc.dart';
-import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import '../../../core/bloc/history_bloc/history_bloc.dart';
 import '../../../core/model/history/history_model.dart';
 import '../../../core/util/route_generator.dart';
 import '../../widget/circular_progress.dart';
@@ -15,6 +14,7 @@ import '../../widget/rating.dart';
 import '../../widget/tag.dart';
 import '../manga_detail/bloc/manga_detail_screen_bloc.dart';
 import '../manga_detail/manga_detail_screen.dart';
+import 'bloc/history_screen_bloc.dart';
 
 class HistoryItem extends StatefulWidget {
   final HistoryModel historyModel;
@@ -179,11 +179,11 @@ class _HistoryItemState extends State<HistoryItem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${widget.historyModel.chapterReached} ${getTranslated(context, 'chapterReached')}",
+                        "${widget.historyModel.chapterReached} ${'chapterReached'.tr()}",
                         style: TextStyle(fontSize: 11),
                       ),
                       Text(
-                        "${widget.historyModel.totalChapter} ${getTranslated(context, 'chapterTotal')}",
+                        "${widget.historyModel.totalChapter} ${'chapterTotal'.tr()}",
                         style: TextStyle(color: Colors.grey, fontSize: 11),
                       )
                     ],
@@ -218,7 +218,7 @@ class _HistoryItemState extends State<HistoryItem> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: ScreenUtil().setWidth(30),
                                     vertical: ScreenUtil().setWidth(10)),
-                                child: Text(getTranslated(context, 'continue'),
+                                child: Text('continue'.tr(),
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontFamily: "Poppins-SemiBold")),

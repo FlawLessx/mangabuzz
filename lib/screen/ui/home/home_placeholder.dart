@@ -2,7 +2,7 @@ import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../widget/latest_update/latest_update_item_placeholder.dart';
 import '../../widget/manga_item/manga_item_placeholder.dart';
 
@@ -24,7 +24,7 @@ Widget buildHomeScreenPlaceholder(BuildContext context) {
               height: ScreenUtil().setHeight(30),
             ),
             Text(
-              getTranslated(context, 'hotSeriesUpdate'),
+              'hotSeriesUpdate'.tr(),
               style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
             ),
             SizedBox(
@@ -47,7 +47,7 @@ Widget buildHomeScreenPlaceholder(BuildContext context) {
               ),
             ),
             Text(
-              getTranslated(context, "infoLatestUpdate"),
+              "infoLatestUpdate".tr(),
               style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
             ),
             SizedBox(

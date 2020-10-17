@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mangabuzz/core/bloc/bookmark_bloc/bookmark_bloc.dart';
-import 'package:mangabuzz/screen/ui/bookmark/bloc/bookmark_screen_bloc.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import '../../../core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import '../../../core/model/bookmark/bookmark_model.dart';
 import '../../../core/util/route_generator.dart';
 import '../../widget/circular_progress.dart';
@@ -14,6 +13,7 @@ import '../../widget/rating.dart';
 import '../../widget/tag.dart';
 import '../manga_detail/bloc/manga_detail_screen_bloc.dart';
 import '../manga_detail/manga_detail_screen.dart';
+import 'bloc/bookmark_screen_bloc.dart';
 
 class BookmarkItem extends StatefulWidget {
   final BookmarkModel bookmarkModel;
@@ -183,7 +183,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: ScreenUtil().setWidth(30),
                                     vertical: ScreenUtil().setWidth(10)),
-                                child: Text(getTranslated(context, 'detail'),
+                                child: Text('detail'.tr(),
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontFamily: "Poppins-SemiBold")),

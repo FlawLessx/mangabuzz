@@ -1,4 +1,4 @@
-package com.example.mangabuzz
+package com.flawlessx.mangabuzz
 
 import io.flutter.embedding.android.FlutterActivity
 

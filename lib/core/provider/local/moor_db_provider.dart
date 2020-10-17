@@ -54,11 +54,12 @@ LazyDatabase _openConnection() {
 //
 // This connection only for testing
 //
+/*
 LazyDatabase _testConnection() {
   return LazyDatabase(() async {
     return VmDatabase.memory();
   });
-}
+} */
 
 @UseMoor(tables: [Bookmarks, Historys], daos: [BookmarkDao, HistoryDao])
 class MyDatabase extends _$MyDatabase {

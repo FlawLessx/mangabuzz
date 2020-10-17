@@ -83,7 +83,7 @@ class _CarousellState extends State<Carousell> {
                               Align(
                                 alignment: Alignment.topRight,
                                 child: Container(
-                                  height: ScreenUtil().setHeight(100),
+                                  width: ScreenUtil().setHeight(200),
                                   decoration: BoxDecoration(
                                       color:
                                           colorSeries.generateColor(item.type),
@@ -95,6 +95,7 @@ class _CarousellState extends State<Carousell> {
                                         ScreenUtil().setWidth(10)),
                                     child: Text(
                                       item.type,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -106,7 +107,7 @@ class _CarousellState extends State<Carousell> {
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                  height: ScreenUtil().setHeight(150),
+                                  height: ScreenUtil().setHeight(120),
                                   width: double.infinity,
                                   color: Colors.black45,
                                   child: Center(

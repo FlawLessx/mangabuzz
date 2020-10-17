@@ -1,13 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/bloc/search_bloc/search_bloc.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/screen/ui/error/error_screen.dart';
-import 'package:mangabuzz/screen/widget/search/search_page.dart';
 
+import '../../../core/bloc/search_bloc/search_bloc.dart';
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/search/search_bar.dart';
+import '../../widget/search/search_page.dart';
+import '../error/error_screen.dart';
 import 'bloc/bookmark_screen_bloc.dart';
 import 'bookmark_item.dart';
 import 'bookmark_placeholder.dart';
@@ -56,7 +56,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: SearchBar(
-        text: getTranslated(context, "searchBookmark"),
+        text: "searchBookmark".tr(),
         function: () {
           showSearch(
               context: context,
@@ -92,7 +92,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                     EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
                 children: [
                   Text(
-                    getTranslated(context, "bookmarkedSeries"),
+                    "bookmarkedSeries".tr(),
                     style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                   ),
                   ListView.builder(

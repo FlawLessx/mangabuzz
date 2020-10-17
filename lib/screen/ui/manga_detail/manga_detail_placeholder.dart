@@ -2,7 +2,7 @@ import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../widget/manga_item/manga_item_placeholder.dart';
 import '../../widget/round_button.dart';
 
@@ -51,14 +51,14 @@ Widget buildMangaDetailPagePlaceholder(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  getTranslated(context, "chapterList"),
+                  "chapterList".tr(),
                   style: TextStyle(
                       fontFamily: "Poppins-Bold",
                       fontSize: 16,
                       color: Colors.black),
                 ),
                 Text(
-                  getTranslated(context, "download"),
+                  "download".tr(),
                   style: TextStyle(
                       fontFamily: "Poppins-Bold",
                       fontSize: 16,

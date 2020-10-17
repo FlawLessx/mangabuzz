@@ -4,10 +4,8 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-import '../../core/localization/langguage_constants.dart';
-import '../../core/util/connectivity_check.dart';
-import '../../core/util/route_generator.dart';
 import '../widget/drawer/drawer_widget.dart';
 import 'bookmark/bloc/bookmark_screen_bloc.dart';
 import 'bookmark/bookmark_screen.dart';
@@ -25,7 +23,6 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
-  ConnectivityCheck connectivityCheck = ConnectivityCheck();
   static List<Widget> widgetList = <Widget>[
     HomePage(),
     ExplorePage(),
@@ -85,22 +82,22 @@ class _BaseScreenState extends State<BaseScreen> {
                     GButton(
                       icon: LineIcons.home,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: getTranslated(context, "homeMenu"),
+                      text: "homeMenu".tr(),
                     ),
                     GButton(
                       icon: LineIcons.compass,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: getTranslated(context, "exploreMenu"),
+                      text: "exploreMenu".tr(),
                     ),
                     GButton(
                       icon: Icons.favorite_border,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: getTranslated(context, "bookmarkMenu"),
+                      text: "bookmarkMenu".tr(),
                     ),
                     GButton(
                       icon: LineIcons.history,
                       iconSize: ScreenUtil().setHeight(60),
-                      text: getTranslated(context, "historyMenu"),
+                      text: "historyMenu".tr(),
                     ),
                   ],
                   selectedIndex: _selectedIndex,
@@ -112,21 +109,5 @@ class _BaseScreenState extends State<BaseScreen> {
             ),
           )),
     );
-  }
-}
-
-class Test extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      child: Center(
-          child: FlatButton(
-              onPressed: () => Navigator.pushNamed(
-                    context,
-                    chapterRoute,
-                  ),
-              child: Text("Tap"))),
-    ));
   }
 }

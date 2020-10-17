@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
 import '../../../core/bloc/search_bloc/search_bloc.dart';
-import '../../../core/localization/langguage_constants.dart';
 import '../../../core/model/manga/manga_model.dart';
 import '../../../core/util/route_generator.dart';
 import '../../widget/latest_update/latest_update_item.dart';
@@ -18,6 +17,7 @@ import '../latest_update/latest_update_screen.dart';
 import 'bloc/home_screen_bloc.dart';
 import 'carousell.dart';
 import 'home_placeholder.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         extendBodyBehindAppBar: false,
         appBar: SearchBar(
-          text: getTranslated(context, "searchHome"),
+          text: 'searchHome'.tr(),
           function: () {
             showSearch(
                 context: context,
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                             height: ScreenUtil().setHeight(30),
                           ),
                           Text(
-                            getTranslated(context, 'hotSeriesUpdate'),
+                            'hotSeriesUpdate'.tr(),
                             style: TextStyle(
                                 fontFamily: "Poppins-Bold", fontSize: 16),
                           ),
@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(20)),
                       child: Text(
-                        getTranslated(context, "infoLatestUpdate"),
+                        "infoLatestUpdate".tr(),
                         style:
                             TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                       ),
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         PaginatedButton(
-                            text: getTranslated(context, "nextPaginatedButton"),
+                            text: "nextPaginatedButton".tr(),
                             icons: Icons.chevron_right,
                             function: () {
                               BlocProvider.of<LatestUpdateScreenBloc>(context)
@@ -163,7 +163,9 @@ class _HomePageState extends State<HomePage> {
         mainAxisSize: MainAxisSize.min,
         children: listManga
             .map((item) => Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(15)),
+                  padding: EdgeInsets.only(
+                      top: ScreenUtil().setHeight(15),
+                      right: ScreenUtil().setWidth(10)),
                   child: MangaItem(
                     manga: item,
                     maxline: 2,

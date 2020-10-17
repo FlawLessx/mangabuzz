@@ -1,0 +1,49 @@
+str,en_US,id_ID
+appName,Mangabuzz,Mangabuzz
+searchHome,Search Something...,Cari Sesuatu...
+searchBookmark,Search Bookmark...,Cari Bookmark...
+searchHistory,Search History...,Cari Riwayat...
+homeMenu,Home,Rumah
+exploreMenu,Explore,Jelajahi
+bookmarkMenu,Bookmark,Ditandai
+historyMenu,History,Riwayat
+hotSeriesUpdate,Hot Series Update,Pembaruan Seri Populer
+detail,Detail,Selengkapnya
+chapterList,Chapter List,List Chapter
+download,Download,Unduh
+chapterReached,Chapter Reached,Chapter Dicapai
+chapterRemains,Chapter Remaining,Chapter Tersisa
+continueRead,Continue Read,Lanjutkan Membaca
+startRead,Start Read,Mulai Baca
+settingsName,Settings,Pengaturan
+langguange,Langguage Settings,Pengaturan Bahasa
+miscellaneous,Miscellaneous,Lainnya
+clearCache,Clear Cache,Bersihkan Cache
+infoCache,Cache is useful for storing and then displaying downloaded images so you don't need to download them again,Cache berguna untuk menyimpan lalu menampilkan gambar yang sudah terunduh sehingga tidak perlu mengunduh lagi
+chapterNow,Chapter,Chapter
+fromTotalChapter,From,Dari
+listManga,List Manga,List Manga
+listManhua,List Manhua,List Manhua
+listManhwa,List Manhwa,List Manhwa
+searchQuery,Result for,Hasil untuk
+contactMe,Contact Me,Hubungi Saya
+checkNewRelease,Check New Release,Cek Rilis Terbaru
+confirmClearBtnText,Clear,Bersihkan
+cancelClearBtnText,Cancel,Batal
+prevPaginatedButton,Prev,Sebelumnya
+nextPaginatedButton,Next,Selanjutnya
+storagePermission,Please enable storage permissions to start download,Harap aktifkan izin penyimpanan untuk mulai mengunduh
+addToBookmarkTooltip,Add to bookmark,Tambahkan ke ditandai
+trimCollapsedText,...Show more,...Lebih banyak
+trimExpandedText, Show less, Lebih sedikit
+infoReleased,Released,Dirilis
+infoType,Type,Tipe
+infoLatestUpdate,Latest Update,Update Terakhir
+chapterTotal,Chapter Total,Total Chapter
+continue,Continue,Lanjutkan
+readHistory,Read History,Riwayat Baca
+showAll,Show All,Lihat Semua
+selectChapter,Select Chapter,Pilih Chapter
+fromChapter,From,Dari
+bookmarkedSeries,Bookmarked Series,Series Ditandai
+genres,Genres,Genre

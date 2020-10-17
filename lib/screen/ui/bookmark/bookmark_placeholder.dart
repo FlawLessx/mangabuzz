@@ -2,7 +2,7 @@ import 'package:content_placeholder/content_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 Widget buildBookmarkScreenPlaceholder(BuildContext context) {
   List count = [1, 2, 3];
@@ -11,7 +11,7 @@ Widget buildBookmarkScreenPlaceholder(BuildContext context) {
     padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
     children: [
       Text(
-        getTranslated(context, 'bookmarkedSeries'),
+        'bookmarkedSeries'.tr(),
         style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
       ),
       SizedBox(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../core/model/history/history_model.dart';
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../core/util/route_generator.dart';
@@ -78,11 +78,11 @@ class MangaDetailNavbar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          "${historyModel.chapterReached} ${getTranslated(context, 'chapterReached')}",
+                          "${historyModel.chapterReached} ${'chapterReached'.tr()}",
                           style: TextStyle(
                               fontSize: 13, fontFamily: "Poppins-Medium")),
                       Text(
-                        "${mangaDetail.chapterList.length - historyModel.chapterReached} ${getTranslated(context, 'chapterRemains')}",
+                        "${mangaDetail.chapterList.length - historyModel.chapterReached} ${'chapterRemains'.tr()}",
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ],
@@ -94,8 +94,8 @@ class MangaDetailNavbar extends StatelessWidget {
               },
               child: Chip(
                 label: historyModel != null
-                    ? Text(getTranslated(context, "continueRead"))
-                    : Text(getTranslated(context, "startRead")),
+                    ? Text("continueRead".tr())
+                    : Text("startRead".tr()),
                 labelStyle: TextStyle(
                     color: Colors.white,
                     fontFamily: "Poppins-Bold",

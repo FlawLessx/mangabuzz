@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../widget/manga_item/manga_item_placeholder.dart';
 
 Widget buildPaginatedScreenPlaceholder(BuildContext context) {
@@ -14,7 +14,7 @@ Widget buildPaginatedScreenPlaceholder(BuildContext context) {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       children: [
         Text(
-          getTranslated(context, "searchQuery"),
+          "searchQuery".tr(),
           style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
         ),
         SizedBox(height: ScreenUtil().setWidth(20)),

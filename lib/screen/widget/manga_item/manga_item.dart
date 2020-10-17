@@ -94,7 +94,7 @@ class _MangaItemState extends State<MangaItem> {
             Text(
               widget.manga.title,
               maxLines: widget.maxline,
-              overflow: TextOverflow.clip,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: TextStyle(fontFamily: 'Poppins-SemiBold', fontSize: 13),
             ),

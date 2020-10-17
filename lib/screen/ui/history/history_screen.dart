@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/bloc/search_bloc/search_bloc.dart';
-import '../../../core/localization/langguage_constants.dart';
 import '../../widget/refresh_snackbar.dart';
 import '../../widget/search/search_bar.dart';
 import '../../widget/search/search_page.dart';
@@ -56,7 +56,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     return Scaffold(
         appBar: SearchBar(
-          text: getTranslated(context, 'searchHistory'),
+          text: 'searchHistory'.tr(),
           function: () {
             showSearch(
                 context: context,
@@ -94,7 +94,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       horizontal: ScreenUtil().setWidth(20)),
                   children: [
                     Text(
-                      getTranslated(context, 'readHistory'),
+                      'readHistory'.tr(),
                       style:
                           TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                     ),

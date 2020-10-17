@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
 import '../../../core/bloc/search_bloc/search_bloc.dart';
-import '../../../core/localization/langguage_constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../core/model/manga/manga_model.dart';
 import '../../ui/bookmark/bookmark_item.dart';
 import '../../ui/history/history_item.dart';
@@ -72,7 +72,7 @@ class SearchWidget extends SearchDelegate<Manga> {
       padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
       children: [
         Text(
-          "${getTranslated(context, 'searchQuery')} '$query'",
+          "${'searchQuery'.tr()} '$query'",
           style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
         ),
         SizedBox(

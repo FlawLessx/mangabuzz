@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
-import 'package:mangabuzz/core/model/paginated_manga/paginated_manga_model.dart';
 
-import '../../../core/localization/langguage_constants.dart';
+import '../../../core/model/paginated_manga/paginated_manga_model.dart';
 import '../../widget/drawer/drawer_widget.dart';
 import '../../widget/manga_item/manga_item.dart';
 import '../../widget/paginated_button.dart';
@@ -161,7 +161,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
                     padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                     children: [
                       Text(
-                        "${getTranslated(context, 'searchQuery')} ${state.name}",
+                        "${'searchQuery'.tr()} ${state.name}",
                         style:
                             TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
                       ),
@@ -209,7 +209,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
         Visibility(
           visible: paginatedManga.previousPage != 0 ? true : false,
           child: PaginatedButton(
-              text: getTranslated(context, "prevPaginatedButton"),
+              text: "prevPaginatedButton".tr(),
               icons: Icons.chevron_left,
               leftIcon: true,
               function: () {
@@ -260,7 +260,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
             ? Visibility(
                 visible: paginatedManga.nextPage != 0 ? true : false,
                 child: PaginatedButton(
-                    text: getTranslated(context, "nextPaginatedButton"),
+                    text: "nextPaginatedButton".tr(),
                     icons: Icons.chevron_right,
                     function: () {
                       _getData(paginatedManga.nextPage);

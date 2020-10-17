@@ -2,20 +2,20 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mangabuzz/core/bloc/history_bloc/history_bloc.dart';
-import 'package:mangabuzz/core/localization/langguage_constants.dart';
-import 'package:mangabuzz/core/model/history/history_model.dart';
-import 'package:mangabuzz/core/util/route_generator.dart';
-import 'package:mangabuzz/screen/ui/error/error_screen.dart';
-import 'package:mangabuzz/screen/widget/circular_progress.dart';
-import 'package:mangabuzz/screen/widget/refresh_snackbar.dart';
 
+import '../../../core/bloc/history_bloc/history_bloc.dart';
+import '../../../core/model/history/history_model.dart';
 import '../../../core/model/manga_detail/manga_detail_model.dart';
+import '../../../core/util/route_generator.dart';
+import '../../widget/circular_progress.dart';
+import '../../widget/refresh_snackbar.dart';
 import '../../widget/round_button.dart';
+import '../error/error_screen.dart';
 import 'bloc/chapter_screen_bloc.dart';
 import 'chapter_appbar.dart';
 import 'chapter_placholder.dart';
@@ -292,7 +292,7 @@ class _ChapterPageState extends State<ChapterPage> {
                             fontFamily: "Poppins-Medium", fontSize: 14),
                       ),
                       Text(
-                        "${getTranslated(context, 'fromChapter')} ${mangaDetail.chapterList.length} chapter",
+                        "${'fromChapter'.tr()} ${mangaDetail.chapterList.length} chapter",
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       )
                     ],

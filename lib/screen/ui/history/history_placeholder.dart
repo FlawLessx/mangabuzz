@@ -1,8 +1,7 @@
 import 'package:content_placeholder/content_placeholder.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../core/localization/langguage_constants.dart';
 
 Widget buildHistoryScreenPlaceholder(BuildContext context) {
   List count = [1, 2, 3, 4];
@@ -11,7 +10,7 @@ Widget buildHistoryScreenPlaceholder(BuildContext context) {
     padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
     children: [
       Text(
-        getTranslated(context, 'readHistory'),
+        'readHistory'.tr(),
         style: TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
       ),
       ListView.builder(

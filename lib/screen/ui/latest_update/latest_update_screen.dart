@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 
-import '../../../core/localization/langguage_constants.dart';
 import '../../widget/latest_update/latest_update_item.dart';
 import '../../widget/latest_update/latest_update_item_placeholder.dart';
 import '../../widget/paginated_button.dart';
@@ -68,7 +68,7 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
             builder: (context, state) {
               if (state is LatestUpdateScreenLoaded) {
                 return Text(
-                  getTranslated(context, 'infoLatestUpdate'),
+                  'infoLatestUpdate'.tr(),
                   style: TextStyle(
                       color: Colors.white, fontFamily: "Poppins-Bold"),
                 );
@@ -117,8 +117,7 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                         children: [
                           state.latestUpdate.previousPage != 0
                               ? PaginatedButton(
-                                  text: getTranslated(
-                                      context, "prevPaginatedButton"),
+                                  text: "prevPaginatedButton".tr(),
                                   icons: Icons.chevron_left,
                                   leftIcon: true,
                                   function: () {
@@ -169,8 +168,7 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                             visible:
                                 state.latestUpdate.nextPage != 0 ? true : false,
                             child: PaginatedButton(
-                                text: getTranslated(
-                                    context, "nextPaginatedButton"),
+                                text: "nextPaginatedButton".tr(),
                                 icons: Icons.chevron_right,
                                 function: () {
                                   _getData(state.latestUpdate.nextPage);

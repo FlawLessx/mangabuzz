@@ -10,8 +10,8 @@ abstract class MangaDetailScreenEvent extends Equatable {
 class GetMangaDetailScreenData extends MangaDetailScreenEvent {
   final String mangaEndpoint;
   final String title;
-  GetMangaDetailScreenData({@required this.mangaEndpoint, @required this.title})
-      : assert(mangaEndpoint != null, title != null);
+  GetMangaDetailScreenData(
+      {@required this.mangaEndpoint, @required this.title});
 
   @override
   List<Object> get props => [mangaEndpoint, title];

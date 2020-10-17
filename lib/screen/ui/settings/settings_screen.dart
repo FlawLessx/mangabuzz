@@ -8,8 +8,7 @@ import 'package:mangabuzz/core/model/language/language_model.dart';
 import 'package:mangabuzz/screen/ui/settings/cubit/settings_screen_cubit.dart';
 import 'package:mangabuzz/screen/widget/drawer/drawer_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../main.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -42,8 +41,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _changeLanguage(Language language) async {
-    Locale _locale = await setLocale(language.languageCode);
-    MyApp.setLocale(context, _locale);
+    await setLocale(language.locale.languageCode);
+    context.locale = language.locale;
   }
 
   @override
@@ -65,7 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
           backgroundColor: Theme.of(context).primaryColor,
           centerTitle: true,
           title: Text(
-            getTranslated(context, "settingsName"),
+            "settingsName".tr(),
             style: TextStyle(color: Colors.white, fontFamily: "Poppins-Bold"),
           ),
         ),
@@ -90,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                getTranslated(context, "langguange"),
+                                "langguange".tr(),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: "Poppins-SemiBold",
@@ -162,7 +161,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                getTranslated(context, "miscellaneous"),
+                                "miscellaneous".tr(),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: "Poppins-SemiBold",
@@ -173,9 +172,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   CoolAlert.show(
                                     context: context,
                                     type: CoolAlertType.warning,
-                                    text: getTranslated(context, "infoCache"),
-                                    confirmBtnText: getTranslated(
-                                        context, "confirmClearBtnText"),
+                                    text: "infoCache".tr(),
+                                    confirmBtnText: "confirmClearBtnText".tr(),
                                     confirmBtnColor: Colors.red,
                                     onConfirmBtnTap: () {
                                       context
@@ -183,13 +181,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                           .clearCache();
                                       Navigator.pop(context);
                                     },
-                                    cancelBtnText: getTranslated(
-                                        context, "cancelClearBtnText"),
+                                    cancelBtnText: "cancelClearBtnText".tr(),
                                     showCancelBtn: true,
                                   );
                                 },
                                 title: Text(
-                                  getTranslated(context, "clearCache"),
+                                  "clearCache".tr(),
                                   style: TextStyle(fontSize: 14),
                                 ),
                                 trailing: Icon(Icons.chevron_right),
@@ -203,7 +200,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   _lauchEmail();
                                 },
                                 title: Text(
-                                  getTranslated(context, "contactMe"),
+                                  "contactMe".tr(),
                                   style: TextStyle(fontSize: 14),
                                 ),
                                 trailing: Icon(Icons.chevron_right),
@@ -217,7 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   _lauchUrl();
                                 },
                                 title: Text(
-                                  getTranslated(context, "checkNewRelease"),
+                                  "checkNewRelease".tr(),
                                   style: TextStyle(fontSize: 14),
                                 ),
                                 trailing: Icon(Icons.chevron_right),
