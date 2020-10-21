@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'core/bloc/history_bloc/history_bloc.dart';
@@ -24,10 +24,8 @@ import 'screen/widget/drawer/bloc/drawer_widget_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GestureBinding.instance.resamplingEnabled = true;
   await di.init();
-  await FlutterDownloader.initialize(
-      debug: false // optional: set false to disable printing logs to console
-      );
 
   runApp(EasyLocalization(
       supportedLocales: [Locale('en', 'US'), Locale('id', 'ID')],
@@ -106,6 +104,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Mangabuzz',
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
+            accentColor: Color(0xFFa78df7),
             fontFamily: 'Poppins-Regular',
             primaryColor: Color(0xFFa78df7)),
       ),

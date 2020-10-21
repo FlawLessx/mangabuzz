@@ -231,7 +231,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     Container(
                       child: Center(
                         child: Text(
-                          "Mangabuzz App v1.0.0",
+                          "Mangabuzz App v1.0.1",
                           style: TextStyle(
                               color: Colors.grey,
                               fontFamily: "Poppins-Medium",

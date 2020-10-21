@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 
 import '../../../core/model/latest_update/latest_update_model.dart';
 import '../../../core/util/route_generator.dart';
+import '../../../injection_container.dart';
 import '../../ui/chapter/bloc/chapter_screen_bloc.dart';
 import '../../ui/chapter/chapter_screen.dart';
 import '../../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
@@ -14,12 +15,12 @@ import '../../util/color_series.dart';
 import '../circular_progress.dart';
 import '../tag.dart';
 
-Widget buildLatestUpdateGridview(LatestUpdate listUpdate) {
+Widget buildLatestUpdateGridview(LatestUpdate listUpdate, bool fullLength) {
   return GridView.builder(
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       physics: NeverScrollableScrollPhysics(),
-      itemCount: listUpdate.latestUpdateList.length,
+      itemCount: fullLength == true ? listUpdate.latestUpdateList.length : 10,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: ScreenUtil().setWidth(10),
@@ -39,10 +40,14 @@ class LatestUpdateItem extends StatefulWidget {
 }
 
 class _LatestUpdateItemState extends State<LatestUpdateItem> {
-  ColorSeries colorSeries = ColorSeries();
+  final colorSeries = sl.get<ColorSeries>();
 
   String _convertUpdate(String data) {
     var result = data.split(" ");
+
+    if (result[1] == 'seconds') {
+      result[1] = 'sec';
+    }
 
     return "${result[0]} ${result[1]}";
   }
@@ -89,9 +94,6 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
               widget.item.hotTag != ""
                   ? Positioned(left: 0, top: 0, child: Tag(isHot: true))
                   : SizedBox(),
-              widget.item.newTag != ""
-                  ? Positioned(right: 0, top: 0, child: Tag(isHot: false))
-                  : SizedBox()
             ],
           ),
           SizedBox(
@@ -138,7 +140,8 @@ class _LatestUpdateItemState extends State<LatestUpdateItem> {
                               width: ScreenUtil().setHeight(20),
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Theme.of(context).primaryColor),
+                                  color: colorSeries
+                                      .generateColor(widget.item.type)),
                             ),
                             SizedBox(width: ScreenUtil().setWidth(5)),
                             Flexible(

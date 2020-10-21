@@ -35,6 +35,7 @@ class Historys extends Table {
   IntColumn get chapterReached => integer().nullable()();
   IntColumn get selectedIndex => integer().nullable()();
   IntColumn get totalChapter => integer().nullable()();
+  TextColumn get chapterReachedName => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {title};
@@ -66,7 +67,17 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(onCreate: (Migrator m) {
+        return m.createAll();
+      }, onUpgrade: (Migrator m, int from, int to) async {
+        if (from == 1) {
+          // we added the dueDate property in the change from version 1
+          await m.addColumn(historys, historys.chapterReachedName);
+        }
+      });
 }
 
 //
@@ -242,7 +253,8 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             rating: rows.rating,
             chapterReached: rows.chapterReached,
             selectedIndex: rows.selectedIndex,
-            totalChapter: rows.totalChapter);
+            totalChapter: rows.totalChapter,
+            chapterReachedName: rows.chapterReachedName);
       }).get();
     } catch (e) {
       throw Exception(e.toString());
@@ -263,7 +275,8 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
               rating: e.rating,
               chapterReached: e.chapterReached,
               selectedIndex: e.selectedIndex,
-              totalChapter: e.totalChapter);
+              totalChapter: e.totalChapter,
+              chapterReachedName: e.chapterReachedName);
         }).toList();
       });
     } catch (e) {
@@ -319,7 +332,8 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             rating: rows.rating,
             chapterReached: rows.chapterReached,
             selectedIndex: rows.selectedIndex,
-            totalChapter: rows.totalChapter);
+            totalChapter: rows.totalChapter,
+            chapterReachedName: rows.chapterReachedName);
       }).getSingle();
     } catch (e) {
       throw Exception(e.toString());
@@ -340,13 +354,11 @@ class HistoryDao extends DatabaseAccessor<MyDatabase> with _$HistoryDaoMixin {
             rating: rows.rating,
             chapterReached: rows.chapterReached,
             selectedIndex: rows.selectedIndex,
-            totalChapter: rows.totalChapter);
+            totalChapter: rows.totalChapter,
+            chapterReachedName: rows.chapterReachedName);
       }).get();
     } catch (e) {
       throw Exception(e.toString());
     }
   }
 }
-
-// Call Database
-//final moorDBProvider = MyDatabase();

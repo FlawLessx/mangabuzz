@@ -30,21 +30,32 @@ class _BaseScreenState extends State<BaseScreen> {
     HistoryPage()
   ];
 
+  PageController pageController;
+
   @override
   void initState() {
+    super.initState();
     _getPermissions();
+    pageController = PageController(
+      initialPage: 0,
+      keepPage: true,
+    );
     BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
     BlocProvider.of<ExploreScreenBloc>(context).add(GetExploreScreenData());
     BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
     BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
-    super.initState();
   }
 
   _getPermissions() async {
     await [
-      Permission.notification,
       Permission.storage,
     ].request();
+  }
+
+  void pageChanged(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -52,64 +63,78 @@ class _BaseScreenState extends State<BaseScreen> {
     ScreenUtil.init(context, allowFontScaling: true);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: null,
-      drawer: DrawerWidget(
-        selectedIndex: 1,
-      ),
-      body: widgetList[_selectedIndex],
-      bottomNavigationBar: Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
-          ]),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(15),
-                vertical: ScreenUtil().setHeight(10),
-              ),
-              child: GNav(
-                  gap: 8,
-                  activeColor: Theme.of(context).primaryColor,
-                  color: Colors.grey,
-                  textStyle: TextStyle(
-                      fontFamily: 'Poppins-Medium',
-                      fontSize: 14,
-                      color: Theme.of(context).primaryColor),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  duration: Duration(milliseconds: 800),
-                  tabBackgroundColor:
-                      Theme.of(context).primaryColor.withOpacity(0.15),
-                  tabs: [
-                    GButton(
-                      icon: LineIcons.home,
-                      iconSize: ScreenUtil().setHeight(60),
-                      text: "homeMenu".tr(),
-                    ),
-                    GButton(
-                      icon: LineIcons.compass,
-                      iconSize: ScreenUtil().setHeight(60),
-                      text: "exploreMenu".tr(),
-                    ),
-                    GButton(
-                      icon: Icons.favorite_border,
-                      iconSize: ScreenUtil().setHeight(60),
-                      text: "bookmarkMenu".tr(),
-                    ),
-                    GButton(
-                      icon: LineIcons.history,
-                      iconSize: ScreenUtil().setHeight(60),
-                      text: "historyMenu".tr(),
-                    ),
-                  ],
-                  selectedIndex: _selectedIndex,
-                  onTabChange: (index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  }),
+        appBar: null,
+        drawer: DrawerWidget(
+          selectedIndex: 1,
+        ),
+        body: buildPageView(),
+        bottomNavigationBar: bottomNavbar());
+  }
+
+  Widget buildPageView() {
+    return PageView(
+        controller: pageController,
+        onPageChanged: (index) {
+          pageChanged(index);
+        },
+        children: widgetList);
+  }
+
+  Widget bottomNavbar() {
+    return Container(
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(0.2))
+        ]),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: ScreenUtil().setWidth(15),
+              vertical: ScreenUtil().setHeight(10),
             ),
-          )),
-    );
+            child: GNav(
+                gap: 8,
+                activeColor: Theme.of(context).primaryColor,
+                color: Colors.grey,
+                textStyle: TextStyle(
+                    fontFamily: 'Poppins-Medium',
+                    fontSize: 14,
+                    color: Theme.of(context).primaryColor),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                duration: Duration(milliseconds: 800),
+                tabBackgroundColor:
+                    Theme.of(context).primaryColor.withOpacity(0.10),
+                tabs: [
+                  GButton(
+                    icon: LineIcons.home,
+                    iconSize: ScreenUtil().setHeight(60),
+                    text: "homeMenu".tr(),
+                  ),
+                  GButton(
+                    icon: LineIcons.compass,
+                    iconSize: ScreenUtil().setHeight(60),
+                    text: "exploreMenu".tr(),
+                  ),
+                  GButton(
+                    icon: Icons.favorite_border,
+                    iconSize: ScreenUtil().setHeight(60),
+                    text: "bookmarkMenu".tr(),
+                  ),
+                  GButton(
+                    icon: LineIcons.history,
+                    iconSize: ScreenUtil().setHeight(60),
+                    text: "historyMenu".tr(),
+                  ),
+                ],
+                selectedIndex: _selectedIndex,
+                onTabChange: (index) {
+                  setState(() {
+                    _selectedIndex = index;
+                    pageController.animateToPage(index,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease);
+                  });
+                }),
+          ),
+        ));
   }
 }

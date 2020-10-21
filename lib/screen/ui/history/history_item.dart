@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -178,13 +179,21 @@ class _HistoryItemState extends State<HistoryItem> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "${widget.historyModel.chapterReached} ${'chapterReached'.tr()}",
+                      AutoSizeText(
+                        "${widget.historyModel.chapterReachedName} ${'chapterReached'.tr()}",
                         style: TextStyle(fontSize: 11),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        maxFontSize: 11,
+                        minFontSize: 10,
                       ),
-                      Text(
+                      AutoSizeText(
                         "${widget.historyModel.totalChapter} ${'chapterTotal'.tr()}",
                         style: TextStyle(color: Colors.grey, fontSize: 11),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        maxFontSize: 11,
+                        minFontSize: 10,
                       )
                     ],
                   ),

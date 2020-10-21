@@ -561,6 +561,7 @@ class History extends DataClass implements Insertable<History> {
   final int chapterReached;
   final int selectedIndex;
   final int totalChapter;
+  final String chapterReachedName;
   History(
       {@required this.title,
       @required this.mangaEndpoint,
@@ -570,7 +571,8 @@ class History extends DataClass implements Insertable<History> {
       this.rating,
       this.chapterReached,
       this.selectedIndex,
-      this.totalChapter});
+      this.totalChapter,
+      this.chapterReachedName});
   factory History.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -594,6 +596,8 @@ class History extends DataClass implements Insertable<History> {
           .mapFromDatabaseResponse(data['${effectivePrefix}selected_index']),
       totalChapter: intType
           .mapFromDatabaseResponse(data['${effectivePrefix}total_chapter']),
+      chapterReachedName: stringType.mapFromDatabaseResponse(
+          data['${effectivePrefix}chapter_reached_name']),
     );
   }
   @override
@@ -626,6 +630,9 @@ class History extends DataClass implements Insertable<History> {
     if (!nullToAbsent || totalChapter != null) {
       map['total_chapter'] = Variable<int>(totalChapter);
     }
+    if (!nullToAbsent || chapterReachedName != null) {
+      map['chapter_reached_name'] = Variable<String>(chapterReachedName);
+    }
     return map;
   }
 
@@ -652,6 +659,9 @@ class History extends DataClass implements Insertable<History> {
       totalChapter: totalChapter == null && nullToAbsent
           ? const Value.absent()
           : Value(totalChapter),
+      chapterReachedName: chapterReachedName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(chapterReachedName),
     );
   }
 
@@ -668,6 +678,8 @@ class History extends DataClass implements Insertable<History> {
       chapterReached: serializer.fromJson<int>(json['chapterReached']),
       selectedIndex: serializer.fromJson<int>(json['selectedIndex']),
       totalChapter: serializer.fromJson<int>(json['totalChapter']),
+      chapterReachedName:
+          serializer.fromJson<String>(json['chapterReachedName']),
     );
   }
   @override
@@ -683,6 +695,7 @@ class History extends DataClass implements Insertable<History> {
       'chapterReached': serializer.toJson<int>(chapterReached),
       'selectedIndex': serializer.toJson<int>(selectedIndex),
       'totalChapter': serializer.toJson<int>(totalChapter),
+      'chapterReachedName': serializer.toJson<String>(chapterReachedName),
     };
   }
 
@@ -695,7 +708,8 @@ class History extends DataClass implements Insertable<History> {
           String rating,
           int chapterReached,
           int selectedIndex,
-          int totalChapter}) =>
+          int totalChapter,
+          String chapterReachedName}) =>
       History(
         title: title ?? this.title,
         mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
@@ -706,6 +720,7 @@ class History extends DataClass implements Insertable<History> {
         chapterReached: chapterReached ?? this.chapterReached,
         selectedIndex: selectedIndex ?? this.selectedIndex,
         totalChapter: totalChapter ?? this.totalChapter,
+        chapterReachedName: chapterReachedName ?? this.chapterReachedName,
       );
   @override
   String toString() {
@@ -718,7 +733,8 @@ class History extends DataClass implements Insertable<History> {
           ..write('rating: $rating, ')
           ..write('chapterReached: $chapterReached, ')
           ..write('selectedIndex: $selectedIndex, ')
-          ..write('totalChapter: $totalChapter')
+          ..write('totalChapter: $totalChapter, ')
+          ..write('chapterReachedName: $chapterReachedName')
           ..write(')'))
         .toString();
   }
@@ -738,8 +754,10 @@ class History extends DataClass implements Insertable<History> {
                           rating.hashCode,
                           $mrjc(
                               chapterReached.hashCode,
-                              $mrjc(selectedIndex.hashCode,
-                                  totalChapter.hashCode)))))))));
+                              $mrjc(
+                                  selectedIndex.hashCode,
+                                  $mrjc(totalChapter.hashCode,
+                                      chapterReachedName.hashCode))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -752,7 +770,8 @@ class History extends DataClass implements Insertable<History> {
           other.rating == this.rating &&
           other.chapterReached == this.chapterReached &&
           other.selectedIndex == this.selectedIndex &&
-          other.totalChapter == this.totalChapter);
+          other.totalChapter == this.totalChapter &&
+          other.chapterReachedName == this.chapterReachedName);
 }
 
 class HistorysCompanion extends UpdateCompanion<History> {
@@ -765,6 +784,7 @@ class HistorysCompanion extends UpdateCompanion<History> {
   final Value<int> chapterReached;
   final Value<int> selectedIndex;
   final Value<int> totalChapter;
+  final Value<String> chapterReachedName;
   const HistorysCompanion({
     this.title = const Value.absent(),
     this.mangaEndpoint = const Value.absent(),
@@ -775,6 +795,7 @@ class HistorysCompanion extends UpdateCompanion<History> {
     this.chapterReached = const Value.absent(),
     this.selectedIndex = const Value.absent(),
     this.totalChapter = const Value.absent(),
+    this.chapterReachedName = const Value.absent(),
   });
   HistorysCompanion.insert({
     @required String title,
@@ -786,6 +807,7 @@ class HistorysCompanion extends UpdateCompanion<History> {
     this.chapterReached = const Value.absent(),
     this.selectedIndex = const Value.absent(),
     this.totalChapter = const Value.absent(),
+    this.chapterReachedName = const Value.absent(),
   })  : title = Value(title),
         mangaEndpoint = Value(mangaEndpoint),
         image = Value(image);
@@ -799,6 +821,7 @@ class HistorysCompanion extends UpdateCompanion<History> {
     Expression<int> chapterReached,
     Expression<int> selectedIndex,
     Expression<int> totalChapter,
+    Expression<String> chapterReachedName,
   }) {
     return RawValuesInsertable({
       if (title != null) 'title': title,
@@ -810,6 +833,8 @@ class HistorysCompanion extends UpdateCompanion<History> {
       if (chapterReached != null) 'chapter_reached': chapterReached,
       if (selectedIndex != null) 'selected_index': selectedIndex,
       if (totalChapter != null) 'total_chapter': totalChapter,
+      if (chapterReachedName != null)
+        'chapter_reached_name': chapterReachedName,
     });
   }
 
@@ -822,7 +847,8 @@ class HistorysCompanion extends UpdateCompanion<History> {
       Value<String> rating,
       Value<int> chapterReached,
       Value<int> selectedIndex,
-      Value<int> totalChapter}) {
+      Value<int> totalChapter,
+      Value<String> chapterReachedName}) {
     return HistorysCompanion(
       title: title ?? this.title,
       mangaEndpoint: mangaEndpoint ?? this.mangaEndpoint,
@@ -833,6 +859,7 @@ class HistorysCompanion extends UpdateCompanion<History> {
       chapterReached: chapterReached ?? this.chapterReached,
       selectedIndex: selectedIndex ?? this.selectedIndex,
       totalChapter: totalChapter ?? this.totalChapter,
+      chapterReachedName: chapterReachedName ?? this.chapterReachedName,
     );
   }
 
@@ -866,6 +893,9 @@ class HistorysCompanion extends UpdateCompanion<History> {
     if (totalChapter.present) {
       map['total_chapter'] = Variable<int>(totalChapter.value);
     }
+    if (chapterReachedName.present) {
+      map['chapter_reached_name'] = Variable<String>(chapterReachedName.value);
+    }
     return map;
   }
 
@@ -880,7 +910,8 @@ class HistorysCompanion extends UpdateCompanion<History> {
           ..write('rating: $rating, ')
           ..write('chapterReached: $chapterReached, ')
           ..write('selectedIndex: $selectedIndex, ')
-          ..write('totalChapter: $totalChapter')
+          ..write('totalChapter: $totalChapter, ')
+          ..write('chapterReachedName: $chapterReachedName')
           ..write(')'))
         .toString();
   }
@@ -1006,6 +1037,20 @@ class $HistorysTable extends Historys with TableInfo<$HistorysTable, History> {
     );
   }
 
+  final VerificationMeta _chapterReachedNameMeta =
+      const VerificationMeta('chapterReachedName');
+  GeneratedTextColumn _chapterReachedName;
+  @override
+  GeneratedTextColumn get chapterReachedName =>
+      _chapterReachedName ??= _constructChapterReachedName();
+  GeneratedTextColumn _constructChapterReachedName() {
+    return GeneratedTextColumn(
+      'chapter_reached_name',
+      $tableName,
+      true,
+    );
+  }
+
   @override
   List<GeneratedColumn> get $columns => [
         title,
@@ -1016,7 +1061,8 @@ class $HistorysTable extends Historys with TableInfo<$HistorysTable, History> {
         rating,
         chapterReached,
         selectedIndex,
-        totalChapter
+        totalChapter,
+        chapterReachedName
       ];
   @override
   $HistorysTable get asDslTable => this;
@@ -1078,6 +1124,12 @@ class $HistorysTable extends Historys with TableInfo<$HistorysTable, History> {
           _totalChapterMeta,
           totalChapter.isAcceptableOrUnknown(
               data['total_chapter'], _totalChapterMeta));
+    }
+    if (data.containsKey('chapter_reached_name')) {
+      context.handle(
+          _chapterReachedNameMeta,
+          chapterReachedName.isAcceptableOrUnknown(
+              data['chapter_reached_name'], _chapterReachedNameMeta));
     }
     return context;
   }

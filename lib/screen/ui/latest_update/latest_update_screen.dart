@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
 
 import '../../widget/latest_update/latest_update_item.dart';
 import '../../widget/latest_update/latest_update_item_placeholder.dart';
@@ -59,6 +60,12 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -111,73 +118,10 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                     controller: _scrollController,
                     padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                     children: [
-                      buildLatestUpdateGridview(state.latestUpdate),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          state.latestUpdate.previousPage != 0
-                              ? PaginatedButton(
-                                  text: "prevPaginatedButton".tr(),
-                                  icons: Icons.chevron_left,
-                                  leftIcon: true,
-                                  function: () {
-                                    _getData(state.latestUpdate.previousPage);
-                                  })
-                              : SizedBox(width: ScreenUtil().setWidth(100)),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(20),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Visibility(
-                                  visible: state.latestUpdate.previousPage != 0
-                                      ? true
-                                      : false,
-                                  child: Text(
-                                    state.latestUpdate.previousPage.toString(),
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 14),
-                                  )),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(30),
-                              ),
-                              Text(
-                                state.latestUpdate.currentPage.toString(),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: "Poppins-Medium",
-                                    fontSize: 16),
-                              ),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(30),
-                              ),
-                              state.latestUpdate.nextPage != 0
-                                  ? Text(
-                                      state.latestUpdate.nextPage.toString(),
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 14),
-                                    )
-                                  : SizedBox(width: ScreenUtil().setWidth(100))
-                            ],
-                          ),
-                          SizedBox(
-                            width: ScreenUtil().setWidth(30),
-                          ),
-                          Visibility(
-                            visible:
-                                state.latestUpdate.nextPage != 0 ? true : false,
-                            child: PaginatedButton(
-                                text: "nextPaginatedButton".tr(),
-                                icons: Icons.chevron_right,
-                                function: () {
-                                  _getData(state.latestUpdate.nextPage);
-                                }),
-                          )
-                        ],
-                      ),
+                      buildLatestUpdateGridview(state.latestUpdate, true),
+                      paginationWidget(state.latestUpdate),
                       SizedBox(
-                        height: ScreenUtil().setHeight(60),
+                        height: ScreenUtil().setHeight(40),
                       )
                     ],
                   ),
@@ -185,10 +129,15 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
               );
             } else if (state is LatestUpdateScreenError) {
               return RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
                   onRefresh: () async {
                     _getData(widget.pageNumber);
                   },
-                  child: ErrorPage());
+                  child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: ErrorPage())));
             } else {
               return Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
@@ -197,5 +146,76 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
             }
           },
         ));
+  }
+
+  Widget paginationWidget(LatestUpdate paginatedManga) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Visibility(
+          visible: paginatedManga.previousPage != 0 ? true : false,
+          child: PaginatedButton(
+              text: "prevPaginatedButton".tr(),
+              icons: Icons.chevron_left,
+              leftIcon: true,
+              function: () {
+                _getData(paginatedManga.previousPage);
+              }),
+        ),
+        SizedBox(
+          width: ScreenUtil().setWidth(20),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            paginatedManga.previousPage != 0
+                ? Visibility(
+                    visible: paginatedManga.previousPage != 0 ? true : false,
+                    child: Text(
+                      paginatedManga.previousPage.toString(),
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ))
+                : SizedBox(
+                    width: ScreenUtil().setWidth(100),
+                  ),
+            SizedBox(
+              width: ScreenUtil().setWidth(30),
+            ),
+            Text(
+              paginatedManga.currentPage.toString(),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "Poppins-Medium",
+                  fontSize: 16),
+            ),
+            SizedBox(
+              width: ScreenUtil().setWidth(30),
+            ),
+            Visibility(
+                visible: paginatedManga.nextPage != 0 ? true : false,
+                child: Text(
+                  paginatedManga.nextPage.toString(),
+                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                ))
+          ],
+        ),
+        SizedBox(
+          width: ScreenUtil().setWidth(30),
+        ),
+        paginatedManga.nextPage != 0
+            ? Visibility(
+                visible: paginatedManga.nextPage != 0 ? true : false,
+                child: PaginatedButton(
+                    text: "nextPaginatedButton".tr(),
+                    icons: Icons.chevron_right,
+                    function: () {
+                      _getData(paginatedManga.nextPage);
+                    }),
+              )
+            : SizedBox(
+                width: ScreenUtil().setWidth(100),
+              )
+      ],
+    );
   }
 }

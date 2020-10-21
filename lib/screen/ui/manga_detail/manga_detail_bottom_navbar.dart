@@ -40,20 +40,40 @@ class MangaDetailNavbar extends StatelessWidget {
     } else {
       BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
           chapterEndpoint: mangaDetail
-              .chapterList[historyModel.selectedIndex].chapterEndpoint,
-          selectedIndex: historyModel.selectedIndex,
+              .chapterList[historyModel.selectedIndex - 1].chapterEndpoint,
+          selectedIndex: historyModel.selectedIndex - 1,
           mangaDetail: mangaDetail,
           historyModel: historyModel,
           fromHome: false));
       Navigator.pushNamed(context, chapterRoute,
           arguments: ChapterPageArguments(
               chapterEndpoint: mangaDetail
-                  .chapterList[historyModel.selectedIndex].chapterEndpoint,
-              selectedIndex: historyModel.selectedIndex,
+                  .chapterList[historyModel.selectedIndex - 1].chapterEndpoint,
+              selectedIndex: historyModel.selectedIndex - 1,
               mangaDetail: mangaDetail,
               historyModel: historyModel,
               fromHome: false));
     }
+  }
+
+  int _chapterRemaining(MangaDetail mangaDetail, HistoryModel historyModel) {
+    int result;
+    if (mangaDetail.chapterList[historyModel.selectedIndex - 1].chapterName
+        .split(' ')[1]
+        .contains('.')) {
+      result = int.parse(mangaDetail.chapterList[0].chapterName.split(' ')[1]) -
+          int.parse(mangaDetail
+              .chapterList[historyModel.selectedIndex - 1].chapterName
+              .split(' ')[1]
+              .split('.')[0]);
+    } else {
+      result = int.parse(mangaDetail.chapterList[0].chapterName.split(' ')[1]) -
+          int.parse(mangaDetail
+              .chapterList[historyModel.selectedIndex - 1].chapterName
+              .split(' ')[1]);
+    }
+
+    return result.floor();
   }
 
   @override
@@ -78,11 +98,11 @@ class MangaDetailNavbar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                          "${historyModel.chapterReached} ${'chapterReached'.tr()}",
+                          '''${mangaDetail.chapterList[historyModel.selectedIndex - 1].chapterName.split(' ')[1]} ${'chapterReached'.tr()}''',
                           style: TextStyle(
                               fontSize: 13, fontFamily: "Poppins-Medium")),
                       Text(
-                        "${mangaDetail.chapterList.length - historyModel.chapterReached} ${'chapterRemains'.tr()}",
+                        "${_chapterRemaining(mangaDetail, historyModel)} ${'chapterRemains'.tr()}",
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ],

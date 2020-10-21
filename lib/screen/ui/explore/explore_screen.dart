@@ -32,6 +32,12 @@ class _ExplorePageState extends State<ExplorePage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   _navigateShowAllText(String name, String endpoint, int drawerSelectedIndex,
       {bool isGenre, bool isManga, bool isManhwa, bool isManhua}) {
     BlocProvider.of<PaginatedScreenBloc>(context).add(
@@ -93,65 +99,74 @@ class _ExplorePageState extends State<ExplorePage> {
                 onRefresh: () async {
                   _refresh();
                 },
-                child: ListView(
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   controller: _scrollController,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("Genres", () {}, isGenre: true)),
-                    buildGenres(state.listGenre),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(30),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("List Manga", () {
-                          _navigateShowAllText("Manga", null, 2,
-                              isGenre: false,
-                              isManga: true,
-                              isManhua: false,
-                              isManhwa: false);
-                        })),
-                    buildListManga(state.listManga),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(30),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("List Manhwa", () {
-                          _navigateShowAllText("Manhwa", null, 3,
-                              isGenre: false,
-                              isManga: false,
-                              isManhua: false,
-                              isManhwa: true);
-                        })),
-                    buildListManga(state.listManhwa),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(30),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(20)),
-                        child: textMenu("List Manhua", () {
-                          _navigateShowAllText("Manhua", null, 4,
-                              isGenre: false,
-                              isManga: false,
-                              isManhua: true,
-                              isManhwa: false);
-                        })),
-                    buildListManga(state.listManhua)
-                  ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(20)),
+                          child: textMenu("Genres", () {}, isGenre: true)),
+                      buildGenres(state.listGenre),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(30),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(20)),
+                          child: textMenu("List Manga", () {
+                            _navigateShowAllText("Manga", null, 2,
+                                isGenre: false,
+                                isManga: true,
+                                isManhua: false,
+                                isManhwa: false);
+                          })),
+                      buildListManga(state.listManga),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(30),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(20)),
+                          child: textMenu("List Manhwa", () {
+                            _navigateShowAllText("Manhwa", null, 3,
+                                isGenre: false,
+                                isManga: false,
+                                isManhua: false,
+                                isManhwa: true);
+                          })),
+                      buildListManga(state.listManhwa),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(30),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(20)),
+                          child: textMenu("List Manhua", () {
+                            _navigateShowAllText("Manhua", null, 4,
+                                isGenre: false,
+                                isManga: false,
+                                isManhua: true,
+                                isManhwa: false);
+                          })),
+                      buildListManga(state.listManhua)
+                    ],
+                  ),
                 ),
               );
             } else if (state is ExploreScreenError) {
               return RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
                   onRefresh: () async {
                     _refresh();
                   },
-                  child: ErrorPage());
+                  child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: ErrorPage())));
             } else {
               return buildExploreScreenPlaceholder();
             }
@@ -250,7 +265,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   child: MangaItem(
                     manga: item,
                     maxline: 2,
-                    isHot: true,
+                    isHot: false,
                   ),
                 ))
             .toList(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../core/util/route_generator.dart';
@@ -35,6 +36,10 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
     BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
 
     if (widget.fromHome == false) {
+      BlocProvider.of<MangaDetailScreenBloc>(context).add(
+          GetMangaDetailScreenData(
+              mangaEndpoint: widget.mangaDetail.mangaEndpoint,
+              title: widget.mangaDetail.title));
       Navigator.popUntil(context, ModalRoute.withName(mangaDetailRoute));
     } else {
       Navigator.popUntil(context, ModalRoute.withName(baseRoute));
@@ -69,28 +74,24 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                     width: ScreenUtil().setHeight(110),
                     color: Colors.transparent,
                   ),
-                  Flexible(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.mangaDetail.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 16, fontFamily: "Poppins-Bold"),
-                        ),
-                        ChapterDropdownButton(
-                          mangaDetail: widget.mangaDetail,
-                          chapterEndpoint: widget
-                              .mangaDetail
-                              .chapterList[widget.selectedIndex]
-                              .chapterEndpoint,
-                          selectedIndex: widget.selectedIndex,
-                          fromHome: widget.fromHome,
-                        )
-                      ],
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.mangaDetail.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            TextStyle(fontSize: 16, fontFamily: "Poppins-Bold"),
+                      ),
+                      ChapterDropdownButton(
+                        mangaDetail: widget.mangaDetail,
+                        chapterEndpoint: widget.mangaDetail
+                            .chapterList[widget.selectedIndex].chapterEndpoint,
+                        selectedIndex: widget.selectedIndex,
+                        fromHome: widget.fromHome,
+                      )
+                    ],
                   ),
                   RoundButton(
                       icons: Icons.close,

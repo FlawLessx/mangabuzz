@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/ui/history/bloc/history_screen_bloc.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 
 import '../../../core/bloc/history_bloc/history_bloc.dart';
 import '../../../core/model/history/history_model.dart';
@@ -57,20 +59,10 @@ class ChapterPage extends StatefulWidget {
 
 class _ChapterPageState extends State<ChapterPage> {
   ScrollController _scrollController;
-  bool reachEnd;
 
   @override
   void initState() {
-    _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {
-          if (_scrollController.position.atEdge) {
-            if (_scrollController.position.pixels != 0) reachEnd = true;
-          } else {
-            reachEnd = false;
-          }
-        });
-      });
+    _scrollController = ScrollController();
 
     super.initState();
   }
@@ -83,10 +75,11 @@ class _ChapterPageState extends State<ChapterPage> {
         rating: mangaDetail.rating,
         title: mangaDetail.title,
         type: mangaDetail.type,
-        totalChapter: mangaDetail.chapterList.length,
+        totalChapter: _chapterConvert(mangaDetail, 0),
         selectedIndex: selectedIndex,
-        chapterReached:
-            _getCurrentValue(mangaDetail.chapterList, selectedIndex));
+        chapterReached: _chapterConvert(mangaDetail, selectedIndex),
+        chapterReachedName:
+            mangaDetail.chapterList[selectedIndex].chapterName.split(' ')[1]);
 
     BlocProvider.of<HistoryBloc>(context).add(AddHistory(historyModel: model));
   }
@@ -108,6 +101,22 @@ class _ChapterPageState extends State<ChapterPage> {
     return index;
   }
 
+  int _chapterConvert(MangaDetail mangaDetail, int selectedIndex) {
+    int result;
+    if (mangaDetail.chapterList[selectedIndex].chapterName
+        .split(' ')[1]
+        .contains('.')) {
+      result = int.parse(mangaDetail.chapterList[selectedIndex].chapterName
+          .split(' ')[1]
+          .split('.')[0]);
+    } else {
+      result = int.parse(
+          mangaDetail.chapterList[selectedIndex].chapterName.split(' ')[1]);
+    }
+
+    return result.floor();
+  }
+
   _navigate(String chapterEndpoint, int selectedIndex, MangaDetail mangaDetail,
       bool fromHome) {
     BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
@@ -116,10 +125,29 @@ class _ChapterPageState extends State<ChapterPage> {
         mangaDetail: mangaDetail,
         historyModel: null,
         fromHome: fromHome));
-    Navigator.pushReplacementNamed(
-      context,
-      chapterRoute,
-    );
+    Navigator.pushReplacementNamed(context, chapterRoute,
+        arguments: ChapterPageArguments(
+            chapterEndpoint: chapterEndpoint,
+            selectedIndex: selectedIndex,
+            mangaDetail: mangaDetail,
+            historyModel: null,
+            fromHome: fromHome));
+  }
+
+  _backNavigate() {
+    BlocProvider.of<HistoryScreenBloc>(context)
+        .add(ResetHistoryScreenBlocToInitialState());
+    BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
+
+    if (widget.fromHome == false) {
+      BlocProvider.of<MangaDetailScreenBloc>(context).add(
+          GetMangaDetailScreenData(
+              mangaEndpoint: widget.mangaDetail.mangaEndpoint,
+              title: widget.mangaDetail.title));
+      Navigator.popUntil(context, ModalRoute.withName(mangaDetailRoute));
+    } else {
+      Navigator.popUntil(context, ModalRoute.withName(baseRoute));
+    }
   }
 
   _refresh() {
@@ -142,9 +170,7 @@ class _ChapterPageState extends State<ChapterPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
-        BlocProvider.of<ChapterScreenBloc>(context)
-            .add(InitialStateChapterScreen());
+        _backNavigate();
         return false;
       },
       child: Scaffold(
@@ -196,7 +222,7 @@ class _ChapterPageState extends State<ChapterPage> {
                     controller: _scrollController,
                     child: ListView(
                       controller: _scrollController,
-                      physics: ScrollPhysics(),
+                      physics: AlwaysScrollableScrollPhysics(),
                       children: [
                         InteractiveViewer(
                           child: ListView.builder(
@@ -206,17 +232,16 @@ class _ChapterPageState extends State<ChapterPage> {
                               itemBuilder: (context, index) {
                                 return CachedNetworkImage(
                                   imageUrl: state.chapterImg[index].imageLink,
-                                  placeholder: (context, url) => Container(
+                                  placeholder: (context, string) => Container(
                                     child: Center(
                                       child: SizedBox(
-                                          height: ScreenUtil().setWidth(60),
-                                          width: ScreenUtil().setWidth(60),
+                                          height: ScreenUtil().setWidth(80),
+                                          width: ScreenUtil().setWidth(80),
                                           child:
                                               CustomCircularProgressIndicator()),
                                     ),
                                   ),
-                                  fit: BoxFit.cover,
-                                  errorWidget: (context, url, error) =>
+                                  errorWidget: (context, string, e) =>
                                       Icon(Icons.error),
                                 );
                               }),
@@ -229,10 +254,15 @@ class _ChapterPageState extends State<ChapterPage> {
                 );
               } else if (state is ChapterScreenError) {
                 return RefreshIndicator(
+                    color: Theme.of(context).primaryColor,
                     onRefresh: () async {
                       _refresh();
                     },
-                    child: ErrorPage());
+                    child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Container(
+                            height: MediaQuery.of(context).size.height,
+                            child: ErrorPage())));
               } else {
                 return chapterBodyPlaceholder();
               }
@@ -265,7 +295,7 @@ class _ChapterPageState extends State<ChapterPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  selectedIndex == mangaDetail.chapterList.length
+                  selectedIndex == mangaDetail.chapterList.length - 1
                       ? SizedBox(
                           width: ScreenUtil().setHeight(120),
                         )
@@ -292,7 +322,7 @@ class _ChapterPageState extends State<ChapterPage> {
                             fontFamily: "Poppins-Medium", fontSize: 14),
                       ),
                       Text(
-                        "${'fromChapter'.tr()} ${mangaDetail.chapterList.length} chapter",
+                        "${'fromChapter'.tr()} ${mangaDetail.chapterList[0].chapterName.split(' ')[1]} chapter",
                         style: TextStyle(color: Colors.grey, fontSize: 12),
                       )
                     ],

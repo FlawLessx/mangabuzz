@@ -191,10 +191,15 @@ class _PaginatedPageState extends State<PaginatedPage> {
               );
             } else if (state is PaginatedScreenError) {
               return RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
                   onRefresh: () async {
                     _getData(widget.pageNumber);
                   },
-                  child: ErrorPage());
+                  child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: ErrorPage())));
             } else {
               return buildPaginatedScreenPlaceholder(context);
             }

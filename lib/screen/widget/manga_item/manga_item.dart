@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:mangabuzz/screen/util/rating_check.dart';
+import 'package:mangabuzz/screen/widget/rating.dart';
 
 import '../../../core/model/manga/manga_model.dart';
 import '../../../core/util/route_generator.dart';
+import '../../../injection_container.dart';
 import '../../ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import '../../ui/manga_detail/manga_detail_screen.dart';
 import '../circular_progress.dart';
@@ -23,6 +25,8 @@ class MangaItem extends StatefulWidget {
 }
 
 class _MangaItemState extends State<MangaItem> {
+  final ratingCheck = sl.get<RatingCheck>();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -72,7 +76,9 @@ class _MangaItemState extends State<MangaItem> {
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    widget.isHot == true ? Tag(isHot: true) : SizedBox(),
+                    widget.isHot == true
+                        ? Positioned(left: 0, top: 0, child: Tag(isHot: true))
+                        : SizedBox(),
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -98,27 +104,7 @@ class _MangaItemState extends State<MangaItem> {
               textAlign: TextAlign.center,
               style: TextStyle(fontFamily: 'Poppins-SemiBold', fontSize: 13),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                RatingBarIndicator(
-                  rating: (double.parse(widget.manga.rating) / 2),
-                  itemCount: 5,
-                  itemSize: ScreenUtil().setHeight(40),
-                  itemBuilder: (context, _) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(10),
-                ),
-                Text(
-                  widget.manga.rating,
-                  style: TextStyle(fontSize: 11, color: Colors.grey),
-                )
-              ],
-            ),
+            Rating(rating: widget.manga.rating),
             Text(
               widget.manga.chapter,
               style: TextStyle(fontFamily: 'Poppins-Medium', fontSize: 12),

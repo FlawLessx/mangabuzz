@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 List<HistoryModel> historyFromJson(String str) => List<HistoryModel>.from(
     json.decode(str).map((x) => HistoryModel.fromJson(x)));
 
@@ -11,17 +13,17 @@ String historyToJson(List<HistoryModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class HistoryModel {
-  HistoryModel({
-    this.title,
-    this.mangaEndpoint,
-    this.image,
-    this.author,
-    this.type,
-    this.rating,
-    this.chapterReached,
-    this.selectedIndex,
-    this.totalChapter,
-  });
+  HistoryModel(
+      {this.title,
+      this.mangaEndpoint,
+      this.image,
+      this.author,
+      this.type,
+      this.rating,
+      this.chapterReached,
+      this.selectedIndex,
+      this.totalChapter,
+      @required this.chapterReachedName});
 
   final String title;
   final String mangaEndpoint;
@@ -32,18 +34,19 @@ class HistoryModel {
   final int chapterReached;
   final int selectedIndex;
   int totalChapter;
+  final String chapterReachedName;
 
   factory HistoryModel.fromJson(Map<String, dynamic> json) => HistoryModel(
-        title: json["title"],
-        mangaEndpoint: json["mangaEndpoint"],
-        image: json["image"],
-        author: json["author"],
-        type: json["type"],
-        rating: json["rating"],
-        chapterReached: json["chapterReached"],
-        selectedIndex: json["selectedIndex"],
-        totalChapter: json["totalChapter"],
-      );
+      title: json["title"],
+      mangaEndpoint: json["mangaEndpoint"],
+      image: json["image"],
+      author: json["author"],
+      type: json["type"],
+      rating: json["rating"],
+      chapterReached: json["chapterReached"],
+      selectedIndex: json["selectedIndex"],
+      totalChapter: json["totalChapter"],
+      chapterReachedName: json["chapterReachedName"]);
 
   Map<String, dynamic> toJson() => {
         "title": title,
@@ -55,5 +58,6 @@ class HistoryModel {
         "chapterReached": chapterReached,
         "selectedIndex": selectedIndex,
         "totalChapter": totalChapter,
+        "chapterReachedName": chapterReachedName
       };
 }

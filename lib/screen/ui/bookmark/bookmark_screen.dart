@@ -87,6 +87,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 _refresh();
               },
               child: ListView(
+                physics: AlwaysScrollableScrollPhysics(),
                 controller: _scrollController,
                 padding:
                     EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
@@ -112,10 +113,15 @@ class _BookmarkPageState extends State<BookmarkPage> {
             );
           } else if (state is BookmarkScreenError) {
             return RefreshIndicator(
+                color: Theme.of(context).primaryColor,
                 onRefresh: () async {
                   _refresh();
                 },
-                child: ErrorPage());
+                child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        child: ErrorPage())));
           } else {
             return buildBookmarkScreenPlaceholder(context);
           }

@@ -5,9 +5,7 @@ import '../../../core/model/manga_detail/manga_detail_model.dart';
 
 class ChapterItem extends StatefulWidget {
   final ChapterList chapterListData;
-  final Function downloadFunction;
-  ChapterItem(
-      {@required this.chapterListData, @required this.downloadFunction});
+  ChapterItem({@required this.chapterListData});
 
   @override
   _ChapterItemState createState() => _ChapterItemState();
@@ -19,7 +17,7 @@ class _ChapterItemState extends State<ChapterItem> {
     return Container(
       width: ScreenUtil().setWidth(500),
       decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor.withOpacity(0.15),
+          color: Theme.of(context).primaryColor.withOpacity(0.10),
           borderRadius:
               BorderRadius.all(Radius.circular(ScreenUtil().setHeight(50)))),
       child: Padding(
@@ -30,15 +28,10 @@ class _ChapterItemState extends State<ChapterItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(widget.chapterListData.chapterName,
-                style: TextStyle(color: Theme.of(context).primaryColor)),
-            InkWell(
-              onTap: widget.downloadFunction,
-              child: Icon(
-                Icons.file_download,
-                color: Theme.of(context).primaryColor,
-                size: ScreenUtil().setHeight(70),
-              ),
-            ),
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 14)),
+            Text(widget.chapterListData.updatedOn,
+                style: TextStyle(color: Color(0xFFb8bbc4), fontSize: 12)),
           ],
         ),
       ),

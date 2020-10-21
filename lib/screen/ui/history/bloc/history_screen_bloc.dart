@@ -30,9 +30,10 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
     if (event is ResetHistoryScreenBlocToInitialState) {
       yield HistoryScreenInitial();
     } else if (event is GetHistoryScreenData) {
-      if (state is HistoryScreenInitial)
+      if (state is HistoryScreenInitial) {
+        yield HistoryScreenLoading();
         yield* getHistoryDataInitialToState();
-      else
+      } else
         yield* getHistoryDataToState();
     }
   }

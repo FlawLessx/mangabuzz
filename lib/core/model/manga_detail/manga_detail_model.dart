@@ -75,23 +75,23 @@ class ChapterList {
   ChapterList({
     this.chapterName,
     this.chapterEndpoint,
-    this.chapterDownload,
+    this.updatedOn,
   });
 
   final String chapterName;
   final String chapterEndpoint;
-  final String chapterDownload;
+  final String updatedOn;
 
   factory ChapterList.fromJson(Map<String, dynamic> json) => ChapterList(
         chapterName: json["chapterName"],
         chapterEndpoint: json["chapter_endpoint"],
-        chapterDownload: json["chapterDownload"],
+        updatedOn: json["updatedOn"],
       );
 
   Map<String, dynamic> toJson() => {
         "chapterName": chapterName,
         "chapter_endpoint": chapterEndpoint,
-        "chapterDownload": chapterDownload,
+        "updatedOn": updatedOn,
       };
 }
 

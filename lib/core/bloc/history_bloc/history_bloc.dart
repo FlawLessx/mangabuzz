@@ -25,7 +25,9 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       yield* insertHistoryToState(event);
     else if (event is UpdateHistory)
       yield* updateHistoryToState(event);
-    else if (event is DeleteHistory) yield* deleteHistoryToState(event);
+    else if (event is DeleteHistory)
+      yield* deleteHistoryToState(event);
+    else if (event is GetHistory) yield* getHistoryToState(event);
   }
 
   Stream<HistoryState> insertHistoryToState(AddHistory event) async* {
@@ -45,7 +47,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
             rating: data.rating,
             selectedIndex: data.selectedIndex,
             chapterReached: data.chapterReached,
-            totalChapter: data.totalChapter));
+            totalChapter: data.totalChapter,
+            chapterReachedName: data.chapterReachedName));
 
         yield HistorySuccess();
       } else {
@@ -74,7 +77,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
               ? data.selectedIndex
               : data.selectedIndex + 1,
           chapterReached: data.chapterReached,
-          totalChapter: data.totalChapter));
+          totalChapter: data.totalChapter,
+          chapterReachedName: data.chapterReachedName));
 
       yield HistorySuccess();
     } catch (e) {
@@ -87,6 +91,17 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       _moorDBRepository.deleteHistory(event.title, event.mangaEndpoint);
 
       yield HistorySuccess();
+    } catch (e) {
+      yield HistoryError(error: e.toString());
+    }
+  }
+
+  Stream<HistoryState> getHistoryToState(GetHistory event) async* {
+    try {
+      final data =
+          await _moorDBRepository.getHistory(event.title, event.mangaEndpoint);
+
+      yield HistorySuccess(historyModel: data);
     } catch (e) {
       yield HistoryError(error: e.toString());
     }

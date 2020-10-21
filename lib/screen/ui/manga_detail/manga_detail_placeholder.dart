@@ -58,7 +58,7 @@ Widget buildMangaDetailPagePlaceholder(BuildContext context) {
                       color: Colors.black),
                 ),
                 Text(
-                  "download".tr(),
+                  "updatedOn".tr(),
                   style: TextStyle(
                       fontFamily: "Poppins-Bold",
                       fontSize: 16,
@@ -70,6 +70,7 @@ Widget buildMangaDetailPagePlaceholder(BuildContext context) {
           ListView.builder(
               shrinkWrap: true,
               itemCount: count.length,
+              physics: NeverScrollableScrollPhysics(),
               padding:
                   EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(100)),
               itemBuilder: (context, index) {
@@ -85,25 +86,36 @@ Widget buildMangaDetailPagePlaceholder(BuildContext context) {
 }
 
 Widget buildBottomNavigationPlaceholder() {
-  return ContentPlaceholder(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        ContentPlaceholder.block(
-          topSpacing: ScreenUtil().setHeight(30),
-          bottomSpacing: ScreenUtil().setHeight(10),
-          leftSpacing: ScreenUtil().setWidth(40),
-          height: ScreenUtil().setHeight(100),
-          width: ScreenUtil().setWidth(500),
-        ),
-        ContentPlaceholder.block(
-          height: ScreenUtil().setHeight(80),
-          width: ScreenUtil().setWidth(350),
-          topSpacing: ScreenUtil().setHeight(30),
-          bottomSpacing: ScreenUtil().setHeight(10),
-          rightSpacing: ScreenUtil().setWidth(40),
-        )
-      ],
+  return Container(
+    height: ScreenUtil().setHeight(150),
+    width: double.infinity,
+    decoration: BoxDecoration(color: Colors.white, boxShadow: [
+      BoxShadow(
+          color: Colors.grey.withOpacity(0.7),
+          blurRadius: 2,
+          spreadRadius: 4,
+          offset: Offset(2, 0))
+    ]),
+    child: ContentPlaceholder(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ContentPlaceholder.block(
+            topSpacing: ScreenUtil().setHeight(30),
+            bottomSpacing: ScreenUtil().setHeight(10),
+            leftSpacing: ScreenUtil().setWidth(40),
+            height: ScreenUtil().setHeight(100),
+            width: ScreenUtil().setWidth(500),
+          ),
+          ContentPlaceholder.block(
+            height: ScreenUtil().setHeight(80),
+            width: ScreenUtil().setWidth(350),
+            topSpacing: ScreenUtil().setHeight(30),
+            bottomSpacing: ScreenUtil().setHeight(10),
+            rightSpacing: ScreenUtil().setWidth(40),
+          )
+        ],
+      ),
     ),
   );
 }

@@ -10,7 +10,7 @@ historyMenu,History,Riwayat
 hotSeriesUpdate,Hot Series Update,Pembaruan Seri Populer
 detail,Detail,Selengkapnya
 chapterList,Chapter List,List Chapter
-download,Download,Unduh
+updatedOn,Updated On,Diperbarui Pada
 chapterReached,Chapter Reached,Chapter Dicapai
 chapterRemains,Chapter Remaining,Chapter Tersisa
 continueRead,Continue Read,Lanjutkan Membaca
@@ -47,3 +47,5 @@ selectChapter,Select Chapter,Pilih Chapter
 fromChapter,From,Dari
 bookmarkedSeries,Bookmarked Series,Series Ditandai
 genres,Genres,Genre
+refreshText,Please check your internet connection, try again?,Cek koneksi internet anda
+refreshButton,Refresh,Coba Lagi

@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _scrollController = ScrollController();
     super.initState();
+    _scrollController = ScrollController();
   }
 
   _refresh() {
@@ -40,9 +40,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: false,
         appBar: SearchBar(
           text: 'searchHome'.tr(),
           function: () {
@@ -74,75 +79,85 @@ class _HomePageState extends State<HomePage> {
                 onRefresh: () async {
                   _refresh();
                 },
-                child: ListView(
+                child: SingleChildScrollView(
                   controller: _scrollController,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(20)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(20)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Carousell(itemList: state.listBestSeries),
+                            SizedBox(
+                              height: ScreenUtil().setHeight(30),
+                            ),
+                            Text(
+                              'hotSeriesUpdate'.tr(),
+                              style: TextStyle(
+                                  fontFamily: "Poppins-Bold", fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(10),
+                      ),
+                      buildHotMangaUpdate(state.listHotMangaUpdate),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(20)),
+                        child: Text(
+                          "infoLatestUpdate".tr(),
+                          style: TextStyle(
+                              fontFamily: "Poppins-Bold", fontSize: 16),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: ScreenUtil().setWidth(20)),
+                        child: buildLatestUpdateGridview(
+                            state.listLatestUpdate, false),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Carousell(itemList: state.listBestSeries),
-                          SizedBox(
-                            height: ScreenUtil().setHeight(30),
-                          ),
-                          Text(
-                            'hotSeriesUpdate'.tr(),
-                            style: TextStyle(
-                                fontFamily: "Poppins-Bold", fontSize: 16),
-                          ),
+                          PaginatedButton(
+                              text: "nextPaginatedButton".tr(),
+                              icons: Icons.chevron_right,
+                              function: () {
+                                BlocProvider.of<LatestUpdateScreenBloc>(context)
+                                    .add(GetLatestUpdateScreenData(
+                                        pageNumber:
+                                            state.listLatestUpdate.nextPage));
+                                Navigator.pushNamed(context, latestUpdateRoute,
+                                    arguments: LatestUpdatePageArguments(
+                                        pageNumber:
+                                            state.listLatestUpdate.nextPage));
+                              }),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(10),
-                    ),
-                    buildHotMangaUpdate(state.listHotMangaUpdate),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(20)),
-                      child: Text(
-                        "infoLatestUpdate".tr(),
-                        style:
-                            TextStyle(fontFamily: "Poppins-Bold", fontSize: 16),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(20)),
-                      child: buildLatestUpdateGridview(state.listLatestUpdate),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PaginatedButton(
-                            text: "nextPaginatedButton".tr(),
-                            icons: Icons.chevron_right,
-                            function: () {
-                              BlocProvider.of<LatestUpdateScreenBloc>(context)
-                                  .add(GetLatestUpdateScreenData(
-                                      pageNumber:
-                                          state.listLatestUpdate.nextPage));
-                              Navigator.pushNamed(context, latestUpdateRoute,
-                                  arguments: LatestUpdatePageArguments(
-                                      pageNumber:
-                                          state.listLatestUpdate.nextPage));
-                            }),
-                      ],
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(20),
-                    )
-                  ],
+                      SizedBox(
+                        height: ScreenUtil().setHeight(20),
+                      )
+                    ],
+                  ),
                 ),
               );
             } else if (state is HomeScreenError) {
               return RefreshIndicator(
+                  color: Theme.of(context).primaryColor,
                   onRefresh: () async {
                     _refresh();
                   },
-                  child: ErrorPage());
+                  child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: ErrorPage())));
             } else {
               return buildHomeScreenPlaceholder(context);
             }

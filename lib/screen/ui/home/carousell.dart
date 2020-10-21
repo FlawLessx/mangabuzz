@@ -8,6 +8,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../core/model/best_series/best_series_model.dart';
 import '../../../core/util/route_generator.dart';
+import '../../../injection_container.dart';
 import '../../util/color_series.dart';
 import '../manga_detail/bloc/manga_detail_screen_bloc.dart';
 import '../manga_detail/manga_detail_screen.dart';
@@ -22,7 +23,14 @@ class Carousell extends StatefulWidget {
 
 class _CarousellState extends State<Carousell> {
   int _current = 0;
-  ColorSeries colorSeries = ColorSeries();
+  final colorSeries = sl.get<ColorSeries>();
+  CarouselController _carouselController;
+
+  @override
+  void initState() {
+    _carouselController = CarouselController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +38,7 @@ class _CarousellState extends State<Carousell> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CarouselSlider(
+          carouselController: _carouselController,
           options: CarouselOptions(
               reverse: false,
               autoPlay: true,
@@ -76,14 +85,14 @@ class _CarousellState extends State<Carousell> {
                                             CustomCircularProgressIndicator()),
                                   ),
                                 ),
-                                fit: BoxFit.fitWidth,
+                                fit: BoxFit.cover,
                                 errorWidget: (context, url, error) =>
                                     Icon(Icons.error),
                               ),
-                              Align(
-                                alignment: Alignment.topRight,
+                              Positioned(
+                                top: 0,
+                                right: 0,
                                 child: Container(
-                                  width: ScreenUtil().setHeight(200),
                                   decoration: BoxDecoration(
                                       color:
                                           colorSeries.generateColor(item.type),

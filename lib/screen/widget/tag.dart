@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mangabuzz/screen/util/color_series.dart';
 
+import '../../injection_container.dart';
+
 class Tag extends StatelessWidget {
   final bool isHot;
   Tag({@required this.isHot});
@@ -11,19 +13,21 @@ class Tag extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
       child: Container(
-        height: ScreenUtil().setWidth(60),
-        width: ScreenUtil().setWidth(60),
         decoration: BoxDecoration(
             color: isHot == true ? Color(0xFFDD392E) : Color(0xFFF39800),
             borderRadius:
-                BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20)))),
+                BorderRadius.all(Radius.circular(ScreenUtil().setWidth(15)))),
         child: Center(
-          child: Text(
-            isHot == true ? "H" : "N",
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: "Poppins-SemiBold",
-                fontSize: 13),
+          child: Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+            child: Text(
+              isHot == true ? "H" : "N",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Poppins-SemiBold",
+                  fontSize: 13),
+            ),
           ),
         ),
       ),
@@ -38,7 +42,7 @@ class TypeTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ColorSeries colorSeries = ColorSeries();
+    final colorSeries = sl.get<ColorSeries>();
 
     return Container(
       decoration: BoxDecoration(

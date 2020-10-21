@@ -8,20 +8,16 @@ String chapterToJson(List<Chapter> data) =>
 
 class Chapter {
   Chapter({
-    this.indexImage,
     this.imageLink,
   });
 
-  final String indexImage;
   final String imageLink;
 
   factory Chapter.fromJson(Map<String, dynamic> json) => Chapter(
-        indexImage: json["indexImage"],
         imageLink: json["imageLink"],
       );
 
   Map<String, dynamic> toJson() => {
-        "indexImage": indexImage,
         "imageLink": imageLink,
       };
 }

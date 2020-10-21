@@ -45,7 +45,7 @@ class LatestUpdateList {
     this.mangaEndpoint,
     this.image,
     this.hotTag,
-    this.newTag,
+    this.type,
     this.listNewChapter,
   });
 
@@ -53,7 +53,7 @@ class LatestUpdateList {
   final String mangaEndpoint;
   final String image;
   final String hotTag;
-  final String newTag;
+  final String type;
   final List<ListNewChapter> listNewChapter;
 
   factory LatestUpdateList.fromJson(Map<String, dynamic> json) =>
@@ -62,7 +62,7 @@ class LatestUpdateList {
         mangaEndpoint: json["manga_endpoint"],
         image: json["image"],
         hotTag: json["hotTag"],
-        newTag: json["newTag"],
+        type: json["type"],
         listNewChapter: List<ListNewChapter>.from(
             json["listNewChapter"].map((x) => ListNewChapter.fromJson(x))),
       );
@@ -72,7 +72,7 @@ class LatestUpdateList {
         "manga_endpoint": mangaEndpoint,
         "image": image,
         "hotTag": hotTag,
-        "newTag": newTag,
+        "type": type,
         "listNewChapter":
             List<dynamic>.from(listNewChapter.map((x) => x.toJson())),
       };

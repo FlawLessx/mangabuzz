@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/screen/util/rating_check.dart';
+
+import '../../injection_container.dart';
 
 class Rating extends StatelessWidget {
   final String rating;
+  final ratingCheck = sl.get<RatingCheck>();
   Rating({@required this.rating});
 
   @override
@@ -13,7 +17,7 @@ class Rating extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           RatingBarIndicator(
-            rating: double.parse(rating) / 2,
+            rating: ratingCheck.ratingCheck(rating),
             itemCount: 5,
             itemSize: ScreenUtil().setHeight(40),
             itemBuilder: (context, _) => Icon(

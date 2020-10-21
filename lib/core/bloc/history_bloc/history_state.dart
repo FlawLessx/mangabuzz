@@ -9,7 +9,13 @@ abstract class HistoryState extends Equatable {
 
 class HistoryInitial extends HistoryState {}
 
-class HistorySuccess extends HistoryState {}
+class HistorySuccess extends HistoryState {
+  final HistoryModel historyModel;
+  HistorySuccess({this.historyModel});
+
+  @override
+  List<Object> get props => [historyModel];
+}
 
 class HistoryError extends HistoryState {
   final String error;

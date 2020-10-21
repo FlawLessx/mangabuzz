@@ -39,7 +39,6 @@ class _ChapterDropdownButtonState extends State<ChapterDropdownButton> {
             ));
       },
       child: Container(
-        width: ScreenUtil().setWidth(400),
         height: ScreenUtil().setHeight(80),
         decoration: BoxDecoration(
             borderRadius:

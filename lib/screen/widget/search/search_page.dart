@@ -81,18 +81,22 @@ class SearchWidget extends SearchDelegate<Manga> {
         BlocBuilder<SearchBloc, SearchState>(
           builder: (context, state) {
             if (state is SearchMangaLoaded) {
-              return Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.spaceAround,
-                runSpacing: ScreenUtil().setHeight(20),
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: state.listManga
-                    .map((e) => MangaItem(
-                          manga: e,
-                          maxline: 1,
-                          isHot: false,
-                        ))
-                    .toList(),
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  alignment: WrapAlignment.spaceAround,
+                  runSpacing: ScreenUtil().setHeight(20),
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: state.listManga
+                      .map((e) => MangaItem(
+                            manga: e,
+                            maxline: 2,
+                            isHot: false,
+                          ))
+                      .toList(),
+                ),
               );
             } else if (state is SearchBookmarkLoaded) {
               return ListView.builder(

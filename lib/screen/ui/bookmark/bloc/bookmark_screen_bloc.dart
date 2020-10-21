@@ -30,9 +30,10 @@ class BookmarkScreenBloc
     if (event is ResetBookmarkScreenBlocToInitialState) {
       yield BookmarkScreenInitial();
     } else if (event is GetBookmarkScreenData) {
-      if (state is BookmarkScreenInitial)
+      if (state is BookmarkScreenInitial) {
+        yield BookmarkScreenLoading();
         yield* getBookmarkDataInitialToState();
-      else
+      } else
         yield* getBookmarkDataToState();
     }
   }

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:mangabuzz/screen/util/color_series.dart';
+import 'package:mangabuzz/screen/util/rating_check.dart';
 
 import 'core/bloc/bookmark_bloc/bookmark_bloc.dart';
 import 'core/bloc/history_bloc/history_bloc.dart';
@@ -66,4 +67,5 @@ Future<void> init() async {
 
   // Util
   sl.registerLazySingleton<ColorSeries>(() => ColorSeries());
+  sl.registerLazySingleton<RatingCheck>(() => RatingCheck());
 }
