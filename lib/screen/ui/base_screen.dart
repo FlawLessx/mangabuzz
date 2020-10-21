@@ -36,10 +36,8 @@ class _BaseScreenState extends State<BaseScreen> {
   void initState() {
     super.initState();
     _getPermissions();
-    pageController = PageController(
-      initialPage: 0,
-      keepPage: true,
-    );
+    pageController =
+        PageController(initialPage: 0, keepPage: false, viewportFraction: 0.99);
     BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
     BlocProvider.of<ExploreScreenBloc>(context).add(GetExploreScreenData());
     BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
@@ -73,6 +71,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   Widget buildPageView() {
     return PageView(
+        physics: AlwaysScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: (index) {
           pageChanged(index);
@@ -129,9 +128,7 @@ class _BaseScreenState extends State<BaseScreen> {
                 onTabChange: (index) {
                   setState(() {
                     _selectedIndex = index;
-                    pageController.animateToPage(index,
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease);
+                    pageController.jumpToPage(_selectedIndex);
                   });
                 }),
           ),
