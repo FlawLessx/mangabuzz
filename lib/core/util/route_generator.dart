@@ -64,6 +64,7 @@ class RouteGenerator {
                   mangaDetail: args.mangaDetail,
                   fromHome: args.fromHome,
                   historyModel: args.historyModel,
+                  mangaEndpoint: args.mangaEndpoint,
                 ),
             settings: settings);
         break;

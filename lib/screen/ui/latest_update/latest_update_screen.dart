@@ -7,7 +7,6 @@ import 'package:mangabuzz/core/model/latest_update/latest_update_model.dart';
 import '../../widget/latest_update/latest_update_item.dart';
 import '../../widget/latest_update/latest_update_item_placeholder.dart';
 import '../../widget/paginated_button.dart';
-import '../../widget/refresh_snackbar.dart';
 import '../error/error_screen.dart';
 import 'bloc/latest_update_screen_bloc.dart';
 
@@ -99,13 +98,7 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
           ],
         ),
         body: BlocConsumer<LatestUpdateScreenBloc, LatestUpdateScreenState>(
-          listener: (context, state) {
-            if (state is LatestUpdateScreenError) {
-              Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-                _getData(widget.pageNumber);
-              }));
-            }
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             if (state is LatestUpdateScreenLoaded) {
               return SafeArea(
@@ -118,7 +111,8 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                     controller: _scrollController,
                     padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
                     children: [
-                      buildLatestUpdateGridview(state.latestUpdate, true),
+                      BuildLatestUpdateGridview(
+                          latestUpdate: state.latestUpdate, fullLength: true),
                       paginationWidget(state.latestUpdate),
                       SizedBox(
                         height: ScreenUtil().setHeight(40),
@@ -128,16 +122,7 @@ class _LatestUpdatePageState extends State<LatestUpdatePage> {
                 ),
               );
             } else if (state is LatestUpdateScreenError) {
-              return RefreshIndicator(
-                  color: Theme.of(context).primaryColor,
-                  onRefresh: () async {
-                    _getData(widget.pageNumber);
-                  },
-                  child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Container(
-                          height: MediaQuery.of(context).size.height,
-                          child: ErrorPage())));
+              return ErrorPage(callback: _getData(widget.pageNumber));
             } else {
               return Padding(
                 padding: EdgeInsets.all(ScreenUtil().setWidth(20)),

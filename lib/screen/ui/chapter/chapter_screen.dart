@@ -15,7 +15,6 @@ import '../../../core/model/history/history_model.dart';
 import '../../../core/model/manga_detail/manga_detail_model.dart';
 import '../../../core/util/route_generator.dart';
 import '../../widget/circular_progress.dart';
-import '../../widget/refresh_snackbar.dart';
 import '../../widget/round_button.dart';
 import '../error/error_screen.dart';
 import 'bloc/chapter_screen_bloc.dart';
@@ -29,13 +28,14 @@ class ChapterPageArguments {
   final String mangaEndpoint;
   final bool fromHome;
   final HistoryModel historyModel;
-  ChapterPageArguments(
-      {@required this.chapterEndpoint,
-      @required this.selectedIndex,
-      @required this.mangaDetail,
-      this.mangaEndpoint,
-      @required this.fromHome,
-      @required this.historyModel});
+  ChapterPageArguments({
+    @required this.chapterEndpoint,
+    @required this.selectedIndex,
+    @required this.mangaDetail,
+    this.mangaEndpoint,
+    @required this.fromHome,
+    @required this.historyModel,
+  });
 }
 
 class ChapterPage extends StatefulWidget {
@@ -45,13 +45,14 @@ class ChapterPage extends StatefulWidget {
   final String mangaEndpoint;
   final bool fromHome;
   final HistoryModel historyModel;
-  ChapterPage(
-      {@required this.chapterEndpoint,
-      @required this.selectedIndex,
-      @required this.mangaDetail,
-      this.mangaEndpoint,
-      @required this.fromHome,
-      @required this.historyModel});
+  ChapterPage({
+    @required this.chapterEndpoint,
+    @required this.selectedIndex,
+    @required this.mangaDetail,
+    this.mangaEndpoint,
+    @required this.fromHome,
+    @required this.historyModel,
+  });
 
   @override
   _ChapterPageState createState() => _ChapterPageState();
@@ -135,8 +136,6 @@ class _ChapterPageState extends State<ChapterPage> {
   }
 
   _backNavigate() {
-    BlocProvider.of<HistoryScreenBloc>(context)
-        .add(ResetHistoryScreenBlocToInitialState());
     BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
 
     if (widget.fromHome == false) {
@@ -171,7 +170,7 @@ class _ChapterPageState extends State<ChapterPage> {
     return WillPopScope(
       onWillPop: () async {
         _backNavigate();
-        return false;
+        return true;
       },
       child: Scaffold(
           appBar: PreferredSize(
@@ -190,15 +189,9 @@ class _ChapterPageState extends State<ChapterPage> {
                   }
                 },
               ),
-              preferredSize: Size.fromHeight(ScreenUtil().setHeight(220))),
+              preferredSize: Size.fromHeight(ScreenUtil().setHeight(170))),
           body: BlocConsumer<ChapterScreenBloc, ChapterScreenState>(
-            listener: (context, state) {
-              if (state is ChapterScreenError) {
-                Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-                  _refresh();
-                }));
-              }
-            },
+            listener: (context, state) {},
             builder: (context, state) {
               if (state is ChapterScreenLoaded) {
                 _addToHistory(state.mangaDetail, state.selectedIndex);
@@ -253,16 +246,7 @@ class _ChapterPageState extends State<ChapterPage> {
                   ),
                 );
               } else if (state is ChapterScreenError) {
-                return RefreshIndicator(
-                    color: Theme.of(context).primaryColor,
-                    onRefresh: () async {
-                      _refresh();
-                    },
-                    child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        child: Container(
-                            height: MediaQuery.of(context).size.height,
-                            child: ErrorPage())));
+                return ErrorPage(callback: _refresh());
               } else {
                 return chapterBodyPlaceholder();
               }
@@ -303,7 +287,7 @@ class _ChapterPageState extends State<ChapterPage> {
                           icons: Icons.arrow_back,
                           iconColor: Theme.of(context).primaryColor,
                           backgroundColor:
-                              Theme.of(context).primaryColor.withOpacity(0.2),
+                              Theme.of(context).primaryColor.withOpacity(0.1),
                           enableShadow: false,
                           onTap: () {
                             _navigate(
@@ -334,7 +318,7 @@ class _ChapterPageState extends State<ChapterPage> {
                       : RoundButton(
                           iconColor: Theme.of(context).primaryColor,
                           backgroundColor:
-                              Theme.of(context).primaryColor.withOpacity(0.2),
+                              Theme.of(context).primaryColor.withOpacity(0.1),
                           enableShadow: false,
                           icons: Icons.arrow_forward,
                           onTap: () {

@@ -24,11 +24,9 @@ class Carousell extends StatefulWidget {
 class _CarousellState extends State<Carousell> {
   int _current = 0;
   final colorSeries = sl.get<ColorSeries>();
-  CarouselController _carouselController;
 
   @override
   void initState() {
-    _carouselController = CarouselController();
     super.initState();
   }
 
@@ -38,7 +36,6 @@ class _CarousellState extends State<Carousell> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CarouselSlider(
-          carouselController: _carouselController,
           options: CarouselOptions(
               reverse: false,
               autoPlay: true,

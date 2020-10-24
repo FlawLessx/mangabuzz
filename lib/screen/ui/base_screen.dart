@@ -3,15 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:mangabuzz/screen/widget/drawer/bloc/drawer_widget_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../widget/drawer/drawer_widget.dart';
-import 'bookmark/bloc/bookmark_screen_bloc.dart';
 import 'bookmark/bookmark_screen.dart';
 import 'explore/bloc/explore_screen_bloc.dart';
 import 'explore/explore_screen.dart';
-import 'history/bloc/history_screen_bloc.dart';
 import 'history/history_screen.dart';
 import 'home/bloc/home_screen_bloc.dart';
 import 'home/home_screen.dart';
@@ -30,30 +29,19 @@ class _BaseScreenState extends State<BaseScreen> {
     HistoryPage()
   ];
 
-  PageController pageController;
-
   @override
   void initState() {
     super.initState();
     _getPermissions();
-    pageController =
-        PageController(initialPage: 0, keepPage: false, viewportFraction: 0.99);
     BlocProvider.of<HomeScreenBloc>(context).add(GetHomeScreenData());
     BlocProvider.of<ExploreScreenBloc>(context).add(GetExploreScreenData());
-    BlocProvider.of<BookmarkScreenBloc>(context).add(GetBookmarkScreenData());
-    BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
+    BlocProvider.of<DrawerWidgetBloc>(context).add(GetDrawerData());
   }
 
   _getPermissions() async {
     await [
       Permission.storage,
     ].request();
-  }
-
-  void pageChanged(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 
   @override
@@ -65,18 +53,8 @@ class _BaseScreenState extends State<BaseScreen> {
         drawer: DrawerWidget(
           selectedIndex: 1,
         ),
-        body: buildPageView(),
+        body: widgetList[_selectedIndex],
         bottomNavigationBar: bottomNavbar());
-  }
-
-  Widget buildPageView() {
-    return PageView(
-        physics: AlwaysScrollableScrollPhysics(),
-        controller: pageController,
-        onPageChanged: (index) {
-          pageChanged(index);
-        },
-        children: widgetList);
   }
 
   Widget bottomNavbar() {
@@ -128,7 +106,6 @@ class _BaseScreenState extends State<BaseScreen> {
                 onTabChange: (index) {
                   setState(() {
                     _selectedIndex = index;
-                    pageController.jumpToPage(_selectedIndex);
                   });
                 }),
           ),

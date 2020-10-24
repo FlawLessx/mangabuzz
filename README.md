@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/flawlessx/mangabuzz/badge)](https://www.codefactor.io/repository/github/flawlessx/mangabuzz)
+
 # Mangabuzz
 
 Aplikasi baca manga bahasa Indonesia
@@ -14,4 +16,5 @@ Aplikasi baca manga bahasa Indonesia
 - History baca
 - Tandai series
 - Cache gambar
+- Zoom gambar di chapter
 

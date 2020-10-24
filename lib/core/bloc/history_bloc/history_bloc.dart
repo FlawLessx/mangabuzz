@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mangabuzz/core/model/history/history_model.dart';
 import 'package:mangabuzz/core/provider/local/moor_db_provider.dart';
 import 'package:mangabuzz/core/repository/local/moor_repository.dart';
+import 'package:mangabuzz/screen/ui/manga_detail/bloc/manga_detail_screen_bloc.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 import '../../../injection_container.dart';
@@ -14,8 +15,10 @@ part 'history_event.dart';
 part 'history_state.dart';
 
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
-  HistoryBloc() : super(HistoryInitial());
+  HistoryBloc({@required this.mangaDetailScreenBloc}) : super(HistoryInitial());
   final _moorDBRepository = sl.get<MoorDBRepository>();
+  final MangaDetailScreenBloc mangaDetailScreenBloc;
+  bool loaded = false;
 
   @override
   Stream<HistoryState> mapEventToState(
@@ -25,9 +28,7 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       yield* insertHistoryToState(event);
     else if (event is UpdateHistory)
       yield* updateHistoryToState(event);
-    else if (event is DeleteHistory)
-      yield* deleteHistoryToState(event);
-    else if (event is GetHistory) yield* getHistoryToState(event);
+    else if (event is DeleteHistory) yield* deleteHistoryToState(event);
   }
 
   Stream<HistoryState> insertHistoryToState(AddHistory event) async* {
@@ -62,9 +63,8 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   Stream<HistoryState> updateHistoryToState(UpdateHistory event) async* {
     try {
       final data = event.historyModel;
-
-      final result = await _moorDBRepository.getHistory(
-          event.historyModel.title, event.historyModel.mangaEndpoint);
+      final result =
+          await _moorDBRepository.getHistory(data.title, data.mangaEndpoint);
 
       _moorDBRepository.updateHistory(History(
           title: data.title,
@@ -73,9 +73,9 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
           author: data.author,
           type: data.type,
           rating: data.rating,
-          selectedIndex: result.totalChapter != data.totalChapter
-              ? data.selectedIndex
-              : data.selectedIndex + 1,
+          selectedIndex: data.totalChapter > result.totalChapter
+              ? data.selectedIndex + 1
+              : data.selectedIndex,
           chapterReached: data.chapterReached,
           totalChapter: data.totalChapter,
           chapterReachedName: data.chapterReachedName));
@@ -91,17 +91,6 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
       _moorDBRepository.deleteHistory(event.title, event.mangaEndpoint);
 
       yield HistorySuccess();
-    } catch (e) {
-      yield HistoryError(error: e.toString());
-    }
-  }
-
-  Stream<HistoryState> getHistoryToState(GetHistory event) async* {
-    try {
-      final data =
-          await _moorDBRepository.getHistory(event.title, event.mangaEndpoint);
-
-      yield HistorySuccess(historyModel: data);
     } catch (e) {
       yield HistoryError(error: e.toString());
     }

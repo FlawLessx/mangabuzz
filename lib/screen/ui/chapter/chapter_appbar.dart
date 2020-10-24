@@ -14,11 +14,12 @@ class ChapterAppbar extends StatefulWidget {
   final String chapterEndpoint;
   final int selectedIndex;
   final bool fromHome;
-  ChapterAppbar(
-      {@required this.mangaDetail,
-      @required this.chapterEndpoint,
-      @required this.selectedIndex,
-      @required this.fromHome});
+  ChapterAppbar({
+    @required this.mangaDetail,
+    @required this.chapterEndpoint,
+    @required this.selectedIndex,
+    @required this.fromHome,
+  });
 
   @override
   _ChapterAppbarState createState() => _ChapterAppbarState();
@@ -31,10 +32,7 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
   }
 
   _navigate() {
-    BlocProvider.of<HistoryScreenBloc>(context)
-        .add(ResetHistoryScreenBlocToInitialState());
     BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
-
     if (widget.fromHome == false) {
       BlocProvider.of<MangaDetailScreenBloc>(context).add(
           GetMangaDetailScreenData(
@@ -67,6 +65,7 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
               padding:
                   EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
@@ -74,24 +73,33 @@ class _ChapterAppbarState extends State<ChapterAppbar> {
                     width: ScreenUtil().setHeight(110),
                     color: Colors.transparent,
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.mangaDetail.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            TextStyle(fontSize: 16, fontFamily: "Poppins-Bold"),
-                      ),
-                      ChapterDropdownButton(
-                        mangaDetail: widget.mangaDetail,
-                        chapterEndpoint: widget.mangaDetail
-                            .chapterList[widget.selectedIndex].chapterEndpoint,
-                        selectedIndex: widget.selectedIndex,
-                        fromHome: widget.fromHome,
-                      )
-                    ],
+                  Flexible(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.mangaDetail.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 16, fontFamily: "Poppins-Bold"),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(150)),
+                          child: ChapterDropdownButton(
+                            mangaDetail: widget.mangaDetail,
+                            chapterEndpoint: widget
+                                .mangaDetail
+                                .chapterList[widget.selectedIndex]
+                                .chapterEndpoint,
+                            selectedIndex: widget.selectedIndex,
+                            fromHome: widget.fromHome,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   RoundButton(
                       icons: Icons.close,

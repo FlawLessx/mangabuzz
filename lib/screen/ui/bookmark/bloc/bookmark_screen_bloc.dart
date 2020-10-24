@@ -20,43 +20,15 @@ class BookmarkScreenBloc
   // Variables
   final dbRepo = sl.get<MoorDBRepository>();
   final connectivity = sl.get<ConnectivityCheck>();
-  List<BookmarkModel> listBookmarkModel = [];
-  int startIndex, endIndex;
 
   @override
   Stream<BookmarkScreenState> mapEventToState(
     BookmarkScreenEvent event,
   ) async* {
-    if (event is ResetBookmarkScreenBlocToInitialState) {
-      yield BookmarkScreenInitial();
-    } else if (event is GetBookmarkScreenData) {
-      if (state is BookmarkScreenInitial) {
-        yield BookmarkScreenLoading();
-        yield* getBookmarkDataInitialToState();
-      } else
-        yield* getBookmarkDataToState();
-    }
-  }
+    yield BookmarkScreenLoading();
 
-  Stream<BookmarkScreenState> getBookmarkDataInitialToState() async* {
-    try {
-      bool isConnected = await connectivity.checkConnectivity();
-      if (isConnected == false) yield BookmarkScreenError();
-
-      listBookmarkModel = await dbRepo.listAllBookmark();
-      listBookmarkModel = listBookmarkModel.reversed.toList();
-
-      startIndex = 0;
-      if (listBookmarkModel.length < 6) {
-        endIndex = listBookmarkModel.length;
-      } else {
-        endIndex = 6;
-      }
-      final data = listBookmarkModel.getRange(startIndex, endIndex).toList();
-
-      yield BookmarkScreenLoaded(listBookmarkData: data, hasReachedMax: false);
-    } on Exception {
-      yield BookmarkScreenError();
+    if (event is GetBookmarkScreenData) {
+      yield* getBookmarkDataToState();
     }
   }
 
@@ -65,27 +37,10 @@ class BookmarkScreenBloc
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield BookmarkScreenError();
 
-      List<BookmarkModel> data;
-      BookmarkScreenLoaded bookmarkScreenLoaded = state as BookmarkScreenLoaded;
+      final listBookmarkModel = await dbRepo.listAllBookmark();
 
-      if (startIndex <= listBookmarkModel.length) {
-        startIndex = bookmarkScreenLoaded.listBookmarkData.length + 1;
-
-        if (endIndex + 6 <= listBookmarkModel.length) {
-          endIndex = endIndex + 6;
-        } else {
-          endIndex = endIndex + (listBookmarkModel.length - endIndex);
-        }
-
-        if (endIndex != listBookmarkModel.length) {
-          data = bookmarkScreenLoaded.listBookmarkData +
-              listBookmarkModel.getRange(startIndex, endIndex).toList();
-        }
-      }
-
-      yield endIndex >= listBookmarkModel.length
-          ? bookmarkScreenLoaded.copyWith(hasReachedMax: true)
-          : BookmarkScreenLoaded(listBookmarkData: data, hasReachedMax: false);
+      yield BookmarkScreenLoaded(
+          listBookmarkData: listBookmarkModel.reversed.toList());
     } on Exception {
       yield BookmarkScreenError();
     }

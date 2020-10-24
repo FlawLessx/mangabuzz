@@ -17,39 +17,38 @@ class APIProvider {
   APIProvider({@required this.client});
 
   Future<List<Manga>> getHotMangaUpdate() async {
-    final response = await client.get(
-      _constant.hotMangaUpdate,
-    );
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get(_constant.hotMangaUpdate);
       return mangaFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<List<BestSeries>> getBestSeries() async {
-    final response = await client.get(_constant.bestSeries);
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get(_constant.bestSeries);
       return bestSeriesFromJson(response.body);
-    } else {
-      print(response.body);
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<MangaDetail> getMangaDetail(String mangaEndpoint) async {
-    final response = await client.get("${_constant.mangaDetail}$mangaEndpoint");
-
-    if (response.statusCode == 200) {
+    try {
+      final response =
+          await client.get("${_constant.mangaDetail}$mangaEndpoint");
       return mangaDetailFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<LatestUpdate> getLatestUpdate(int pageNumber) async {
+    try {} catch (e) {
+      throw Exception(e.toString());
+    }
+
     final response = await client.get("${_constant.latestUpdate}$pageNumber");
 
     if (response.statusCode == 200) {
@@ -60,73 +59,66 @@ class APIProvider {
   }
 
   Future<List<Genre>> getAllGenre() async {
-    final response = await client.get(_constant.allGenre);
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get(_constant.allGenre);
       return genreFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<PaginatedManga> getGenre(String genreEndpoint, int pageNumber) async {
-    final response =
-        await client.get("${_constant.genre}$genreEndpoint$pageNumber");
-
-    if (response.statusCode == 200) {
+    try {
+      final response =
+          await client.get("${_constant.genre}$genreEndpoint$pageNumber");
       return paginatedMangaFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<List<Chapter>> getChapter(String chapterEndpoint) async {
-    final response = await client.get("${_constant.chapter}$chapterEndpoint");
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get("${_constant.chapter}$chapterEndpoint");
       return chapterFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<List<Manga>> getSearch(String query) async {
-    final response = await client.get("${_constant.search}?query=$query");
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get("${_constant.search}?query=$query");
       return mangaFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<PaginatedManga> getListManga(int pageNumber) async {
-    final response = await client.get("${_constant.listManga}$pageNumber");
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get("${_constant.listManga}$pageNumber");
       return paginatedMangaFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<PaginatedManga> getListManhua(int pageNumber) async {
-    final response = await client.get("${_constant.listManhua}$pageNumber");
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get("${_constant.listManhua}$pageNumber");
       return paginatedMangaFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
   Future<PaginatedManga> getListManhwa(int pageNumber) async {
-    final response = await client.get("${_constant.listManhwa}$pageNumber");
-
-    if (response.statusCode == 200) {
+    try {
+      final response = await client.get("${_constant.listManhwa}$pageNumber");
       return paginatedMangaFromJson(response.body);
-    } else {
-      throw Exception();
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 }

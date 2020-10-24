@@ -30,7 +30,8 @@ Future<void> init() async {
   //! Core
   // BLoC
   sl.registerFactory(() => BookmarkBloc());
-  sl.registerFactory(() => HistoryBloc());
+  sl.registerFactory(
+      () => HistoryBloc(mangaDetailScreenBloc: sl<MangaDetailScreenBloc>()));
   sl.registerFactory(() => SearchBloc());
 
   // Provider

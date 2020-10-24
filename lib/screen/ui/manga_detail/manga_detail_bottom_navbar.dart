@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -40,40 +41,20 @@ class MangaDetailNavbar extends StatelessWidget {
     } else {
       BlocProvider.of<ChapterScreenBloc>(context).add(GetChapterScreenData(
           chapterEndpoint: mangaDetail
-              .chapterList[historyModel.selectedIndex - 1].chapterEndpoint,
-          selectedIndex: historyModel.selectedIndex - 1,
+              .chapterList[historyModel.selectedIndex].chapterEndpoint,
+          selectedIndex: historyModel.selectedIndex,
           mangaDetail: mangaDetail,
           historyModel: historyModel,
           fromHome: false));
       Navigator.pushNamed(context, chapterRoute,
           arguments: ChapterPageArguments(
               chapterEndpoint: mangaDetail
-                  .chapterList[historyModel.selectedIndex - 1].chapterEndpoint,
-              selectedIndex: historyModel.selectedIndex - 1,
+                  .chapterList[historyModel.selectedIndex].chapterEndpoint,
+              selectedIndex: historyModel.selectedIndex,
               mangaDetail: mangaDetail,
               historyModel: historyModel,
               fromHome: false));
     }
-  }
-
-  int _chapterRemaining(MangaDetail mangaDetail, HistoryModel historyModel) {
-    int result;
-    if (mangaDetail.chapterList[historyModel.selectedIndex - 1].chapterName
-        .split(' ')[1]
-        .contains('.')) {
-      result = int.parse(mangaDetail.chapterList[0].chapterName.split(' ')[1]) -
-          int.parse(mangaDetail
-              .chapterList[historyModel.selectedIndex - 1].chapterName
-              .split(' ')[1]
-              .split('.')[0]);
-    } else {
-      result = int.parse(mangaDetail.chapterList[0].chapterName.split(' ')[1]) -
-          int.parse(mangaDetail
-              .chapterList[historyModel.selectedIndex - 1].chapterName
-              .split(' ')[1]);
-    }
-
-    return result.floor();
   }
 
   @override
@@ -93,19 +74,30 @@ class MangaDetailNavbar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             historyModel != null
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                          '''${mangaDetail.chapterList[historyModel.selectedIndex - 1].chapterName.split(' ')[1]} ${'chapterReached'.tr()}''',
+                ? Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AutoSizeText(
+                          "${historyModel.chapterReachedName} ${'chapterReached'.tr()}",
                           style: TextStyle(
-                              fontSize: 13, fontFamily: "Poppins-Medium")),
-                      Text(
-                        "${_chapterRemaining(mangaDetail, historyModel)} ${'chapterRemains'.tr()}",
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ],
+                              fontSize: 13, fontFamily: "Poppins-Medium"),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          maxFontSize: 13,
+                          minFontSize: 11,
+                        ),
+                        AutoSizeText(
+                          "${historyModel.totalChapter - historyModel.chapterReached} ${'chapterRemains'.tr()}",
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          maxFontSize: 12,
+                          minFontSize: 11,
+                        ),
+                      ],
+                    ),
                   )
                 : SizedBox(),
             InkWell(

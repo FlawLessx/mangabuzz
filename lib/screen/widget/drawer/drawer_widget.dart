@@ -22,11 +22,7 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
-  @override
-  void initState() {
-    BlocProvider.of<DrawerWidgetBloc>(context).add(GetDrawerData());
-    super.initState();
-  }
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +158,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   .toList(),
             ),
             ExpansionTile(
+                onExpansionChanged: (status) {
+                  setState(() {
+                    isExpanded = status;
+                  });
+                },
                 trailing: Icon(
                   Icons.keyboard_arrow_down,
                   color: Colors.black,
@@ -184,44 +185,52 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               horizontal: ScreenUtil().setWidth(10)),
                           child: Wrap(
                             spacing: ScreenUtil().setWidth(10),
-                            children: state.genreList
-                                .map((e) => GestureDetector(
-                                      onTap: () {
-                                        BlocProvider.of<PaginatedScreenBloc>(
-                                                context)
-                                            .add(GetPaginatedScreenScreenData(
-                                                name: e.genreSubtitle,
-                                                endpoint: e.genreEndpoint,
-                                                pageNumber: 1,
-                                                isGenre: true,
-                                                isManga: false,
-                                                isManhua: false,
-                                                isManhwa: false));
-                                        Navigator.pushNamed(
-                                            context, paginatedRoute,
-                                            arguments: PaginatedPageArguments(
-                                                name: e.genreSubtitle,
-                                                endpoint: e.genreEndpoint,
-                                                pageNumber: 1,
-                                                isGenre: true,
-                                                isManga: false,
-                                                isManhua: false,
-                                                isManhwa: false,
-                                                drawerSelectedIndex: 1));
-                                      },
-                                      child: GenreItem(
-                                          text: e.genreSubtitle,
-                                          textColor: Colors.white,
-                                          backgroundColor:
-                                              Theme.of(context).primaryColor),
-                                    ))
-                                .toList(),
+                            children: isExpanded == false
+                                ? []
+                                : state.genreList
+                                    .map((e) => GestureDetector(
+                                          onTap: () {
+                                            BlocProvider.of<
+                                                        PaginatedScreenBloc>(
+                                                    context)
+                                                .add(
+                                                    GetPaginatedScreenScreenData(
+                                                        name: e.genreSubtitle,
+                                                        endpoint:
+                                                            e.genreEndpoint,
+                                                        pageNumber: 1,
+                                                        isGenre: true,
+                                                        isManga: false,
+                                                        isManhua: false,
+                                                        isManhwa: false));
+                                            Navigator.pushNamed(
+                                                context, paginatedRoute,
+                                                arguments:
+                                                    PaginatedPageArguments(
+                                                        name: e.genreSubtitle,
+                                                        endpoint:
+                                                            e.genreEndpoint,
+                                                        pageNumber: 1,
+                                                        isGenre: true,
+                                                        isManga: false,
+                                                        isManhua: false,
+                                                        isManhwa: false,
+                                                        drawerSelectedIndex:
+                                                            1));
+                                          },
+                                          child: GenreItem(
+                                              text: e.genreSubtitle,
+                                              textColor: Colors.white,
+                                              backgroundColor: Theme.of(context)
+                                                  .primaryColor),
+                                        ))
+                                    .toList(),
                           ),
                         );
                       } else {
                         return ContentPlaceholder(
-                          width: ScreenUtil().setWidth(500),
-                          height: ScreenUtil().setHeight(80),
+                          width: ScreenUtil().setWidth(400),
+                          height: ScreenUtil().setHeight(40),
                         );
                       }
                     },

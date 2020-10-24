@@ -82,13 +82,11 @@ class SearchWidget extends SearchDelegate<Manga> {
           builder: (context, state) {
             if (state is SearchMangaLoaded) {
               return Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
                 child: Wrap(
                   direction: Axis.horizontal,
                   alignment: WrapAlignment.spaceAround,
                   runSpacing: ScreenUtil().setHeight(20),
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.start,
                   children: state.listManga
                       .map((e) => MangaItem(
                             manga: e,
@@ -116,13 +114,8 @@ class SearchWidget extends SearchDelegate<Manga> {
                       HistoryItem(historyModel: state.listHistory[index]));
             } else if (state is SearchLoading) {
               return Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
                 child: Center(
-                  child: SizedBox(
-                      height: ScreenUtil().setWidth(120),
-                      width: ScreenUtil().setWidth(120),
-                      child: CustomCircularProgressIndicator()),
+                  child: CustomCircularProgressIndicator(),
                 ),
               );
             } else {

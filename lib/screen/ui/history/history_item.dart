@@ -56,8 +56,6 @@ class _HistoryItemState extends State<HistoryItem> {
                 title: widget.historyModel.title,
                 mangaEndpoint: widget.historyModel.mangaEndpoint));
             BlocProvider.of<HistoryScreenBloc>(context)
-                .add(ResetHistoryScreenBlocToInitialState());
-            BlocProvider.of<HistoryScreenBloc>(context)
                 .add(GetHistoryScreenData());
           },
         ),

@@ -16,6 +16,7 @@ class MangaDetailScreenLoaded extends MangaDetailScreenState {
   final bool isBookmarked;
   final HistoryModel historyModel;
   final BookmarkModel bookmarkModel;
+
   MangaDetailScreenLoaded(
       {@required this.mangaDetail,
       @required this.isBookmarked,
@@ -23,8 +24,12 @@ class MangaDetailScreenLoaded extends MangaDetailScreenState {
       this.historyModel});
 
   @override
-  List<Object> get props =>
-      [mangaDetail, isBookmarked, historyModel, bookmarkModel];
+  List<Object> get props => [
+        mangaDetail,
+        isBookmarked,
+        historyModel,
+        bookmarkModel,
+      ];
 }
 
 class MangaDetailScreenError extends MangaDetailScreenState {}

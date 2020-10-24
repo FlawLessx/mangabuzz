@@ -42,7 +42,7 @@ class ExploreScreenBloc extends Bloc<ExploreScreenEvent, ExploreScreenState> {
       final listManhua = await apiRepo.getListManhua(1);
 
       yield ExploreScreenLoaded(
-          listGenre: genres,
+          listGenre: genres.getRange(0, 10).toList(),
           listManga: listManga.result.getRange(0, 5).toList(),
           listManhwa: listManhwa.result.getRange(0, 5).toList(),
           listManhua: listManhua.result.getRange(0, 5).toList());

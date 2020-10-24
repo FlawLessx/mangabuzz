@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:easy_localization/easy_localization.dart';
-import '../../widget/manga_item/manga_item_placeholder.dart';
 import '../../widget/round_button.dart';
 
 Widget buildMangaDetailPagePlaceholder(BuildContext context) {
@@ -39,7 +38,30 @@ Widget buildMangaDetailPagePlaceholder(BuildContext context) {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          mangaItemPlaceHolder(),
+          ContentPlaceholder(
+            width: ScreenUtil().setWidth(300),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ContentPlaceholder.block(
+                  width: ScreenUtil().setWidth(320),
+                  height: ScreenUtil().setWidth(460),
+                ),
+                ContentPlaceholder.block(
+                    width: ScreenUtil().setWidth(500),
+                    height: ScreenUtil().setHeight(60),
+                    bottomSpacing: ScreenUtil().setHeight(10)),
+                ContentPlaceholder.block(
+                    width: ScreenUtil().setWidth(200),
+                    height: ScreenUtil().setHeight(60),
+                    bottomSpacing: ScreenUtil().setHeight(10)),
+                ContentPlaceholder.block(
+                  width: ScreenUtil().setWidth(100),
+                  height: ScreenUtil().setHeight(60),
+                ),
+              ],
+            ),
+          ),
           ContentPlaceholder(
               height: ScreenUtil().setHeight(300),
               width: ScreenUtil().setWidth(1000)),

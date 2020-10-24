@@ -48,8 +48,7 @@ class _BookmarkItemState extends State<BookmarkItem> {
           onTap: () {
             BlocProvider.of<BookmarkBloc>(context)
                 .add(DeleteBookmark(bookmarkModel: widget.bookmarkModel));
-            BlocProvider.of<BookmarkScreenBloc>(context)
-                .add(ResetBookmarkScreenBlocToInitialState());
+
             BlocProvider.of<BookmarkScreenBloc>(context)
                 .add(GetBookmarkScreenData());
           },

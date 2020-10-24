@@ -15,20 +15,47 @@ import '../../util/color_series.dart';
 import '../circular_progress.dart';
 import '../tag.dart';
 
-Widget buildLatestUpdateGridview(LatestUpdate listUpdate, bool fullLength) {
-  return GridView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: fullLength == true ? listUpdate.latestUpdateList.length : 10,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: ScreenUtil().setWidth(10),
-          childAspectRatio: 3 / 2,
-          mainAxisSpacing: 0),
-      itemBuilder: (context, index) {
-        return LatestUpdateItem(item: listUpdate.latestUpdateList[index]);
-      });
+class BuildLatestUpdateGridview extends StatefulWidget {
+  final bool fullLength;
+  final LatestUpdate latestUpdate;
+
+  BuildLatestUpdateGridview(
+      {this.fullLength = false, @required this.latestUpdate});
+
+  @override
+  _BuildLatestUpdateGridviewState createState() =>
+      _BuildLatestUpdateGridviewState();
+}
+
+class _BuildLatestUpdateGridviewState extends State<BuildLatestUpdateGridview> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+        controller: _scrollController,
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: widget.fullLength == true
+            ? widget.latestUpdate.latestUpdateList.length
+            : 10,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: ScreenUtil().setWidth(10),
+            childAspectRatio: 3 / 2,
+            mainAxisSpacing: 0),
+        itemBuilder: (context, index) {
+          return LatestUpdateItem(
+              item: widget.latestUpdate.latestUpdateList[index]);
+        });
+  }
 }
 
 class LatestUpdateItem extends StatefulWidget {

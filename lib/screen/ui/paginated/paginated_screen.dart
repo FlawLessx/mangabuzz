@@ -7,7 +7,6 @@ import '../../../core/model/paginated_manga/paginated_manga_model.dart';
 import '../../widget/drawer/drawer_widget.dart';
 import '../../widget/manga_item/manga_item.dart';
 import '../../widget/paginated_button.dart';
-import '../../widget/refresh_snackbar.dart';
 import '../error/error_screen.dart';
 import 'bloc/paginated_screen_bloc.dart';
 import 'paginated_screen_placeholder.dart';
@@ -141,13 +140,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
           ],
         ),
         body: BlocConsumer<PaginatedScreenBloc, PaginatedScreenState>(
-          listener: (context, state) {
-            if (state is PaginatedScreenError) {
-              Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-                _getData(widget.pageNumber);
-              }));
-            }
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             if (state is PaginatedScreenLoaded) {
               return SafeArea(
@@ -190,16 +183,7 @@ class _PaginatedPageState extends State<PaginatedPage> {
                 ),
               );
             } else if (state is PaginatedScreenError) {
-              return RefreshIndicator(
-                  color: Theme.of(context).primaryColor,
-                  onRefresh: () async {
-                    _getData(widget.pageNumber);
-                  },
-                  child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Container(
-                          height: MediaQuery.of(context).size.height,
-                          child: ErrorPage())));
+              return ErrorPage(callback: _getData(widget.pageNumber));
             } else {
               return buildPaginatedScreenPlaceholder(context);
             }

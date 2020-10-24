@@ -30,31 +30,50 @@ class MangaDetailScreenBloc
   ) async* {
     yield MangaDetailScreenLoading();
 
-    if (event is GetMangaDetailScreenData)
+    if (event is GetMangaDetailScreenData) {
       yield* getMangaDetailScreenDataToState(event);
+    } else if (event is UpdateHistoryBottomNavbar) {
+      yield* updateHistoryBottomNavbarToState(event);
+    }
+  }
+
+  Stream<MangaDetailScreenState> updateHistoryBottomNavbarToState(
+      UpdateHistoryBottomNavbar event) async* {
+    try {
+      yield MangaDetailScreenLoading();
+
+      final historyResult = await dbRepo.getHistory(
+          event.mangaDetail.title, event.mangaDetail.mangaEndpoint);
+
+      yield MangaDetailScreenLoaded(
+        mangaDetail: event.mangaDetail,
+        isBookmarked: event.isBookmarked,
+        bookmarkModel: event.bookmarkModel,
+        historyModel: historyResult,
+      );
+    } on Exception {
+      yield MangaDetailScreenError();
+    }
   }
 
   Stream<MangaDetailScreenState> getMangaDetailScreenDataToState(
       GetMangaDetailScreenData event) async* {
     try {
-      var historyResult;
-      var bookmarkResult;
-
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield MangaDetailScreenError();
 
-      final dataManga = await apiRepo.getMangaDetail(event.mangaEndpoint);
-
-      bookmarkResult =
+      final mangaDetail = await apiRepo.getMangaDetail(event.mangaEndpoint);
+      final bookmarkResult =
           await dbRepo.getBookmark(event.title, event.mangaEndpoint);
-
-      historyResult = await dbRepo.getHistory(event.title, event.mangaEndpoint);
+      final historyResult =
+          await dbRepo.getHistory(event.title, event.mangaEndpoint);
 
       yield MangaDetailScreenLoaded(
-          mangaDetail: dataManga,
-          isBookmarked: bookmarkResult != null ? true : false,
-          bookmarkModel: bookmarkResult,
-          historyModel: historyResult);
+        mangaDetail: mangaDetail,
+        isBookmarked: bookmarkResult != null ? true : false,
+        bookmarkModel: bookmarkResult,
+        historyModel: historyResult,
+      );
     } on Exception {
       yield MangaDetailScreenError();
     }

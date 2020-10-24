@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mangabuzz/core/model/history/history_model.dart';
+import 'package:mangabuzz/screen/widget/circular_progress.dart';
 
 import '../../../core/bloc/search_bloc/search_bloc.dart';
-import '../../widget/refresh_snackbar.dart';
 import '../../widget/search/search_bar.dart';
 import '../../widget/search/search_page.dart';
-import '../bookmark/bloc/bookmark_screen_bloc.dart';
 import '../error/error_screen.dart';
 import 'bloc/history_screen_bloc.dart';
 import 'history_item.dart';
@@ -20,25 +20,48 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   ScrollController _scrollController;
-  final _scrollThreshold = 500;
+  List<HistoryModel> originalData;
+  List<HistoryModel> data;
+  int currentIndex = 0;
+  static const ITEM_COUNT = 10;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    data = [];
+    originalData = [];
+    _refresh();
+    _scrollController = ScrollController()
+      ..addListener(() {
+        if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent) {
+          if (currentIndex != originalData.length) {
+            _loadMore();
+          }
+        }
+      });
   }
 
-  _loadMore() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
-      BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
+  Future _loadMore() async {
+    if ((currentIndex + ITEM_COUNT) >= originalData.length) {
+      await Future.delayed(Duration(milliseconds: 500), () {
+        setState(() {
+          data.addAll(originalData.getRange(currentIndex, originalData.length));
+          currentIndex = currentIndex + (originalData.length - currentIndex);
+        });
+      });
+    } else {
+      await Future.delayed(Duration(milliseconds: 500), () {
+        setState(() {
+          data.addAll(
+              originalData.getRange(currentIndex, currentIndex + ITEM_COUNT));
+          currentIndex = currentIndex + ITEM_COUNT;
+        });
+      });
     }
   }
 
   _refresh() {
-    BlocProvider.of<HistoryScreenBloc>(context)
-        .add(ResetHistoryScreenBlocToInitialState());
     BlocProvider.of<HistoryScreenBloc>(context).add(GetHistoryScreenData());
   }
 
@@ -50,10 +73,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController.addListener(() {
-      _loadMore();
-    });
-
     return Scaffold(
         appBar: SearchBar(
           text: 'searchHistory'.tr(),
@@ -72,13 +91,18 @@ class _HistoryPageState extends State<HistoryPage> {
         ),
         body: BlocConsumer<HistoryScreenBloc, HistoryScreenState>(
           listener: (context, state) {
-            if (state is HistoryScreenError) {
-              Scaffold.of(context).showSnackBar(refreshSnackBar(() {
-                BlocProvider.of<BookmarkScreenBloc>(context)
-                    .add(ResetBookmarkScreenBlocToInitialState());
-                BlocProvider.of<HistoryScreenBloc>(context)
-                    .add(GetHistoryScreenData());
-              }));
+            if (state is HistoryScreenLoaded) {
+              data = [];
+              originalData = [];
+
+              final length = state.listHistoryData.length <= ITEM_COUNT
+                  ? state.listHistoryData.length
+                  : ITEM_COUNT;
+              setState(() {
+                currentIndex = length;
+                data.addAll(state.listHistoryData.getRange(0, length));
+                originalData = state.listHistoryData;
+              });
             }
           },
           builder: (context, state) {
@@ -103,28 +127,28 @@ class _HistoryPageState extends State<HistoryPage> {
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: state.hasReachedMax
-                            ? state.listHistoryData.length
-                            : state.listHistoryData.length + 1,
-                        itemBuilder: (context, index) =>
-                            (index >= state.listHistoryData.length)
-                                ? SizedBox()
-                                : HistoryItem(
-                                    historyModel: state.listHistoryData[index]))
+                        itemCount: (currentIndex <= originalData.length)
+                            ? data.length + 1
+                            : data.length,
+                        itemBuilder: (context, index) {
+                          if (index == data.length) {
+                            if (index == originalData.length) {
+                              return SizedBox();
+                            } else {
+                              return Container(
+                                  child: Center(
+                                      child:
+                                          CustomCircularProgressIndicator()));
+                            }
+                          } else {
+                            return HistoryItem(historyModel: data[index]);
+                          }
+                        }),
                   ],
                 ),
               );
             } else if (state is HistoryScreenError) {
-              return RefreshIndicator(
-                  color: Theme.of(context).primaryColor,
-                  onRefresh: () async {
-                    _refresh();
-                  },
-                  child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Container(
-                          height: MediaQuery.of(context).size.height,
-                          child: ErrorPage())));
+              return ErrorPage(callback: _refresh());
             } else {
               return buildHistoryScreenPlaceholder(context);
             }

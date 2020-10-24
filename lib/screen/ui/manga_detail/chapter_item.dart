@@ -15,6 +15,7 @@ class _ChapterItemState extends State<ChapterItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: ScreenUtil().setHeight(90),
       width: ScreenUtil().setWidth(500),
       decoration: BoxDecoration(
           color: Theme.of(context).primaryColor.withOpacity(0.10),

@@ -19,74 +19,27 @@ class HistoryScreenBloc extends Bloc<HistoryScreenEvent, HistoryScreenState> {
   // Variables
   final dbRepo = sl.get<MoorDBRepository>();
   final connectivity = sl.get<ConnectivityCheck>();
-  List<HistoryModel> listHistoryModel = [];
-  int startIndex;
-  int endIndex;
 
   @override
   Stream<HistoryScreenState> mapEventToState(
     HistoryScreenEvent event,
   ) async* {
-    if (event is ResetHistoryScreenBlocToInitialState) {
-      yield HistoryScreenInitial();
-    } else if (event is GetHistoryScreenData) {
-      if (state is HistoryScreenInitial) {
-        yield HistoryScreenLoading();
-        yield* getHistoryDataInitialToState();
-      } else
-        yield* getHistoryDataToState();
+    yield HistoryScreenLoading();
+    if (event is GetHistoryScreenData) {
+      yield* getHistoryDataToState(event);
     }
   }
 
-  Stream<HistoryScreenState> getHistoryDataInitialToState() async* {
+  Stream<HistoryScreenState> getHistoryDataToState(
+      GetHistoryScreenData event) async* {
     try {
       bool isConnected = await connectivity.checkConnectivity();
       if (isConnected == false) yield HistoryScreenError();
 
-      listHistoryModel = await dbRepo.listAllHistory();
-      listHistoryModel = listHistoryModel.reversed.toList();
+      final listHistory = await dbRepo.listAllHistory();
+      final reversedListHistory = listHistory.reversed.toList();
 
-      startIndex = 0;
-      if (listHistoryModel.length < 6) {
-        endIndex = listHistoryModel.length;
-      } else {
-        endIndex = 6;
-      }
-
-      final data = listHistoryModel.getRange(startIndex, endIndex).toList();
-
-      yield HistoryScreenLoaded(listHistoryData: data, hasReachedMax: false);
-    } on Exception {
-      yield HistoryScreenError();
-    }
-  }
-
-  Stream<HistoryScreenState> getHistoryDataToState() async* {
-    try {
-      bool isConnected = await connectivity.checkConnectivity();
-      if (isConnected == false) yield HistoryScreenError();
-
-      List<HistoryModel> data;
-      HistoryScreenLoaded historyScreenLoaded = state as HistoryScreenLoaded;
-
-      if (startIndex <= listHistoryModel.length) {
-        startIndex = historyScreenLoaded.listHistoryData.length + 1;
-
-        if (endIndex + 6 <= listHistoryModel.length) {
-          endIndex = endIndex + 6;
-        } else {
-          endIndex = endIndex + (listHistoryModel.length - endIndex);
-        }
-
-        if (endIndex != listHistoryModel.length) {
-          data = historyScreenLoaded.listHistoryData +
-              listHistoryModel.getRange(startIndex, endIndex).toList();
-        }
-      }
-
-      yield endIndex >= listHistoryModel.length
-          ? historyScreenLoaded.copyWith(hasReachedMax: true)
-          : HistoryScreenLoaded(listHistoryData: data, hasReachedMax: false);
+      yield HistoryScreenLoaded(listHistoryData: reversedListHistory);
     } on Exception {
       yield HistoryScreenError();
     }

@@ -13,19 +13,10 @@ class BookmarkScreenLoading extends BookmarkScreenState {}
 
 class BookmarkScreenLoaded extends BookmarkScreenState {
   final List<BookmarkModel> listBookmarkData;
-  final bool hasReachedMax;
-  BookmarkScreenLoaded(
-      {@required this.listBookmarkData, @required this.hasReachedMax});
-
-  BookmarkScreenLoaded copyWith(
-      {List<BookmarkModel> listBookmarkData, bool hasReachedMax}) {
-    return BookmarkScreenLoaded(
-        listBookmarkData: listBookmarkData ?? this.listBookmarkData,
-        hasReachedMax: hasReachedMax ?? this.hasReachedMax);
-  }
+  BookmarkScreenLoaded({@required this.listBookmarkData});
 
   @override
-  List<Object> get props => [listBookmarkData, hasReachedMax];
+  List<Object> get props => [listBookmarkData];
 }
 
 class BookmarkScreenError extends BookmarkScreenState {}
