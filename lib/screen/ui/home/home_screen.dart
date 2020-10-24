@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //Carousell(itemList: state.listBestSeries),
+                          Carousell(itemList: state.listBestSeries),
                           SizedBox(
                             height: ScreenUtil().setHeight(30),
                           ),
