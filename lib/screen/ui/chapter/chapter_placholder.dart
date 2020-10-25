@@ -16,49 +16,54 @@ Widget chapterAppbarPlaceholder(BuildContext context) {
               offset: Offset(0, 2),
               color: Colors.grey)
         ]),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: ScreenUtil().setHeight(110),
-              width: ScreenUtil().setHeight(110),
-              color: Colors.transparent,
-            ),
-            ContentPlaceholder(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ContentPlaceholder.block(
-                    topSpacing: ScreenUtil().setHeight(40),
-                    height: ScreenUtil().setHeight(40),
-                    width: ScreenUtil().setWidth(500),
-                  ),
-                  ContentPlaceholder.block(
-                      height: ScreenUtil().setHeight(40),
-                      width: ScreenUtil().setWidth(300),
-                      bottomSpacing: 0),
-                ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                height: ScreenUtil().setHeight(210),
+                width: ScreenUtil().setHeight(110),
+                color: Colors.transparent,
               ),
-            ),
-            RoundButton(
-                icons: Icons.close,
-                iconColor: Colors.white,
-                backgroundColor: Theme.of(context).primaryColor,
-                enableShadow: true,
-                onTap: () => Navigator.pop(context))
-          ],
+              Flexible(
+                child: ContentPlaceholder(
+                  spacing: EdgeInsets.zero,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ContentPlaceholder.block(
+                        topSpacing: ScreenUtil().setHeight(20),
+                        height: ScreenUtil().setHeight(40),
+                        width: ScreenUtil().setWidth(500),
+                      ),
+                      ContentPlaceholder.block(
+                        height: ScreenUtil().setHeight(40),
+                        width: ScreenUtil().setWidth(500),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              RoundButton(
+                  icons: Icons.close,
+                  iconColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  enableShadow: true,
+                  onTap: () => Navigator.pop(context))
+            ],
+          ),
         )),
   );
 }
 
 Widget chapterBodyPlaceholder() {
-  List count = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  int count = 10;
 
   return ListView.builder(
       shrinkWrap: true,
       padding: EdgeInsets.zero,
-      itemCount: count.length,
+      itemCount: count,
       itemBuilder: (context, index) {
         return Center(child: CustomCircularProgressIndicator());
       });

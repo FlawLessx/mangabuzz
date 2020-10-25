@@ -274,7 +274,7 @@ class _ChapterPageState extends State<ChapterPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

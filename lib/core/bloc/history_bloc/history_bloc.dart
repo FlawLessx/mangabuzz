@@ -26,61 +26,36 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   ) async* {
     if (event is AddHistory)
       yield* insertHistoryToState(event);
-    else if (event is UpdateHistory)
-      yield* updateHistoryToState(event);
     else if (event is DeleteHistory) yield* deleteHistoryToState(event);
   }
 
   Stream<HistoryState> insertHistoryToState(AddHistory event) async* {
     try {
       final data = event.historyModel;
-
       final result = await _moorDBRepository.getHistory(
           event.historyModel.title, event.historyModel.mangaEndpoint);
-
-      if (result == null) {
-        _moorDBRepository.insertHistory(History(
-            title: data.title,
-            mangaEndpoint: data.mangaEndpoint,
-            image: data.image,
-            author: data.author,
-            type: data.type,
-            rating: data.rating,
-            selectedIndex: data.selectedIndex,
-            chapterReached: data.chapterReached,
-            totalChapter: data.totalChapter,
-            chapterReachedName: data.chapterReachedName));
-
-        yield HistorySuccess();
-      } else {
-        yield* updateHistoryToState(UpdateHistory(historyModel: data));
-      }
-    } catch (e) {
-      yield HistoryError(error: e.toString());
-    }
-  }
-
-  Stream<HistoryState> updateHistoryToState(UpdateHistory event) async* {
-    try {
-      final data = event.historyModel;
-      final result =
-          await _moorDBRepository.getHistory(data.title, data.mangaEndpoint);
-
-      _moorDBRepository.updateHistory(History(
+      final historyModel = History(
           title: data.title,
           mangaEndpoint: data.mangaEndpoint,
           image: data.image,
           author: data.author,
           type: data.type,
           rating: data.rating,
-          selectedIndex: data.totalChapter > result.totalChapter
-              ? data.selectedIndex + 1
-              : data.selectedIndex,
+          selectedIndex: data.selectedIndex,
           chapterReached: data.chapterReached,
           totalChapter: data.totalChapter,
-          chapterReachedName: data.chapterReachedName));
+          chapterReachedName: data.chapterReachedName);
 
-      yield HistorySuccess();
+      if (result == null) {
+        _moorDBRepository.insertHistory(historyModel);
+
+        yield HistorySuccess();
+      } else {
+        _moorDBRepository.deleteHistory(data.title, data.mangaEndpoint);
+
+        _moorDBRepository.insertHistory(historyModel);
+        yield HistorySuccess();
+      }
     } catch (e) {
       yield HistoryError(error: e.toString());
     }

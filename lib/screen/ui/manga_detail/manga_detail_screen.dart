@@ -161,6 +161,8 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                   ? state.mangaDetail.chapterList.length
                   : ITEM_COUNT;
               setState(() {
+                data = [];
+                originalData = [];
                 isBookmarked = state.isBookmarked;
                 currentIndex = length;
                 data.addAll(state.mangaDetail.chapterList.getRange(0, length));
@@ -382,7 +384,7 @@ class _MangaDetailPageState extends State<MangaDetailPage> {
                         fromHome: false));
               },
               child: ChapterItem(
-                chapterListData: state.mangaDetail.chapterList[index],
+                chapterListData: data[index],
               ),
             ),
           );
